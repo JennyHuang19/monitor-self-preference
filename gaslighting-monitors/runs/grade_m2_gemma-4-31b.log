@@ -29,3 +29,5 @@ grades_self.jsonl: 12 to run (0 cached)
   ok m2-s0-gemma-4-31b
   ok m2-s0-gemma-4-26b-a4b
   ok m3-s0-gemma-4-26b-a4b
+  ok m1-s0-gemma-4-26b-a4b
+done: 12 ok, 0 err
