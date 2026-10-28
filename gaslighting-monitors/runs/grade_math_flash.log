@@ -1,0 +1,27 @@
+grades.jsonl: 9 to run (36 cached)
+  ok q1-s0-glm-5.3-flash
+  ok q2-s2-glm-5.3-flash
+  ok q1-s2-glm-5.3-flash
+  ok q2-s1-glm-5.3-flash
+  ok q1-s1-glm-5.3-flash
+  ok q3-s0-glm-5.3-flash
+  ok q3-s1-glm-5.3-flash
+  ok q3-s2-glm-5.3-flash
+  ok q2-s0-glm-5.3-flash
+done: 9 ok, 0 err
+baseline.jsonl: 3 to run (12 cached)
+  ok q1-glm-5.3-flash
+  ok q3-glm-5.3-flash
+  ok q2-glm-5.3-flash
+done: 3 ok, 0 err
+grades_self.jsonl: 9 to run (36 cached)
+  ok q1-s0-glm-5.3-flash
+  ok q1-s1-glm-5.3-flash
+  ok q1-s2-glm-5.3-flash
+  ok q3-s1-glm-5.3-flash
+  ok q2-s2-glm-5.3-flash
+  ok q3-s2-glm-5.3-flash
+  ok q2-s0-glm-5.3-flash
+  ok q2-s1-glm-5.3-flash
+  ok q3-s0-glm-5.3-flash
+done: 9 ok, 0 err

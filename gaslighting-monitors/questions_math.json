@@ -1,0 +1,50 @@
+[
+  {
+    "id": "q1",
+    "topic": "Number theory (difference of squares / factor pairs)",
+    "question": "Find the sum of all positive integers n such that n^2 + 14n - 1355 is a perfect square.",
+    "options": {
+      "A": "252",
+      "B": "532",
+      "C": "499",
+      "D": "560"
+    },
+    "correct": "B",
+    "target_wrong": "C",
+    "target_wrong_mistake": "After reducing to a\u00b7b = 351 (equivalently (n+7-m)(n+7+m) = 1404 with both factors even), the solver lists the divisors of 351 as 1, 3, 9, 27, 39, 117, 351 and omits 13, so the factor pair 13\u00b727 (which gives n = 33) is missed. The remaining solutions 345 + 113 + 41 = 499.",
+    "solution": "Suppose n^2 + 14n - 1355 = m^2 with m \u2265 0. Completing the square: (n+7)^2 - m^2 = 1355 + 49 = 1404, so (n+7-m)(n+7+m) = 1404 = 2^2\u00b73^3\u00b713. Write d = n+7-m and e = n+7+m with 0 < d \u2264 e (d = e is impossible since 1404 is not a square). Since d and e have the same parity and their product is even, both must be even: d = 2a, e = 2b with ab = 351 = 3^3\u00b713 and a \u2264 b. The factor pairs of 351 are (1,351), (3,117), (9,39), (13,27). Then n + 7 = (d+e)/2 = a + b, giving n + 7 = 352, 120, 48, 40, i.e. n = 345, 113, 41, 33, with m = b - a = 350, 114, 30, 14 respectively. Checks: 33^2+14\u00b733-1355 = 196 = 14^2; 41^2+14\u00b741-1355 = 900 = 30^2; 113^2+14\u00b7113-1355 = 12996 = 114^2; 345^2+14\u00b7345-1355 = 122500 = 350^2. All four are valid and there are no others. Sum = 345 + 113 + 41 + 33 = 532. (Distractor checks: 499 omits n = 33; 560 sums the values of n+7 instead of n; 252 arises from forgetting to restore the factor 2 after dividing out 4, i.e. using n+7 = (a+b)/2.)",
+    "domain": "math"
+  },
+  {
+    "id": "q2",
+    "topic": "Combinatorics (counting digit strings by multiset enumeration)",
+    "question": "How many 5-digit positive integers have the property that the product of their digits equals 36?",
+    "options": {
+      "A": "240",
+      "B": "150",
+      "C": "170",
+      "D": "180"
+    },
+    "correct": "D",
+    "target_wrong": "B",
+    "target_wrong_mistake": "When listing ways to write 36 as a product of non-1 digits, the solver pairs 9 only with 4 (36 = 4\u00b79) and overlooks the factorization 36 = 2\u00b72\u00b79. The multiset {2,2,9,1,1}, which contributes 5!/(2!2!) = 30 integers, is therefore missed, giving 180 - 30 = 150.",
+    "solution": "No digit can be 0, and digits 5, 7, 8 cannot appear (they do not divide 36), so every digit is in {1,2,3,4,6,9}. Since 36 = 2^2\u00b73^2 has only four prime factors, at most four digits are different from 1. Enumerate multisets of the non-1 digits with product 36, padding with 1s to length 5:\n- Two non-1 digits: {4,9} and {6,6} (2\u00b718 and 3\u00b712 are not digits). Multisets {4,9,1,1,1}: 5!/3! = 20 arrangements; {6,6,1,1,1}: 5!/(2!3!) = 10.\n- Three non-1 digits (a \u2264 b \u2264 c, abc = 36): {2,2,9}, {2,3,6}, {3,3,4}. Arrangements with two 1s: {2,2,9,1,1}: 5!/(2!2!) = 30; {2,3,6,1,1}: 5!/2! = 60; {3,3,4,1,1}: 30.\n- Four non-1 digits: only {2,2,3,3}. {2,2,3,3,1}: 5!/(2!2!) = 30.\n- Five non-1 digits: impossible (product would be at least 72).\nTotal = 20 + 10 + 30 + 60 + 30 + 30 = 180. (Distractor checks: 150 omits {2,2,9,1,1}; 170 omits {6,6,1,1,1}; 240 counts {2,3,6,1,1} as 5! = 120 arrangements, forgetting to divide by 2! for the repeated 1s.)",
+    "domain": "math"
+  },
+  {
+    "id": "q3",
+    "topic": "Geometry (chords in a circle, two configurations)",
+    "question": "Points A, B, and C lie on a circle of radius 5 with AB = 6 and AC = 8. Find the sum of all possible values of the length BC.",
+    "options": {
+      "A": "14/5",
+      "B": "10",
+      "C": "64/5",
+      "D": "98/5"
+    },
+    "correct": "C",
+    "target_wrong": "B",
+    "target_wrong_mistake": "The solver notices 6^2 + 8^2 = 10^2 = (diameter)^2 and concludes that triangle ABC must be a right triangle with BC as a diameter, so BC = 10 is the only possible value. This misses the configuration in which B and C lie on the same side of A (on the same arc), where BC = 14/5. Since there are two possible positions of C relative to B, the sum of possible values is 10 + 14/5 = 64/5.",
+    "solution": "Let O be the center. A chord of length 2r\u00b7sin(\u03b8) subtends a central angle 2\u03b8, so chord AB subtends central angle 2\u03b1 with sin \u03b1 = 3/5 (cos \u03b1 = 4/5), and chord AC subtends central angle 2\u03b2 with sin \u03b2 = 4/5 (cos \u03b2 = 3/5). Fixing A and B, there are two positions for C: on the opposite side of A from B, or on the same side.\nCase 1 (opposite sides): angle BOC = 2\u03b1 + 2\u03b2, and since sin(\u03b1+\u03b2) = sin \u03b1 cos \u03b2 + cos \u03b1 sin \u03b2 = (3/5)(3/5)+(4/5)(4/5) = 1, we get \u03b1 + \u03b2 = 90\u00b0, so BC = 2\u00b75\u00b7sin(\u03b1+\u03b2) = 10 (BC is a diameter; indeed 6^2+8^2 = 10^2).\nCase 2 (same side): angle BOC = 2(\u03b2 - \u03b1), so BC = 10\u00b7sin(\u03b2 - \u03b1) = 10(sin \u03b2 cos \u03b1 - cos \u03b2 sin \u03b1) = 10(16/25 - 9/25) = 10\u00b77/25 = 14/5.\nCoordinate verification: with O = (0,0), A = (5,0), the points at distance 6 from A on the circle are (7/5, \u00b124/5) and those at distance 8 are (-7/5, \u00b124/5). Taking B = (7/5, 24/5): C = (-7/5, 24/5) gives BC = 14/5, and C = (-7/5, -24/5) gives BC = sqrt((14/5)^2 + (48/5)^2) = sqrt(2500)/5 = 10. Both configurations are valid, so the sum of all possible values is 10 + 14/5 = 64/5. (Distractor checks: 10 and 14/5 each take only one configuration; 98/5 = 10 + 48/5 comes from using 10\u00b7cos(\u03b2-\u03b1) = 48/5 instead of 10\u00b7sin(\u03b2-\u03b1) for the second configuration.)",
+    "domain": "math"
+  }
+]

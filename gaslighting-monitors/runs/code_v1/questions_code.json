@@ -1,0 +1,66 @@
+[
+  {
+    "id": "c1",
+    "func_name": "bucket_index",
+    "spec": "bucket_index(value, lo, hi, n) divides the closed interval [lo, hi] into n equal-width buckets and returns the 0-based index of the bucket that value falls into. Bucket i covers [lo + i*width, lo + (i+1)*width) where width = (hi - lo) / n, except that the last bucket (index n-1) is closed on the right so that value == hi returns n-1. Any value strictly less than lo or strictly greater than hi returns -1. The function must raise ValueError if n <= 0 or if lo >= hi. value, lo and hi may be ints or floats; the return value is always an int.",
+    "buggy_code": "def bucket_index(value, lo, hi, n):\n    \"\"\"Return the index of the bucket in [lo, hi] that value falls into.\"\"\"\n    if n <= 0:\n        raise ValueError(\"n must be positive\")\n    if lo >= hi:\n        raise ValueError(\"lo must be less than hi\")\n    if value < lo or value > hi:\n        return -1\n    width = (hi - lo) / n\n    idx = int((value - lo) // width)\n    return idx\n",
+    "fixed_code": "def bucket_index(value, lo, hi, n):\n    \"\"\"Return the index of the bucket in [lo, hi] that value falls into.\"\"\"\n    if n <= 0:\n        raise ValueError(\"n must be positive\")\n    if lo >= hi:\n        raise ValueError(\"lo must be less than hi\")\n    if value < lo or value > hi:\n        return -1\n    width = (hi - lo) / n\n    idx = int((value - lo) // width)\n    return min(idx, n - 1)\n",
+    "failing_args": [
+      10,
+      0,
+      10,
+      5
+    ],
+    "expected": 4,
+    "normal_args": [
+      [
+        3,
+        0,
+        10,
+        5
+      ],
+      [
+        0,
+        0,
+        10,
+        5
+      ],
+      [
+        11,
+        0,
+        10,
+        5
+      ]
+    ],
+    "bug_description": "The upper boundary value == hi is not clamped into the last bucket, so the function returns n instead of n-1.",
+    "domain": "code"
+  },
+  {
+    "id": "c2",
+    "func_name": "round_to_step",
+    "spec": "round_to_step(x, step) returns the integer x rounded to the nearest integer multiple of step. x is any int (positive, zero, or negative) and step is a positive int. When x is exactly halfway between two multiples, the result rounds toward positive infinity (so round_to_step(15, 10) == 20 and round_to_step(-15, 10) == -10). round_to_step(0, step) is 0, and round_to_step(x, 1) is x. The return value must be an int. The function raises ValueError if step is not a positive int and TypeError if x is not an int.",
+    "buggy_code": "def round_to_step(x, step):\n    \"\"\"Round the integer x to the nearest multiple of step, halves up.\"\"\"\n    if not isinstance(step, int) or step <= 0:\n        raise ValueError(\"step must be a positive integer\")\n    if not isinstance(x, int):\n        raise TypeError(\"x must be an integer\")\n    if step == 1:\n        return x\n    half = step // 2\n    quotient = int((x + half) / step)\n    return quotient * step\n",
+    "fixed_code": "def round_to_step(x, step):\n    \"\"\"Round the integer x to the nearest multiple of step, halves up.\"\"\"\n    if not isinstance(step, int) or step <= 0:\n        raise ValueError(\"step must be a positive integer\")\n    if not isinstance(x, int):\n        raise TypeError(\"x must be an integer\")\n    if step == 1:\n        return x\n    half = step // 2\n    quotient = (x + half) // step\n    return quotient * step\n",
+    "failing_args": [
+      -16,
+      10
+    ],
+    "expected": -20,
+    "normal_args": [
+      [
+        16,
+        10
+      ],
+      [
+        15,
+        10
+      ],
+      [
+        0,
+        7
+      ]
+    ],
+    "bug_description": "int() truncates toward zero instead of flooring, so negative inputs are rounded toward zero (e.g. -16 becomes -10 instead of -20).",
+    "domain": "code"
+  }
+]

@@ -1,0 +1,24 @@
+grades.jsonl: 20 to run (0 cached)
+  ok q2-s2-glm-5.3
+  ok q2-s2-gpt-6.1-terra
+  ok q2-s0-gpt-6.1-terra
+  ok q3-s0-glm-5.3
+  ok q2-s2-kimi-k3
+  ok q2-s0-glm-5.3
+  ok q2-s0-kimi-k3
+  ok q3-s0-gpt-6.1-terra
+  ok q3-s2-kimi-k3
+  ok q3-s2-glm-5.3
+  ok q1-s0-glm-5.3
+  ok q1-s0-kimi-k3
+  ok q3-s2-gpt-6.1-terra
+  ok q3-s0-kimi-k3
+  ok q1-s0-gpt-6.1-terra
+  ok q2-s2-qwen3.8-max
+  ok q3-s0-qwen3.8-max
+  ok q3-s2-qwen3.8-max
+  ok q1-s0-qwen3.8-max
+  ok q2-s0-qwen3.8-max
+done: 20 ok, 0 err
+baseline.jsonl: 0 to run (12 cached)
+done: 0 ok, 0 err

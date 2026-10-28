@@ -1,0 +1,22 @@
+grades.jsonl: 8 to run (0 cached)
+  ok m1-s0-gpt-oss-20b
+  ok m3-s0-gpt-oss-120b
+  ok m1-s0-gpt-oss-120b
+  ok m3-s0-gpt-oss-20b
+  ok m1-s0-gemma-4-31b
+  ok m1-s0-gemma-4-26b-a4b
+  ok m3-s0-gemma-4-31b
+  ok m3-s0-gemma-4-26b-a4b
+done: 8 ok, 0 err
+baseline.jsonl: 0 to run (12 cached)
+done: 0 ok, 0 err
+grades_self.jsonl: 8 to run (0 cached)
+  ok m1-s0-gpt-oss-120b
+  ok m1-s0-gpt-oss-20b
+  ok m3-s0-gpt-oss-120b
+  ok m3-s0-gpt-oss-20b
+  ok m1-s0-gemma-4-31b
+  ok m3-s0-gemma-4-26b-a4b
+  ok m1-s0-gemma-4-26b-a4b
+  ok m3-s0-gemma-4-31b
+done: 8 ok, 0 err

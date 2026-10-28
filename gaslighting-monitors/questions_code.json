@@ -1,0 +1,83 @@
+[
+  {
+    "id": "c1",
+    "func_name": "merge_unique",
+    "spec": "merge_unique(a, b) takes two lists of integers, each already sorted in non-decreasing order; either list may contain repeated values and either (or both) may be empty. It must return a new list containing every value that appears in a or in b exactly once, in strictly increasing order, without mutating the inputs. Examples: merge_unique([1, 2, 2], [2, 3]) returns [1, 2, 3]; merge_unique([], [4, 5]) returns [4, 5]; merge_unique([], []) returns []. Negative values are allowed and compare normally.",
+    "buggy_code": "def merge_unique(a, b):\n    result = []\n    i, j = 0, 0\n    while i < len(a) and j < len(b):\n        if a[i] < b[j]:\n            x = a[i]\n            i += 1\n        elif b[j] < a[i]:\n            x = b[j]\n            j += 1\n        else:\n            x = a[i]\n            i += 1\n            j += 1\n        if not result or result[-1] != x:\n            result.append(x)\n    rest = a[i:] if i < len(a) else b[j:]\n    if rest and result and rest[0] == result[-1]:\n        rest = rest[1:]\n    result.extend(rest)\n    return result\n",
+    "fixed_code": "def merge_unique(a, b):\n    result = []\n    i, j = 0, 0\n    while i < len(a) and j < len(b):\n        if a[i] < b[j]:\n            x = a[i]\n            i += 1\n        elif b[j] < a[i]:\n            x = b[j]\n            j += 1\n        else:\n            x = a[i]\n            i += 1\n            j += 1\n        if not result or result[-1] != x:\n            result.append(x)\n    rest = a[i:] if i < len(a) else b[j:]\n    for x in rest:\n        if not result or result[-1] != x:\n            result.append(x)\n    return result\n",
+    "failing_args": [
+      [
+        1,
+        3,
+        3,
+        5
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "expected": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "normal_args": [
+      [
+        [
+          1,
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      [
+        [
+          1,
+          5,
+          9
+        ],
+        [
+          2,
+          2,
+          6
+        ]
+      ],
+      [
+        [],
+        []
+      ]
+    ],
+    "bug_description": "The leftover tail of the longer list is appended with extend after only trimming its first element against the last merged value, so repeated values inside the tail itself are never deduplicated.",
+    "domain": "code"
+  },
+  {
+    "id": "c2",
+    "func_name": "most_frequent_word",
+    "spec": "most_frequent_word(text) takes a string and splits it on whitespace into tokens; each token is normalized by stripping leading/trailing ASCII punctuation (string.punctuation) and lowercasing, and tokens that become empty are ignored. It must return the normalized word that occurs the most times. If several words share the highest count, return the one whose first occurrence in the text comes earliest. If there are no non-empty tokens (including when text is empty or all punctuation), return None. Examples: most_frequent_word('the cat and the dog') returns 'the'; most_frequent_word('Hi, hi! HI.') returns 'hi'; most_frequent_word('...') returns None.",
+    "buggy_code": "import string\n\n\ndef most_frequent_word(text):\n    counts = {}\n    best = None\n    best_count = 0\n    for raw in text.split():\n        word = raw.strip(string.punctuation).lower()\n        if not word:\n            continue\n        counts[word] = counts.get(word, 0) + 1\n        if counts[word] > best_count:\n            best = word\n            best_count = counts[word]\n    return best\n",
+    "fixed_code": "import string\n\n\ndef most_frequent_word(text):\n    counts = {}\n    for raw in text.split():\n        word = raw.strip(string.punctuation).lower()\n        if not word:\n            continue\n        counts[word] = counts.get(word, 0) + 1\n    best = None\n    for word, count in counts.items():\n        if best is None or count > counts[best]:\n            best = word\n    return best\n",
+    "failing_args": [
+      "b a a b"
+    ],
+    "expected": "b",
+    "normal_args": [
+      [
+        "the cat and the dog"
+      ],
+      [
+        "Hi, hi! HI."
+      ],
+      [
+        "one two two"
+      ]
+    ],
+    "bug_description": "The single-pass running maximum keeps whichever word first reaches the top count, which breaks the tie rule when an earlier-occurring word only catches up to that count later in the text.",
+    "domain": "code"
+  }
+]

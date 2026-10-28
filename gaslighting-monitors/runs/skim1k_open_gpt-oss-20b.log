@@ -1,0 +1,14 @@
+grades_skim1k.jsonl: 12 to run (0 cached)
+  ok q2-s0-gpt-oss-20b
+  ok q1-s0-gpt-oss-120b
+  ok q1-s0-gpt-oss-20b
+  ok q3-s0-gpt-oss-20b
+  ok q3-s0-gpt-oss-120b
+  ok q3-s0-gemma-4-31b
+  ok q2-s0-gemma-4-26b-a4b
+  ok q3-s0-gemma-4-26b-a4b
+  ok q2-s0-gpt-oss-120b
+  ok q1-s0-gemma-4-31b
+  ok q2-s0-gemma-4-31b
+  ok q1-s0-gemma-4-26b-a4b
+done: 12 ok, 0 err

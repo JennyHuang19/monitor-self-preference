@@ -1,0 +1,52 @@
+grades.jsonl: 36 to run (0 cached)
+  ok q1-s0-glm-5.3
+  ok q2-s0-glm-5.3
+  ok q1-s0-gpt-6.1-terra
+  ok q2-s0-gpt-6.1-terra
+  ok q2-s2-glm-5.3
+  ok q1-s1-glm-5.3
+  ok q1-s0-kimi-k3
+  ok q2-s2-gpt-6.1-terra
+  ok q1-s1-gpt-6.1-terra
+  ok q2-s2-kimi-k3
+  ok q1-s1-kimi-k3
+  ok q1-s2-glm-5.3
+  ok q1-s2-kimi-k3
+  ok q3-s1-glm-5.3
+  ok q2-s0-kimi-k3
+  ok q1-s2-gpt-6.1-terra
+  ok q3-s1-gpt-6.1-terra
+  ok q3-s1-kimi-k3
+  ok q2-s1-glm-5.3
+  ok q1-s0-qwen3.8-max
+  ok q2-s1-kimi-k3
+  ok q2-s1-gpt-6.1-terra
+  ok q1-s1-qwen3.8-max
+  ok q3-s2-glm-5.3
+  ok q3-s2-kimi-k3
+  ok q3-s2-gpt-6.1-terra
+  ok q2-s2-qwen3.8-max
+  ok q3-s0-glm-5.3
+  ok q1-s2-qwen3.8-max
+  ok q3-s0-gpt-6.1-terra
+  ok q3-s0-kimi-k3
+  ok q2-s0-qwen3.8-max
+  ok q3-s2-qwen3.8-max
+  ok q3-s0-qwen3.8-max
+  ok q2-s1-qwen3.8-max
+  ok q3-s1-qwen3.8-max
+done: 36 ok, 0 err
+baseline.jsonl: 12 to run (0 cached)
+  ok q1-glm-5.3
+  ok q2-gpt-6.1-terra
+  ok q1-gpt-6.1-terra
+  ok q1-kimi-k3
+  ok q3-glm-5.3
+  ok q3-gpt-6.1-terra
+  ok q2-kimi-k3
+  ok q3-kimi-k3
+  ok q1-qwen3.8-max
+  ok q3-qwen3.8-max
+  ok q2-qwen3.8-max
+  ok q2-glm-5.3
+done: 12 ok, 0 err

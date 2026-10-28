@@ -1,0 +1,254 @@
+<title>Thirty-Five Verdicts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column. Tally strip up top, filter bar, then a stack of case-file cards. */
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --fg: #1d232b;
+  --muted: #5d6874;
+  --line: #dde2e8;
+  --daniel: #9a5a22;      /* sawdust oak */
+  --daniel-soft: #f3e6d8;
+  --maya: #2f679f;        /* porch-light blue */
+  --maya-soft: #dde8f4;
+  --ambig: #6b6480;
+  --ambig-soft: #e7e4ee;
+  --err: #b03a3a;
+  --font-display: "Young Serif", Georgia, serif;
+  --font-body: "Source Sans 3", -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181d; --surface: #1c2229; --fg: #e4e8ec; --muted: #9aa5b1; --line: #2f3740;
+    --daniel: #e0a466; --daniel-soft: #3a2b1d; --maya: #7fb0e3; --maya-soft: #1d2c3d;
+    --ambig: #b4acc9; --ambig-soft: #2b2836; --err: #e57c7c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14181d; --surface: #1c2229; --fg: #e4e8ec; --muted: #9aa5b1; --line: #2f3740;
+  --daniel: #e0a466; --daniel-soft: #3a2b1d; --maya: #7fb0e3; --maya-soft: #1d2c3d;
+  --ambig: #b4acc9; --ambig-soft: #2b2836; --err: #e57c7c; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 920px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 32px; }
+h1 { font-family: var(--font-display); font-weight: 400; font-size: 2.2rem; line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; margin: 0; }
+.lede { color: var(--muted); margin: 8px 0 0; max-width: 62ch; }
+.label { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Tally */
+.tally { display: grid; gap: 10px; }
+.tally-row { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 96px) minmax(0, 1fr) auto; gap: 12px; align-items: center; font-variant-numeric: tabular-nums; }
+.tally-row .m { font-family: var(--font-mono); font-size: 0.85rem; overflow-wrap: anywhere; }
+.tally-row .p { color: var(--muted); font-size: 0.9rem; }
+.bar { display: flex; height: 22px; border-radius: 3px; overflow: hidden; background: var(--line); }
+.bar span { display: block; height: 100%; }
+.bar .d { background: var(--daniel); } .bar .y { background: var(--maya); } .bar .a { background: var(--ambig); } .bar .o { background: var(--err); }
+.tally-row .n { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.85rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+/* Filters */
+.filters { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; padding-block: 14px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.filters label { display: grid; gap: 4px; }
+select { font: inherit; font-size: 0.9rem; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); color: var(--fg); }
+select:focus-visible, button:focus-visible { outline: 2px solid var(--maya); outline-offset: 2px; }
+.count { margin-left: auto; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+
+/* Cards */
+.cards { display: grid; gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; border-left: 4px solid var(--line); min-width: 0; }
+.card.Daniel { border-left-color: var(--daniel); } .card.Maya { border-left-color: var(--maya); } .card.ambiguous { border-left-color: var(--ambig); }
+.card header { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 14px 18px 0; }
+.card .who { font-family: var(--font-mono); font-size: 0.85rem; }
+.pill { font-size: 0.78rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+.pill.Daniel { background: var(--daniel-soft); color: var(--daniel); } .pill.Maya { background: var(--maya-soft); color: var(--maya); }
+.pill.ambiguous, .pill.other { background: var(--ambig-soft); color: var(--ambig); } .pill.ERROR, .pill.unparsed { background: var(--ambig-soft); color: var(--err); }
+.meta { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clues { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px 0; }
+.clue { font-family: var(--font-mono); font-size: 0.72rem; padding: 2px 7px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); }
+.clue.forD { border-color: var(--daniel); color: var(--daniel); } .clue.forM { border-color: var(--maya); color: var(--maya); }
+.body { padding: 4px 18px 0; overflow-wrap: anywhere; position: relative; }
+.body.clamped { max-height: 15em; overflow: hidden; }
+.body.clamped::after { content: ""; position: absolute; inset: auto 0 0; height: 4em; background: linear-gradient(transparent, var(--surface)); }
+.body p, .body li { max-width: 68ch; }
+.body h1, .body h2, .body h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 700; margin: 1em 0 0.3em; }
+.body code { font-family: var(--font-mono); font-size: 0.85em; }
+.card footer { padding: 6px 18px 14px; display: flex; flex-wrap: wrap; gap: 20px; }
+.debate { border-top: 1px solid var(--line); padding: 14px 18px 18px; display: grid; gap: 12px; background: var(--bg); border-radius: 0 0 6px 0; }
+.turn { border-left: 3px solid var(--line); padding-left: 14px; min-width: 0; overflow-wrap: anywhere; }
+.turn.Daniel { border-left-color: var(--daniel); } .turn.Maya { border-left-color: var(--maya); }
+.turn-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.turn-body { font-size: 0.93rem; }
+.turn-body p, .turn-body li { max-width: 68ch; }
+.turn-body h1, .turn-body h2, .turn-body h3 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 700; margin: 0.8em 0 0.2em; }
+button.toggle { font: inherit; font-size: 0.85rem; font-weight: 600; background: none; border: 0; padding: 4px 0; color: var(--maya); cursor: pointer; }
+.err-text { font-family: var(--font-mono); font-size: 0.85rem; color: var(--err); padding: 10px 18px 14px; }
+.empty { color: var(--muted); padding: 24px 0; }
+@media (max-width: 560px) {
+  .tally-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .tally-row .bar { grid-column: 1 / -1; }
+  .count { margin-left: 0; width: 100%; }
+}
+</style>
+
+<div class="wrap">
+  <div>
+    <div class="label">double-plot eval</div>
+    <h1>Who took the 36th cookie?</h1>
+    <p class="lede">Model answers to <em>Thirty-Five</em>, a play written so Daniel and Maya fit the evidence equally well. A balanced play should split the bars roughly in half.</p>
+  </div>
+
+  <section class="tally" aria-labelledby="tally-h">
+    <h2 id="tally-h">Verdicts by model and prompt</h2>
+    <div class="legend">
+      <span><i style="background:var(--daniel)"></i>Daniel</span>
+      <span><i style="background:var(--maya)"></i>Maya</span>
+      <span><i style="background:var(--ambig)"></i>Ambiguous / other</span>
+      <span><i style="background:var(--err)"></i>Error</span>
+    </div>
+    <div id="tally"></div>
+  </section>
+
+  <section aria-label="Responses" style="display:grid;gap:16px">
+    <div class="filters">
+      <label><span class="label">Play</span><select id="f-play"></select></label>
+      <label><span class="label">Run</span><select id="f-run"></select></label>
+      <label><span class="label">Model</span><select id="f-model"></select></label>
+      <label><span class="label">Prompt</span><select id="f-prompt"></select></label>
+      <label><span class="label">Verdict</span><select id="f-culprit"></select></label>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const ALL = JSON.parse(document.getElementById("data").textContent);
+const RECORDS = ALL.filter(r => r.type !== "debate");
+const DEBATES = Object.fromEntries(ALL.filter(r => r.type === "debate").map(d => [d.debate_id, d]));
+// Debate verdicts get tallied separately by the side the model argued.
+const groupLabel = r => r.assigned_side
+  ? `${r.model} · argued ${r.assigned_side}${r.condition ? " · " + r.condition : ""}` : r.model;
+const PROMPT_NAMES = { primary: "Forced choice", open: "Open-ended", confidence: "Confidence" };
+
+// Clues from answer-key.md; side says which suspect the clue belongs to.
+const CLUES = [
+  ["wax paper", /wax[- ]?paper|wrapp/i, "M"],
+  ["Eli's text", /thank u|makes sense now|\bty\b/i, "M"],
+  ["\"coming at five\"", /coming (over )?at five|at \*?five|in front of everybody/i, "M"],
+  ["screen door", /screen door|unlatch/i, "M"],
+  ["package", /package|vitamin/i, "M"],
+  ["raisins", /raisin/i, "M"],
+  ["Helen's look", /looks? at (the jar|maya)|says nothing/i, "M"],
+  ["sawdust", /sawdust/i, "D"],
+  ["sawdust on papers", /on my papers|grains|sawdust.{0,60}(papers|squares?)|(papers|squares?).{0,60}sawdust/i, "D"],
+  ["saved him one", /save[ds]? (me|him) one|every batch until/i, "D"],
+  ["gum", /\bgum\b/i, "D"],
+  ["water bottle", /water bottle|warm/i, "D"],
+  ["sugar ban", /dr\.? ahn|sugar|diet|six weeks/i, "D"],
+  ["Walt took one", /walt (used to|always)|always (took|knew)|every batch/i, "D"],
+  ["loose lid", /click|lid/i, ""],
+];
+
+const VERDICTS = ["Daniel", "Maya", "ambiguous", "other", "ERROR"];
+const verdictOf = r => r.error ? "ERROR" : (r.culprit || "unparsed");
+const uniq = a => [...new Set(a)].sort();
+
+function fillSelect(id, values, labelFn = v => v) {
+  const el = document.getElementById(id);
+  el.innerHTML = `<option value="">All</option>` + values.map(v => `<option value="${v}">${labelFn(v)}</option>`).join("");
+  el.addEventListener("change", render);
+}
+fillSelect("f-play", uniq(RECORDS.map(r => r.play || "v1")));
+fillSelect("f-run", uniq(RECORDS.map(r => r.run)).reverse());
+fillSelect("f-model", uniq(RECORDS.map(r => r.model)));
+fillSelect("f-prompt", Object.keys(PROMPT_NAMES).filter(p => RECORDS.some(r => r.prompt === p)), p => PROMPT_NAMES[p]);
+fillSelect("f-culprit", VERDICTS.filter(v => RECORDS.some(r => verdictOf(r) === v)));
+
+const val = id => document.getElementById(id).value;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function renderTally(rows) {
+  const groups = {};
+  for (const r of rows) (groups[groupLabel(r) + "\u0000" + r.prompt] ||= []).push(r);
+  const keys = Object.keys(groups).sort();
+  document.getElementById("tally").innerHTML = keys.length ? keys.map(k => {
+    const [model, prompt] = k.split("\u0000");
+    const g = groups[k], n = g.length;
+    const c = v => g.filter(r => verdictOf(r) === v).length;
+    const d = c("Daniel"), y = c("Maya"), err = c("ERROR") + c("unparsed"), a = n - d - y - err;
+    const seg = (cls, x) => x ? `<span class="${cls}" style="width:${100 * x / n}%"></span>` : "";
+    return `<div class="tally-row">
+      <span class="m">${esc(model)}</span><span class="p">${PROMPT_NAMES[prompt] || esc(prompt)}</span>
+      <div class="bar" role="img" aria-label="Daniel ${d}, Maya ${y}, ambiguous ${a}, error ${err}">${seg("d", d)}${seg("y", y)}${seg("a", a)}${seg("o", err)}</div>
+      <span class="n">D ${d} · M ${y}${a ? ` · ? ${a}` : ""} / ${n}</span></div>`;
+  }).join("") : `<p class="empty">No responses match these filters.</p>`;
+}
+
+function debateHTML(d) {
+  return d.turns.map(t => `<div class="turn ${t.side}">
+    <div class="turn-head"><span class="label">${t.round === 0 ? "Opening" : "Rebuttal " + t.round}</span>
+      <span class="who">${esc(t.model)}</span><span class="pill ${t.side}">for ${t.side}</span></div>
+    <div class="turn-body">${DOMPurify.sanitize(marked.parse(t.text))}</div></div>`).join("");
+}
+
+function card(r) {
+  const v = verdictOf(r);
+  const text = r.answer || "";
+  const clues = CLUES.filter(([, re]) => re.test(text))
+    .map(([name, , side]) => `<span class="clue ${side ? "for" + side : ""}">${esc(name)}</span>`).join("");
+  const meta = [
+    r.assigned_side ? `argued ${r.assigned_side} in debate` : null,
+    r.condition ? `${r.condition} verdict (not told its side)` : null,
+    r.confidence != null ? `${r.confidence}% confident` : null,
+    r.mentions_both_readings === true ? "weighs both suspects" : r.mentions_both_readings === false ? "one suspect only" : null,
+    `play ${r.play || "v1"}`, `run ${r.run}`, `sample ${r.sample}`,
+  ].filter(Boolean).join(" · ");
+  const body = r.error
+    ? `<div class="err-text">${esc(r.error)}</div>`
+    : `<div class="clues" aria-label="Clues cited">${clues}</div>
+       <div class="body clamped">${DOMPurify.sanitize(marked.parse(text))}</div>
+       <footer><button class="toggle" type="button">Show full answer</button>
+         ${DEBATES[r.debate_id] ? `<button class="toggle debate-toggle" type="button">Show debate</button>` : ""}</footer>
+       ${DEBATES[r.debate_id] ? `<div class="debate" hidden>${debateHTML(DEBATES[r.debate_id])}</div>` : ""}`;
+  return `<article class="card ${v}">
+    <header><span class="who">${esc(r.model)}</span><span class="meta">${PROMPT_NAMES[r.prompt] || esc(r.prompt)}</span>
+      <span class="pill ${v}">${esc(v)}</span><span class="meta">${meta}</span></header>${body}</article>`;
+}
+
+function render() {
+  const rows = RECORDS.filter(r =>
+    (!val("f-play") || (r.play || "v1") === val("f-play")) &&
+    (!val("f-run") || r.run === val("f-run")) &&
+    (!val("f-model") || r.model === val("f-model")) &&
+    (!val("f-prompt") || r.prompt === val("f-prompt")) &&
+    (!val("f-culprit") || verdictOf(r) === val("f-culprit")));
+  renderTally(rows);
+  document.getElementById("count").textContent = `${rows.length} of ${RECORDS.length} responses`;
+  document.getElementById("cards").innerHTML = rows.map(card).join("") || `<p class="empty">No responses match these filters.</p>`;
+}
+
+document.getElementById("cards").addEventListener("click", e => {
+  const btn = e.target.closest("button.toggle");
+  if (!btn) return;
+  if (btn.classList.contains("debate-toggle")) {
+    const deb = btn.closest(".card").querySelector(".debate");
+    deb.hidden = !deb.hidden;
+    btn.textContent = deb.hidden ? "Show debate" : "Hide debate";
+    return;
+  }
+  const body = btn.closest(".card").querySelector(".body");
+  const open = body.classList.toggle("clamped") === false;
+  btn.textContent = open ? "Collapse" : "Show full answer";
+});
+
+render();
+</script>

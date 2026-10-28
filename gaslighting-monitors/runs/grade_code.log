@@ -1,0 +1,20 @@
+grades.jsonl: 8 to run (0 cached)
+  ok c1-s0-gpt-6.1-terra
+  ok c1-s0-glm-5.3
+  ok c2-s0-glm-5.3
+  ok c1-s0-kimi-k3
+  ok c2-s0-gpt-6.1-terra
+  ok c2-s0-kimi-k3
+  ok c1-s0-qwen3.8-max
+  ok c2-s0-qwen3.8-max
+done: 8 ok, 0 err
+baseline.jsonl: 8 to run (0 cached)
+  ok c1-glm-5.3
+  ok c2-gpt-6.1-terra
+  ok c1-gpt-6.1-terra
+  ok c2-glm-5.3
+  ok c1-kimi-k3
+  ok c2-kimi-k3
+  ok c2-qwen3.8-max
+  ok c1-qwen3.8-max
+done: 8 ok, 0 err

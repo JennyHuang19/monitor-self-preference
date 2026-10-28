@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWE-chat Viewer</title>
+<style>
+:root {
+  --bg: #f7f7f5; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e3e2dc;
+  --user: #e8f0fe; --user-edge: #3b6fd8; --asst: #ffffff; --asst-edge: #9a9a92;
+  --think: #fbf5e6; --think-edge: #c69a2b; --tool: #f1f6f1; --tool-edge: #4f8a55;
+  --res: #f4f4f2; --res-edge: #b8b8b0; --err: #c8473b; --sys: #f3eef8; --sys-edge: #8a6bb3;
+  --accent: #3b6fd8; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --panel: #1f1f1d; --ink: #e9e8e3; --muted: #9a9991; --line: #33332f;
+    --user: #1c2a44; --asst: #1f1f1d; --think: #2c2617; --tool: #1a2a1c; --res: #232321; --sys: #271f33;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --panel: #1f1f1d; --ink: #e9e8e3; --muted: #9a9991; --line: #33332f;
+  --user: #1c2a44; --asst: #1f1f1d; --think: #2c2617; --tool: #1a2a1c; --res: #232321; --sys: #271f33;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 -apple-system, system-ui, sans-serif; }
+.app { display: grid; grid-template-columns: 300px 1fr; height: 100vh; }
+aside { border-right: 1px solid var(--line); overflow-y: auto; background: var(--panel); }
+aside h1 { font-size: 15px; margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.sess { padding: 10px 16px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.sess:hover { background: var(--bg); }
+.sess.active { background: var(--user); box-shadow: inset 3px 0 var(--accent); }
+.sess .t { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sess .s { color: var(--muted); font-size: 12px; }
+main { overflow-y: auto; padding: 0 24px 80px; }
+.toolbar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 12px 0; border-bottom: 1px solid var(--line);
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+.toolbar input[type=search] { flex: 1; min-width: 160px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); }
+.toolbar label { color: var(--muted); user-select: none; }
+.meta { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 16px 0; }
+.meta h2 { margin: 0 0 6px; font-size: 17px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+.chip b { color: var(--ink); font-weight: 600; }
+.meta dl { display: grid; grid-template-columns: 90px 1fr; gap: 4px 12px; margin: 0; font-size: 13px; }
+.meta dt { color: var(--muted); }
+.meta dd { margin: 0; }
+.meta a { color: var(--accent); }
+.turn { border-left: 3px solid; border-radius: 6px; padding: 8px 12px; margin: 8px 0; max-width: 980px; }
+.turn .h { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); display: flex; gap: 8px; }
+.turn .h .n { margin-left: auto; text-transform: none; letter-spacing: 0; }
+.turn pre { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; font: 12.5px/1.45 var(--mono); }
+.turn .body { white-space: pre-wrap; word-break: break-word; margin-top: 2px; }
+.user { background: var(--user); border-color: var(--user-edge); }
+.assistant { background: var(--asst); border-color: var(--asst-edge); border: 1px solid var(--line); border-left: 3px solid var(--asst-edge); }
+.thinking { background: var(--think); border-color: var(--think-edge); font-style: italic; }
+.tool_call { background: var(--tool); border-color: var(--tool-edge); }
+.tool_result { background: var(--res); border-color: var(--res-edge); }
+.tool_result.err { border-color: var(--err); }
+.system, .event { background: var(--sys); border-color: var(--sys-edge); }
+.side { margin-left: 28px; opacity: .85; }
+details > summary { cursor: pointer; list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary .h::before { content: "▸ "; }
+details[open] > summary .h::before { content: "▾ "; }
+.preview { color: var(--muted); font: 12px var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+mark { background: #ffe46b; color: #000; }
+.hidden { display: none; }
+.empty { color: var(--muted); padding: 40px; }
+@media (max-width: 760px) {
+  .app { grid-template-columns: 1fr; height: auto; }
+  aside { max-height: 40vh; border-right: 0; border-bottom: 1px solid var(--line); }
+  main { padding: 0 16px 60px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside><h1>SWE-chat · <span id="count"></span> sessions</h1><div id="list"></div></aside>
+  <main>
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Search this session…">
+      <label><input type="checkbox" data-k="thinking" checked> thinking</label>
+      <label><input type="checkbox" data-k="tool_call" checked> tool calls</label>
+      <label><input type="checkbox" data-k="tool_result" checked> tool results</label>
+      <label><input type="checkbox" data-k="system"> system/meta</label>
+      <label><input type="checkbox" id="expand"> expand tools</label>
+      <span id="stats" class="chip"></span>
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+<script id="data" type="application/json">__SESSIONS_JSON__</script>
+<script>
+const SESSIONS = JSON.parse(document.getElementById('data').textContent);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let cur = 0;
+
+function firstPrompt(s) { const u = s.turns.find(t => t.kind === 'user'); return u ? u.text.trim().split('\n')[0] : '(no user prompt)'; }
+function fmtNum(n) { return n == null ? '—' : Number(n).toLocaleString(); }
+function fmtDur(s) { if (!s) return '—'; const m = Math.round(s / 60); return m < 60 ? m + 'm' : (m / 60).toFixed(1) + 'h'; }
+
+function renderList() {
+  $('#count').textContent = SESSIONS.length;
+  $('#list').innerHTML = SESSIONS.map((s, i) => `
+    <div class="sess ${i === cur ? 'active' : ''}" data-i="${i}">
+      <div class="t">${esc(firstPrompt(s))}</div>
+      <div class="s">${esc(s.meta.agent)} · ${esc(s.meta.model || '?')} · ${esc(s.meta.repo_id || '')}</div>
+      <div class="s">${s.meta.prompt_count ?? '?'} prompts · ${s.turns.length} turns${s.meta.format === 'raw' ? ' · raw' : ''}</div>
+    </div>`).join('');
+  document.querySelectorAll('.sess').forEach(el => el.onclick = () => { cur = +el.dataset.i; location.hash = cur; render(); });
+}
+
+function renderMeta(m) {
+  const chip = (k, v) => v == null || v === '' ? '' : `<span class="chip">${k} <b>${esc(v)}</b></span>`;
+  const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : '';
+  return `<div class="meta">
+    <h2>${esc(m.repo_id || m.session_id)}</h2>
+    <div class="chips">
+      ${chip('agent', m.agent)}${chip('model', m.model)}${chip('persona', m.user_persona)}${chip('success', m.session_success)}
+      ${chip('duration', fmtDur(m.duration_seconds))}${chip('prompts', m.prompt_count)}${chip('tool calls', fmtNum(m.tool_call_count))}
+      ${chip('in tok', fmtNum(m.input_tokens))}${chip('out tok', fmtNum(m.output_tokens))}${chip('files', m.files_touched_count)}
+      ${chip('agent-authored %', m.agent_percentage != null ? Math.round(m.agent_percentage) : null)}
+    </div>
+    <dl>${row('Intent', m.summary_intent)}${row('Outcome', m.summary_outcome)}${row('Friction', m.summary_friction)}${row('Learnings', m.summary_learnings)}
+      <dt>Session</dt><dd><code>${esc(m.session_id)}</code> · ${esc((m.created_at || '').slice(0, 16))}
+      ${m.viewer_url_hf ? ` · <a href="${esc(m.viewer_url_hf)}" target="_blank">HF</a>` : ''}</dd></dl>
+  </div>`;
+}
+
+const LABEL = { user: 'User', assistant: 'Assistant', thinking: 'Thinking', tool_call: 'Tool call', tool_result: 'Tool result', system: 'System / meta', event: 'Event' };
+
+function renderTurn(t, i, q) {
+  const kind = t.kind;
+  const hl = s => { let h = esc(s); if (q) h = h.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), m => `<mark>${m}</mark>`); return h; };
+  const cls = `turn ${kind}${t.side ? ' side' : ''}${t.name === 'error' ? ' err' : ''}`;
+  const time = t.ts ? t.ts.slice(11, 19) : '';
+  const head = `<div class="h"><span>${LABEL[kind] || kind}${t.name && t.name !== 'error' ? ' · ' + esc(t.name) : ''}${t.name === 'error' ? ' · error' : ''}${t.side ? ' · subagent' : ''}</span><span class="n">#${i} ${time}</span></div>`;
+  const collapsible = kind === 'tool_call' || kind === 'tool_result' || kind === 'event' || kind === 'system';
+  if (!collapsible) return `<div class="${cls}" data-kind="${kind}">${head}<div class="body">${hl(t.text)}</div></div>`;
+  const open = $('#expand').checked || (q && t.text.toLowerCase().includes(q.toLowerCase()));
+  const prev = t.text.replace(/\s+/g, ' ').slice(0, 160);
+  return `<details class="${cls}" data-kind="${kind}" ${open ? 'open' : ''}><summary>${head}<div class="preview">${esc(prev)}</div></summary><pre>${hl(t.text)}</pre></details>`;
+}
+
+function render() {
+  renderList();
+  const s = SESSIONS[cur];
+  if (!s) { $('#view').innerHTML = '<div class="empty">No sessions.</div>'; return; }
+  const q = $('#q').value.trim();
+  const show = {}; document.querySelectorAll('[data-k]').forEach(c => show[c.dataset.k] = c.checked);
+  show.event = show.system;
+  let n = 0, hits = 0;
+  const html = s.turns.map((t, i) => {
+    if (show[t.kind] === false) return '';
+    if (q && !t.text.toLowerCase().includes(q.toLowerCase())) return '';
+    n++; if (q) hits++;
+    return renderTurn(t, i, q);
+  }).join('');
+  $('#view').innerHTML = renderMeta(s.meta) + (html || '<div class="empty">Nothing matches.</div>');
+  const counts = s.turns.reduce((a, t) => (a[t.kind] = (a[t.kind] || 0) + 1, a), {});
+  $('#stats').textContent = q ? `${hits} matching turns` : `${counts.user || 0} user · ${counts.assistant || 0} asst · ${counts.tool_call || 0} tools · showing ${n}`;
+}
+
+document.querySelectorAll('.toolbar input').forEach(el => el.addEventListener('input', render));
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'j') { cur = Math.min(SESSIONS.length - 1, cur + 1); render(); $('main').scrollTop = 0; }
+  if (e.key === 'k') { cur = Math.max(0, cur - 1); render(); $('main').scrollTop = 0; }
+});
+cur = Math.min(SESSIONS.length - 1, +location.hash.slice(1) || 0);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+grades.jsonl: 0 to run (0 cached)
+done: 0 ok, 0 err
+baseline.jsonl: 24 to run (0 cached)
+  ok t1-glm-5.3
+  ok t2-kimi-k3
+  ok t3-glm-5.3
+  ok t2-glm-5.3
+  ok t1-gpt-6.1-terra
+  ok t2-gpt-6.1-terra
+  ok t3-kimi-k3
+  ok t4-glm-5.3
+  ok t3-gpt-6.1-terra
+  ok t4-kimi-k3
+  ok t1-kimi-k3
+  ok t5-glm-5.3
+  ok t5-kimi-k3
+  ok t1-qwen3.8-max
+  ok t4-gpt-6.1-terra
+  ok t6-glm-5.3
+  ok t5-gpt-6.1-terra
+  ok t6-kimi-k3
+  ok t4-qwen3.8-max
+  ok t6-gpt-6.1-terra
+  ok t3-qwen3.8-max
+  ok t5-qwen3.8-max
+  ok t2-qwen3.8-max
+  ok t6-qwen3.8-max
+done: 24 ok, 0 err

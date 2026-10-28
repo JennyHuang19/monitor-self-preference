@@ -1,0 +1,54 @@
+grades.jsonl: 50 to run (0 cached)
+  ok t4-s0-kimi-k3
+  ok t4-s0-glm-5.3
+  ok t8-s0-glm-5.3
+  ok t8-s0-gpt-6.1-terra
+  ok t3-s0-glm-5.3
+  ok t8-s0-kimi-k3
+  ok t4-s0-gpt-6.1-terra
+  ok t4-s0-glm-5.3-flash
+  ok t8-s0-glm-5.3-flash
+  ok t3-s0-kimi-k3
+  ok t1-s0-glm-5.3
+  ok t3-s0-gpt-6.1-terra
+  ok t1-s0-glm-5.3-flash
+  ok t5-s0-glm-5.3
+  ok t3-s0-glm-5.3-flash
+  ok t1-s0-kimi-k3
+  ok t5-s0-glm-5.3-flash
+  ok t5-s0-kimi-k3
+  ok t1-s0-gpt-6.1-terra
+  ok t6-s0-glm-5.3
+  ok t8-s0-qwen3.8-max
+  ok t5-s0-gpt-6.1-terra
+  ok t4-s0-qwen3.8-max
+  ok t7-s0-glm-5.3
+  ok t6-s0-kimi-k3
+  ok t3-s0-qwen3.8-max
+  ok t6-s0-gpt-6.1-terra
+  ok t6-s0-glm-5.3-flash
+  ok t9-s0-glm-5.3
+  ok t7-s0-kimi-k3
+  ok t1-s0-qwen3.8-max
+  ok t7-s0-gpt-6.1-terra
+  ok t7-s0-glm-5.3-flash
+  ok t2-s0-glm-5.3
+  ok t9-s0-gpt-6.1-terra
+  ok t9-s0-glm-5.3-flash
+  ok t5-s0-qwen3.8-max
+  ok t9-s0-kimi-k3
+  ok t10-s0-glm-5.3
+  ok t2-s0-glm-5.3-flash
+  ok t2-s0-kimi-k3
+  ok t7-s0-qwen3.8-max
+  ok t2-s0-gpt-6.1-terra
+  ok t6-s0-qwen3.8-max
+  ok t9-s0-qwen3.8-max
+  ok t10-s0-gpt-6.1-terra
+  ok t10-s0-glm-5.3-flash
+  ok t2-s0-qwen3.8-max
+  ok t10-s0-kimi-k3
+  ok t10-s0-qwen3.8-max
+done: 50 ok, 0 err
+baseline.jsonl: 0 to run (50 cached)
+done: 0 ok, 0 err

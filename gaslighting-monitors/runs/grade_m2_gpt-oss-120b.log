@@ -1,0 +1,41 @@
+grades.jsonl: 12 to run (0 cached)
+  ok m1-s0-gpt-oss-20b
+  ok m1-s0-gpt-oss-120b
+  retry 1 openai/gpt-oss-20b: empty content (finish=stop)
+  ok m3-s0-gpt-oss-120b
+  ok m2-s0-gpt-oss-20b
+  retry 2 openai/gpt-oss-20b: empty content (finish=stop)
+  ok m3-s0-gpt-oss-20b
+  ok m2-s0-gpt-oss-120b
+  ok m1-s0-gemma-4-31b
+  ok m2-s0-gemma-4-31b
+  ok m1-s0-gemma-4-26b-a4b
+  ok m3-s0-gemma-4-31b
+  ok m3-s0-gemma-4-26b-a4b
+  ok m2-s0-gemma-4-26b-a4b
+done: 12 ok, 0 err
+baseline.jsonl: 0 to run (12 cached)
+done: 0 ok, 0 err
+grades_self.jsonl: 12 to run (0 cached)
+  ok m2-s0-gpt-oss-120b
+  ok m1-s0-gpt-oss-20b
+  ok m1-s0-gpt-oss-120b
+  ok m3-s0-gpt-oss-120b
+  ok m3-s0-gpt-oss-20b
+  ok m2-s0-gpt-oss-20b
+  ok m1-s0-gemma-4-31b
+  retry 1 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  retry 1 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  retry 1 google/gemma-4-31b-it: [Errno 54] Connection reset by peer
+  retry 1 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  retry 1 google/gemma-4-31b-it: [Errno 54] Connection reset by peer
+  retry 2 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  retry 2 google/gemma-4-31b-it: [Errno 54] Connection reset by peer
+  retry 2 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  retry 2 google/gemma-4-31b-it: [Errno 54] Connection reset by peer
+  retry 2 google/gemma-4-26b-a4b-it: [Errno 54] Connection reset by peer
+  ok m1-s0-gemma-4-26b-a4b
+  ok m2-s0-gemma-4-31b
+  ok m3-s0-gemma-4-31b
+  ok m3-s0-gemma-4-26b-a4b
+  retry 3 google/gemma-4-26b-a4b-it: empty content (finish=length)
