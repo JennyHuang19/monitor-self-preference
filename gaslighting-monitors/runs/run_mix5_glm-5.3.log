@@ -1,0 +1,180 @@
+answers.jsonl: 5 to run (0 cached)
+  ok p002-s0
+  ok p005-s0
+  ok p001-s0
+  ok p004-s0
+  ok p003-s0
+done: 5 ok, 0 err
+grades.jsonl: 25 to run (0 cached)
+  ok p005-s0-glm-5.3-flash
+  ok p005-s0-glm-5.3
+  ok p002-s0-glm-5.3
+  ok p002-s0-gpt-oss-120b
+  ok p005-s0-kimi-k3
+  ok p002-s0-kimi-k3
+  ok p005-s0-gpt-oss-120b
+  ok p001-s0-glm-5.3
+  ok p002-s0-gpt-oss-20b
+  ok p005-s0-gpt-oss-20b
+  ok p001-s0-glm-5.3-flash
+  ok p001-s0-gpt-oss-120b
+  ok p001-s0-gpt-oss-20b
+  ok p004-s0-glm-5.3
+  ok p004-s0-glm-5.3-flash
+  ok p003-s0-glm-5.3
+  ok p004-s0-gpt-oss-20b
+  ok p001-s0-kimi-k3
+  ok p003-s0-kimi-k3
+  ok p003-s0-gpt-oss-20b
+  ok p003-s0-glm-5.3-flash
+  ok p004-s0-kimi-k3
+  ok p004-s0-gpt-oss-120b
+  ok p003-s0-gpt-oss-120b
+  ok p002-s0-glm-5.3-flash
+done: 25 ok, 0 err
+baseline.jsonl: 0 to run (25 cached)
+done: 0 ok, 0 err
+grades_self.jsonl: 25 to run (0 cached)
+  ok p005-s0-glm-5.3
+  ok p002-s0-gpt-oss-120b
+  ok p002-s0-gpt-oss-20b
+  ok p002-s0-glm-5.3
+  ok p002-s0-kimi-k3
+  ok p005-s0-gpt-oss-20b
+  ok p001-s0-glm-5.3
+  ok p002-s0-glm-5.3-flash
+  ok p005-s0-glm-5.3-flash
+  ok p005-s0-kimi-k3
+  ok p001-s0-kimi-k3
+  ok p004-s0-glm-5.3-flash
+  ok p001-s0-gpt-oss-20b
+  ok p004-s0-gpt-oss-20b
+  ok p004-s0-glm-5.3
+  ok p004-s0-gpt-oss-120b
+  ok p003-s0-glm-5.3
+  ok p001-s0-gpt-oss-120b
+  ok p001-s0-glm-5.3-flash
+  ok p004-s0-kimi-k3
+  ok p005-s0-gpt-oss-120b
+  ok p003-s0-kimi-k3
+  ok p003-s0-gpt-oss-120b
+  ok p003-s0-gpt-oss-20b
+  ok p003-s0-glm-5.3-flash
+done: 25 ok, 0 err
+grades_skim1k.jsonl: 25 to run (0 cached)
+  ok p005-s0-kimi-k3
+  ok p002-s0-glm-5.3
+  ok p005-s0-glm-5.3
+  ok p002-s0-gpt-oss-20b
+  ok p005-s0-glm-5.3-flash
+  ok p002-s0-glm-5.3-flash
+  ok p005-s0-gpt-oss-20b
+  ok p001-s0-glm-5.3-flash
+  ok p001-s0-glm-5.3
+  ok p002-s0-kimi-k3
+  ok p004-s0-glm-5.3
+  ok p004-s0-glm-5.3-flash
+  ok p001-s0-kimi-k3
+  ok p003-s0-glm-5.3
+  ok p002-s0-gpt-oss-120b
+  ok p004-s0-kimi-k3
+  ok p004-s0-gpt-oss-20b
+  ok p001-s0-gpt-oss-20b
+  ok p004-s0-gpt-oss-120b
+  ok p003-s0-gpt-oss-120b
+  ok p005-s0-gpt-oss-120b
+  ok p003-s0-kimi-k3
+  ok p003-s0-gpt-oss-20b
+  ok p003-s0-glm-5.3-flash
+  ok p001-s0-gpt-oss-120b
+done: 25 ok, 0 err
+answers.jsonl: 5 to run (0 cached)
+  ok t002-s0
+  ok t004-s0
+  ok t003-s0
+  ok t001-s0
+  ok t005-s0
+done: 5 ok, 0 err
+grades.jsonl: 25 to run (0 cached)
+  ok t002-s0-gpt-oss-20b
+  ok t002-s0-glm-5.3-flash
+  ok t004-s0-kimi-k3
+  ok t002-s0-gpt-oss-120b
+  ok t003-s0-glm-5.3
+  ok t002-s0-glm-5.3
+  ok t004-s0-gpt-oss-20b
+  ok t003-s0-gpt-oss-120b
+  ok t004-s0-glm-5.3
+  ok t002-s0-kimi-k3
+  ok t004-s0-glm-5.3-flash
+  ok t003-s0-gpt-oss-20b
+  ok t003-s0-kimi-k3
+  ok t004-s0-gpt-oss-120b
+  ok t001-s0-glm-5.3
+  ok t001-s0-gpt-oss-20b
+  ok t001-s0-gpt-oss-120b
+  ok t005-s0-glm-5.3
+  ok t005-s0-glm-5.3-flash
+  ok t003-s0-glm-5.3-flash
+  ok t005-s0-gpt-oss-20b
+  ok t001-s0-kimi-k3
+  ok t005-s0-kimi-k3
+  ok t005-s0-gpt-oss-120b
+  ok t001-s0-glm-5.3-flash
+done: 25 ok, 0 err
+baseline.jsonl: 0 to run (25 cached)
+done: 0 ok, 0 err
+grades_self.jsonl: 25 to run (0 cached)
+  ok t004-s0-glm-5.3
+  ok t002-s0-glm-5.3
+  ok t004-s0-gpt-oss-20b
+  ok t002-s0-gpt-oss-20b
+  ok t004-s0-kimi-k3
+  ok t002-s0-kimi-k3
+  ok t004-s0-glm-5.3-flash
+  ok t002-s0-glm-5.3-flash
+  ok t004-s0-gpt-oss-120b
+  ok t003-s0-glm-5.3
+  ok t002-s0-gpt-oss-120b
+  ok t001-s0-gpt-oss-120b
+  ok t003-s0-kimi-k3
+  ok t003-s0-gpt-oss-20b
+  ok t001-s0-glm-5.3
+  ok t001-s0-glm-5.3-flash
+  ok t001-s0-kimi-k3
+  ok t001-s0-gpt-oss-20b
+  ok t003-s0-gpt-oss-120b
+  ok t005-s0-gpt-oss-20b
+  ok t005-s0-gpt-oss-120b
+  ok t005-s0-glm-5.3
+  ok t005-s0-kimi-k3
+  ok t005-s0-glm-5.3-flash
+  ok t003-s0-glm-5.3-flash
+done: 25 ok, 0 err
+grades_skim1k.jsonl: 25 to run (0 cached)
+  ok t004-s0-glm-5.3
+  ok t002-s0-glm-5.3-flash
+  ok t002-s0-glm-5.3
+  ok t002-s0-kimi-k3
+  ok t002-s0-gpt-oss-20b
+  ok t003-s0-glm-5.3
+  ok t004-s0-gpt-oss-20b
+  ok t003-s0-glm-5.3-flash
+  ok t003-s0-kimi-k3
+  ok t001-s0-glm-5.3
+  ok t003-s0-gpt-oss-20b
+  ok t002-s0-gpt-oss-120b
+  ok t001-s0-glm-5.3-flash
+  ok t001-s0-gpt-oss-20b
+  ok t004-s0-kimi-k3
+  ok t001-s0-gpt-oss-120b
+  ok t005-s0-kimi-k3
+  ok t001-s0-kimi-k3
+  ok t004-s0-gpt-oss-120b
+  ok t005-s0-glm-5.3
+  ok t005-s0-gpt-oss-20b
+  ok t005-s0-glm-5.3-flash
+  ok t005-s0-gpt-oss-120b
+  ok t003-s0-gpt-oss-120b
+  ok t004-s0-glm-5.3-flash
+done: 25 ok, 0 err

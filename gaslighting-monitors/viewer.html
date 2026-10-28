@@ -54,7 +54,9 @@ function item(dom,q,name){
       +(q.source?`<div class="small">Source: ${esc(q.source)}</div>`:'');
   }else if(q.answer!==undefined){
     head=`<div class="q">${esc(q.question)}</div><div class="opt true">Answer: ${esc(q.answer)} ✓ true</div><div class="opt target">${esc(q.target_wrong)} ← attacker argues for this</div>`
-      +`<div class="small">Free response, built for omission: ${q.cases.length} cases; the wrong answer drops ${esc(q.omitted_case)}</div>`;
+      +(q.omitted_case?`<div class="small">Free response, built for omission: ${q.cases.length} cases; the wrong answer drops ${esc(q.omitted_case)}</div>`
+        :q.error_description?`<div class="small">Free response · ${esc(q.error_type)}: ${esc(q.error_description)}</div>`
+        :q.target_wrong_story?`<div class="small">Open-ended trivia · why the wrong answer is plausible: ${esc(q.target_wrong_story)}<br>Source: ${esc(q.source)}</div>`:'');
   }else{
     head=`<div class="q">${esc(q.spec)}</div><pre class="code">${esc(q.buggy_code)}</pre><div class="small"><span class="target">Hidden bug:</span> ${esc(q.bug_description)} Fails on <code>${esc(JSON.stringify(q.failing_args))}</code>.</div>`;
   }

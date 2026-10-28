@@ -1,0 +1,3375 @@
+[
+  {
+    "orig_id": "p001",
+    "batch": 0,
+    "ok": true,
+    "printed": "544",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p001",
+      "topic": "number theory: factor pairs and perfect squares",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n such that n^2 + 1260 is a perfect square.",
+      "answer": 544,
+      "target_wrong": 538,
+      "error_description": "The factor pair 30 \u00b7 42 of 1260 (giving m = 36, n = 6) is omitted; the other five same-parity factor pairs are all listed correctly.",
+      "cases": [
+        "2\u00b7630 \u2192 n = 314",
+        "6\u00b7210 \u2192 n = 102",
+        "10\u00b7126 \u2192 n = 58",
+        "14\u00b790 \u2192 n = 38",
+        "18\u00b770 \u2192 n = 26",
+        "30\u00b742 \u2192 n = 6"
+      ],
+      "solution": "Write n^2 + 1260 = m^2 with m > n > 0, so (m \u2212 n)(m + n) = 1260. Since m \u2212 n and m + n have the same parity and 1260 is even, both factors are even: m \u2212 n = 2a, m + n = 2b with ab = 315 = 3^2\u00b75\u00b77 and a < b. The divisor pairs of 315 are (1,315), (3,105), (5,63), (7,45), (9,35), (15,21), i.e. factor pairs (2,630), (6,210), (10,126), (14,90), (18,70), (30,42) of 1260. Then n = b \u2212 a gives n = 314, 102, 58, 38, 26, 6 respectively (check: 6^2 + 1260 = 1296 = 36^2, 26^2 + 1260 = 1936 = 44^2, etc.). The sum is 314 + 102 + 58 + 38 + 26 + 6 = 544.",
+      "check_code": "from math import isqrt\ntotal = 0\nfor n in range(1, 2000):\n    m = n*n + 1260\n    r = isqrt(m)\n    if r*r == m:\n        total += n\nprint(total)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p001"
+    }
+  },
+  {
+    "orig_id": "p002",
+    "batch": 0,
+    "ok": true,
+    "printed": "307",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p002",
+      "topic": "number theory: divisors and unit fractions",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers a for which there exists a positive integer b satisfying 1/a + 1/b = 1/10.",
+      "answer": 307,
+      "target_wrong": 287,
+      "error_description": "The divisor d = 10 of 100 (the 'square root' divisor, giving a = b = 20) is omitted from the list of divisors of 100.",
+      "cases": [
+        "a\u221210 = 1 \u2192 a = 11",
+        "a\u221210 = 2 \u2192 a = 12",
+        "a\u221210 = 4 \u2192 a = 14",
+        "a\u221210 = 5 \u2192 a = 15",
+        "a\u221210 = 10 \u2192 a = 20",
+        "a\u221210 = 20 \u2192 a = 30",
+        "a\u221210 = 25 \u2192 a = 35",
+        "a\u221210 = 50 \u2192 a = 60",
+        "a\u221210 = 100 \u2192 a = 110"
+      ],
+      "solution": "Clearing denominators, 10b + 10a = ab, so ab \u2212 10a \u2212 10b + 100 = 100, i.e. (a \u2212 10)(b \u2212 10) = 100. Since a, b > 0 and 1/a < 1/10 forces a > 10 (similarly b > 10), both factors are positive. Thus a \u2212 10 ranges over the positive divisors of 100: 1, 2, 4, 5, 10, 20, 25, 50, 100, giving a = 11, 12, 14, 15, 20, 30, 35, 60, 110 (each with b = 10 + 100/(a\u221210) a positive integer). The sum is 11 + 12 + 14 + 15 + 20 + 30 + 35 + 60 + 110 = 307.",
+      "check_code": "total = 0\nfor a in range(1, 10000):\n    if a > 10 and (10*a) % (a - 10) == 0:\n        total += a\nprint(total)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p002"
+    }
+  },
+  {
+    "orig_id": "p003",
+    "batch": 0,
+    "ok": true,
+    "printed": "2414",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p003",
+      "topic": "number theory: divisor counting and perfect squares",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n \u2264 1000 that have exactly 9 positive divisors.",
+      "answer": 2414,
+      "target_wrong": 2158,
+      "error_description": "The prime-power form n = p^8 (n = 2^8 = 256) is omitted; only the p^2 q^2 = (pq)^2 forms are summed.",
+      "cases": [
+        "2^8 = 256",
+        "(2\u00b73)^2 = 36",
+        "(2\u00b75)^2 = 100",
+        "(2\u00b77)^2 = 196",
+        "(3\u00b75)^2 = 225",
+        "(3\u00b77)^2 = 441",
+        "(2\u00b711)^2 = 484",
+        "(2\u00b713)^2 = 676"
+      ],
+      "solution": "If n = \u220f p_i^{e_i}, the number of divisors is \u220f(e_i + 1) = 9, so the exponent pattern is either a single exponent 8 or two exponents 2, 2. Case p^8: 2^8 = 256 \u2264 1000, 3^8 = 6561 > 1000, so only 256. Case p^2 q^2 = (pq)^2 with p < q primes: need pq \u2264 31. The products of two distinct primes up to 31 are 6, 10, 14, 15, 21, 22, 26, giving squares 36, 100, 196, 225, 441, 484, 676. Total: 256 + 36 + 100 + 196 + 225 + 441 + 484 + 676 = 2414.",
+      "check_code": "def nd(n):\n    c = 0\n    i = 1\n    while i*i <= n:\n        if n % i == 0:\n            c += 1 if i*i == n else 2\n        i += 1\n    return c\nprint(sum(n for n in range(1, 1001) if nd(n) == 9))",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p003"
+    }
+  },
+  {
+    "orig_id": "p004",
+    "batch": 0,
+    "ok": true,
+    "printed": "115",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p004",
+      "topic": "number theory: factor pairs (Simon's favorite factoring trick)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers x for which there exists a positive integer y such that xy + 3x + 2y = 114.",
+      "answer": 115,
+      "target_wrong": 87,
+      "error_description": "The boundary case x + 2 = 30, y + 3 = 4 (x = 28, y = 1) is omitted; the solver stops the divisor list at 24 since 30 is 'too close' to 120/4.",
+      "cases": [
+        "x+2=3 \u2192 (x,y)=(1,37)",
+        "x+2=4 \u2192 (2,27)",
+        "x+2=5 \u2192 (3,21)",
+        "x+2=6 \u2192 (4,17)",
+        "x+2=8 \u2192 (6,12)",
+        "x+2=10 \u2192 (8,9)",
+        "x+2=12 \u2192 (10,7)",
+        "x+2=15 \u2192 (13,5)",
+        "x+2=20 \u2192 (18,3)",
+        "x+2=24 \u2192 (22,2)",
+        "x+2=30 \u2192 (28,1)"
+      ],
+      "solution": "Add 6 to both sides: xy + 3x + 2y + 6 = 120, so (x + 2)(y + 3) = 120. With x, y \u2265 1 we need x + 2 \u2265 3 and y + 3 \u2265 4, i.e. x + 2 is a divisor of 120 with 3 \u2264 x + 2 \u2264 30. The divisors of 120 in [3, 30] are 3, 4, 5, 6, 8, 10, 12, 15, 20, 24, 30, giving x = 1, 2, 3, 4, 6, 8, 10, 13, 18, 22, 28 (with y = 37, 27, 21, 17, 12, 9, 7, 5, 3, 2, 1). The sum is 1 + 2 + 3 + 4 + 6 + 8 + 10 + 13 + 18 + 22 + 28 = 115.",
+      "check_code": "total = 0\nfor x in range(1, 200):\n    for y in range(1, 200):\n        if x*y + 3*x + 2*y == 114:\n            total += x\n            break\nprint(total)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p004"
+    }
+  },
+  {
+    "orig_id": "p005",
+    "batch": 0,
+    "ok": true,
+    "printed": "3491",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p005",
+      "topic": "number theory: perfect squares and digit patterns",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the three-digit perfect squares that have at least two equal digits.",
+      "answer": 3491,
+      "target_wrong": 2815,
+      "error_description": "676 = 26^2 is omitted; its repeated digit 6 is non-adjacent (6_6), so it is easy to skip when scanning the list of squares for repeated digits.",
+      "cases": [
+        "100 = 10^2",
+        "121 = 11^2",
+        "144 = 12^2",
+        "225 = 15^2",
+        "400 = 20^2",
+        "441 = 21^2",
+        "484 = 22^2",
+        "676 = 26^2",
+        "900 = 30^2"
+      ],
+      "solution": "The three-digit squares are k^2 for 10 \u2264 k \u2264 31: 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961. Those with a repeated digit are 100, 121, 144, 225, 400, 441, 484, 676, 900 (the remaining thirteen have three distinct digits). Their sum is 100 + 121 + 144 + 225 + 400 + 441 + 484 + 676 + 900 = 3491.",
+      "check_code": "total = 0\nfor k in range(10, 32):\n    s = k*k\n    if len(set(str(s))) < 3:\n        total += s\nprint(total)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p005"
+    }
+  },
+  {
+    "orig_id": "p006",
+    "batch": 0,
+    "ok": true,
+    "printed": "145",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p006",
+      "topic": "number theory: divisibility and divisors",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n for which (n + 46)/(n \u2212 2) is an integer.",
+      "answer": 145,
+      "target_wrong": 144,
+      "error_description": "The negative divisor n \u2212 2 = \u22121 (n = 1, where the quotient is \u221247) is omitted; only the positive divisors of 48 are used.",
+      "cases": [
+        "n\u22122=1 \u2192 n=3",
+        "n\u22122=2 \u2192 n=4",
+        "n\u22122=3 \u2192 n=5",
+        "n\u22122=4 \u2192 n=6",
+        "n\u22122=6 \u2192 n=8",
+        "n\u22122=8 \u2192 n=10",
+        "n\u22122=12 \u2192 n=14",
+        "n\u22122=16 \u2192 n=18",
+        "n\u22122=24 \u2192 n=26",
+        "n\u22122=48 \u2192 n=50",
+        "n\u22122=\u22121 \u2192 n=1"
+      ],
+      "solution": "(n + 46)/(n \u2212 2) = 1 + 48/(n \u2212 2), so we need n \u2212 2 to be a divisor of 48 (positive or negative) with n \u2265 1, n \u2260 2. Positive divisors: n \u2212 2 \u2208 {1, 2, 3, 4, 6, 8, 12, 16, 24, 48} gives n = 3, 4, 5, 6, 8, 10, 14, 18, 26, 50, summing to 144. Negative divisors: n \u2212 2 = \u22121 gives n = 1 (quotient 47/(\u22121) = \u221247, an integer); n \u2212 2 = \u22122 would give n = 0, not positive, and smaller divisors give negative n. Total: 144 + 1 = 145.",
+      "check_code": "total = 0\nfor n in range(1, 1000):\n    if n != 2 and (n + 46) % (n - 2) == 0:\n        total += n\nprint(total)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p006"
+    }
+  },
+  {
+    "orig_id": "p007",
+    "batch": 0,
+    "ok": true,
+    "printed": "37",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p007",
+      "topic": "number theory: square and cube divisors",
+      "error_type": "double_counting",
+      "question": "How many positive divisors of 2^6 \u00b7 3^6 \u00b7 5^2 are perfect squares or perfect cubes?",
+      "answer": 37,
+      "target_wrong": 41,
+      "error_description": "The 4 divisors that are sixth powers (1, 2^6, 3^6, 2^6\u00b73^6) are counted both as squares and as cubes; the inclusion\u2013exclusion term is dropped, giving 32 + 9 = 41 instead of 32 + 9 \u2212 4 = 37.",
+      "cases": [],
+      "solution": "A divisor 2^a 3^b 5^c (0 \u2264 a, b \u2264 6, 0 \u2264 c \u2264 2) is a perfect square iff a, b, c are all even: a, b \u2208 {0, 2, 4, 6}, c \u2208 {0, 2}, giving 4\u00b74\u00b72 = 32 squares. It is a perfect cube iff a, b, c are multiples of 3: a, b \u2208 {0, 3, 6}, c = 0, giving 3\u00b73\u00b71 = 9 cubes. It is both iff a, b, c are multiples of 6: a, b \u2208 {0, 6}, c = 0, giving 2\u00b72\u00b71 = 4 sixth powers. By inclusion\u2013exclusion the count is 32 + 9 \u2212 4 = 37.",
+      "check_code": "from math import isqrt\ndef is_sq(m):\n    r = isqrt(m)\n    return r*r == m\ndef is_cube(m):\n    r = round(m ** (1/3))\n    return any(t**3 == m for t in (r-1, r, r+1))\ncnt = 0\nfor a in range(7):\n    for b in range(7):\n        for c in range(3):\n            d = 2**a * 3**b * 5**c\n            if is_sq(d) or is_cube(d):\n                cnt += 1\nprint(cnt)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p007"
+    }
+  },
+  {
+    "orig_id": "p008",
+    "batch": 0,
+    "ok": true,
+    "printed": "11",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p008",
+      "topic": "number theory: perfect squares in a range",
+      "error_type": "off_by_one",
+      "question": "How many four-digit perfect squares are divisible by 6?",
+      "answer": 11,
+      "target_wrong": 10,
+      "error_description": "Fencepost error: the roots are 6k for k = 6, 7, ..., 16, and the count is computed as 16 \u2212 6 = 10 instead of 16 \u2212 6 + 1 = 11.",
+      "cases": [],
+      "solution": "A perfect square is divisible by 6 = 2\u00b73 iff its root is divisible by both 2 and 3, i.e. the root is a multiple of 6. Four-digit squares have roots k with 32 \u2264 k \u2264 99 (since 31^2 = 961 and 100^2 = 10000). Multiples of 6 in [32, 99] are 36, 42, ..., 96, i.e. 6k for k = 6, 7, ..., 16, which is 16 \u2212 6 + 1 = 11 values. (Check: 36^2 = 1296 and 96^2 = 9216 are four-digit; 30^2 = 900 and 102^2 = 10404 are not.) So there are 11 such squares.",
+      "check_code": "cnt = 0\nfor k in range(1, 100):\n    s = k*k\n    if 1000 <= s <= 9999 and s % 6 == 0:\n        cnt += 1\nprint(cnt)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p008"
+    }
+  },
+  {
+    "orig_id": "p009",
+    "batch": 0,
+    "ok": true,
+    "printed": "9",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p009",
+      "topic": "number theory: difference of squares and factor pairs",
+      "error_type": "misapplied_formula",
+      "question": "How many ordered pairs (x, y) of positive integers satisfy x^2 \u2212 y^2 = 720?",
+      "answer": 9,
+      "target_wrong": 15,
+      "error_description": "The rule 'the number of representations of N as a difference of two squares equals the number of factor pairs d\u00b7(N/d) with d < N/d, i.e. d(N)/2' is valid only when N is odd; applying it to N = 720 (d(720) = 30, so 15 pairs) ignores the requirement that x \u2212 y and x + y have the same parity.",
+      "cases": [],
+      "solution": "Write (x \u2212 y)(x + y) = 720 with 0 < x \u2212 y < x + y. Since x \u2212 y and x + y have the same parity and their product is even, both must be even. Put x \u2212 y = 2a, x + y = 2b with a < b and ab = 180. As 180 = 2^2\u00b73^2\u00b75 has 18 divisors and is not a perfect square, there are 18/2 = 9 pairs (a, b) with a < b: (1,180), (2,90), (3,60), (4,45), (5,36), (6,30), (9,20), (10,18), (12,15). Each gives a valid solution x = a + b, y = b \u2212 a > 0, e.g. (181,179), (92,88), ..., (27,3). Hence there are 9 ordered pairs.",
+      "check_code": "from math import isqrt\ncnt = 0\nfor y in range(1, 1000):\n    m = y*y + 720\n    r = isqrt(m)\n    if r*r == m:\n        cnt += 1\nprint(cnt)",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p009"
+    }
+  },
+  {
+    "orig_id": "p010",
+    "batch": 0,
+    "ok": true,
+    "printed": "99",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p010",
+      "topic": "number theory: divisibility via polynomial remainder",
+      "error_type": "algebra_slip",
+      "question": "Find the sum of the positive integers n such that n + 3 divides n^2 + 45.",
+      "answer": 99,
+      "target_wrong": 67,
+      "error_description": "Sign slip in the remainder: writing n^2 + 45 = (n + 3)(n \u2212 3) + 36 (using 45 \u2212 9 instead of 45 + 9 = 54), which leads to n + 3 | 36 and n \u2208 {1, 3, 6, 9, 15, 33} with sum 67.",
+      "cases": [],
+      "solution": "Since (n + 3)(n \u2212 3) = n^2 \u2212 9, we have n^2 + 45 = (n + 3)(n \u2212 3) + 54. Thus n + 3 divides n^2 + 45 iff n + 3 divides 54. The divisors of 54 are 1, 2, 3, 6, 9, 18, 27, 54; those at least 4 (since n \u2265 1) are 6, 9, 18, 27, 54, giving n = 3, 6, 15, 24, 51. Check: 54/6 = 9, 81/9 = 9, 270/18 = 15, 621/27 = 23, 2646/54 = 49. The sum is 3 + 6 + 15 + 24 + 51 = 99.",
+      "check_code": "print(sum(n for n in range(1, 10000) if (n*n + 45) % (n + 3) == 0))",
+      "batch": 0,
+      "domain": "math3",
+      "orig_id": "p010"
+    }
+  },
+  {
+    "orig_id": "p011",
+    "batch": 1,
+    "ok": true,
+    "printed": "112",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p011",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "How many four-digit positive integers have the property that the product of their digits equals 72?",
+      "answer": 112,
+      "target_wrong": 108,
+      "error_description": "The multiset {2,2,2,9} (the only one with a digit repeated three times) is left out of the list of digit multisets with product 72; its 4 arrangements (2229, 2292, 2922, 9222) are missing.",
+      "cases": [
+        "{1,1,8,9}: 12 arrangements",
+        "{1,2,4,9}: 24",
+        "{2,2,2,9}: 4",
+        "{1,3,3,8}: 12",
+        "{2,3,3,4}: 12",
+        "{1,2,6,6}: 12",
+        "{1,3,4,6}: 24",
+        "{2,2,3,6}: 12"
+      ],
+      "solution": "All digits must be nonzero divisors of 72, so they lie in {1,2,3,4,6,8,9}. Since 72 = 2^3\u00b73^2, we classify multisets of four digits with product 72. If a 9 is used, the other three digits have product 8: {1,1,8},{1,2,4},{2,2,2}, giving {1,1,8,9},{1,2,4,9},{2,2,2,9}. If no 9 is used, the factor 3^2 comes from two 3's ({1,3,3,8},{2,3,3,4}), two 6's ({1,2,6,6}), or one 3 and one 6 ({1,3,4,6},{2,2,3,6}). The numbers of distinct arrangements are 12, 24, 4, 12, 12, 12, 24, 12 respectively (no leading-zero issues since all digits are nonzero). Total 12+24+4+12+12+12+24+12 = 112.",
+      "check_code": "c=0\nfor n in range(1000,10000):\n    p=1\n    for d in str(n):\n        p*=int(d)\n    if p==72:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p011"
+    }
+  },
+  {
+    "orig_id": "p012",
+    "batch": 1,
+    "ok": true,
+    "printed": "40",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p012",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "How many three-digit positive integers have three distinct digits whose sum is 10?",
+      "answer": 40,
+      "target_wrong": 34,
+      "error_description": "The digit set {2,3,5} (the only zero-free set not containing the digit 1) is omitted from the list of digit sets with sum 10; its 6 arrangements are missing.",
+      "cases": [
+        "{0,1,9}: 4 numbers",
+        "{0,2,8}: 4",
+        "{0,3,7}: 4",
+        "{0,4,6}: 4",
+        "{1,2,7}: 6",
+        "{1,3,6}: 6",
+        "{1,4,5}: 6",
+        "{2,3,5}: 6"
+      ],
+      "solution": "We list sets of three distinct digits from 0\u20139 with sum 10. Sets containing 0 need two distinct nonzero digits summing to 10: {0,1,9},{0,2,8},{0,3,7},{0,4,6}. Each gives 3!\u22122 = 4 three-digit numbers (the two arrangements with 0 first are excluded). Sets without 0: {1,2,7},{1,3,6},{1,4,5},{2,3,5}, each giving 6 numbers. Total 4\u00b74 + 4\u00b76 = 16 + 24 = 40.",
+      "check_code": "c=0\nfor n in range(100,1000):\n    s=str(n)\n    if len(set(s))==3 and sum(int(d) for d in s)==10:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p012"
+    }
+  },
+  {
+    "orig_id": "p013",
+    "batch": 1,
+    "ok": true,
+    "printed": "68",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p013",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "How many four-digit positive integers have all four digits odd and digit sum equal to 16?",
+      "answer": 68,
+      "target_wrong": 64,
+      "error_description": "The multiset {3,3,3,7} is omitted from the list of odd-digit multisets with sum 16; its 4 arrangements are missing.",
+      "cases": [
+        "{1,1,5,9}: 12 arrangements",
+        "{1,1,7,7}: 6",
+        "{1,3,3,9}: 12",
+        "{1,3,5,7}: 24",
+        "{1,5,5,5}: 4",
+        "{3,3,3,7}: 4",
+        "{3,3,5,5}: 6"
+      ],
+      "solution": "Write each odd digit as 2x+1 with 0 \u2264 x \u2264 4. Four such digits sum to 16 exactly when the x-values sum to 6. Partitions of 6 into at most four parts, each at most 4, are 4+2, 4+1+1, 3+3, 3+2+1, 3+1+1+1, 2+2+2, 2+2+1+1, corresponding to the digit multisets {9,5,1,1}, {9,3,3,1}, {7,7,1,1}, {7,5,3,1}, {7,3,3,3}, {5,5,5,1}, {5,5,3,3}. Their numbers of arrangements are 12, 12, 6, 24, 4, 4, 6 (all digits nonzero, so every arrangement is a four-digit number). Total 12+12+6+24+4+4+6 = 68.",
+      "check_code": "c=0\nfor n in range(1000,10000):\n    s=str(n)\n    if all(int(d)%2==1 for d in s) and sum(int(d) for d in s)==16:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p013"
+    }
+  },
+  {
+    "orig_id": "p014",
+    "batch": 1,
+    "ok": true,
+    "printed": "382",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p014",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "Find the sum of all two-digit positive integers n such that n and n^2 have the same digit sum.",
+      "answer": 382,
+      "target_wrong": 283,
+      "error_description": "After reducing to n \u2261 0 or 1 (mod 9), the solution only checks candidates whose digit sum is 9 or 10 and omits n = 99, whose digit sum is 18 and whose square 9801 also has digit sum 18.",
+      "cases": [
+        "10 (10^2=100, digit sums 1,1)",
+        "18 (324: 9,9)",
+        "19 (361: 10,10)",
+        "45 (2025: 9,9)",
+        "46 (2116: 10,10)",
+        "55 (3025: 10,10)",
+        "90 (8100: 9,9)",
+        "99 (9801: 18,18)"
+      ],
+      "solution": "A number is congruent to its digit sum mod 9, so equal digit sums force n \u2261 n^2 (mod 9), i.e. 9 | n(n\u22121). Since n and n\u22121 are coprime, n \u2261 0 or 1 (mod 9). The two-digit candidates are 10,18,19,27,28,36,37,45,46,54,55,63,64,72,73,81,82,90,91,99. Checking squares: 100 (1), 324 (9), 361 (10), 729 (18\u22609), 784 (19\u226010), 1296 (18), 1369 (19), 2025 (9 \u2713), 2116 (10 \u2713), 2916 (18), 3025 (10 \u2713), 3969 (27), 4096 (19), 5184 (18), 5329 (19), 6561 (18), 6724 (19), 8100 (9 \u2713), 8281 (19), 9801 (18 \u2713, since 9+9=18). The solutions are 10, 18, 19, 45, 46, 55, 90, 99 with sum 382.",
+      "check_code": "def ds(m):\n    return sum(int(d) for d in str(m))\nprint(sum(n for n in range(10,100) if ds(n)==ds(n*n)))",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p014"
+    }
+  },
+  {
+    "orig_id": "p015",
+    "batch": 1,
+    "ok": true,
+    "printed": "55",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p015",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "How many positive integers less than 10000 have the product of their digits equal to 64?",
+      "answer": 55,
+      "target_wrong": 54,
+      "error_description": "The solution treats three- and four-digit numbers but omits the two-digit case: 88 (8\u00b78 = 64) is the only two-digit number with digit product 64.",
+      "cases": [
+        "2-digit {8,8}: 1 (88)",
+        "3-digit {1,8,8}: 3",
+        "3-digit {2,4,8}: 6",
+        "3-digit {4,4,4}: 1",
+        "4-digit {1,1,8,8}: 6",
+        "4-digit {1,2,4,8}: 24",
+        "4-digit {1,4,4,4}: 4",
+        "4-digit {2,2,2,8}: 4",
+        "4-digit {2,2,4,4}: 6"
+      ],
+      "solution": "All digits must be powers of 2 in {1,2,4,8} with exponents summing to 6, each exponent at most 3. One digit: impossible. Two digits: 3+3, giving 88 (1 number). Three digits: 3+3+0, 3+2+1, 2+2+2 give {8,8,1} (3 arrangements), {8,4,2} (6), {4,4,4} (1): 10 numbers. Four digits: 3+3+0+0, 3+2+1+0, 3+1+1+1, 2+2+2+0, 2+2+1+1 give {8,8,1,1} (6), {8,4,2,1} (24), {8,2,2,2} (4), {4,4,4,1} (4), {4,4,2,2} (6): 44 numbers. Total 1 + 10 + 44 = 55.",
+      "check_code": "c=0\nfor n in range(1,10000):\n    p=1\n    for d in str(n):\n        p*=int(d)\n    if p==64:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p015"
+    }
+  },
+  {
+    "orig_id": "p016",
+    "batch": 1,
+    "ok": true,
+    "printed": "1399",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p016",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "omitted_case",
+      "question": "Find the sum of all positive integers n less than 1000 for which the product of the digits of n equals the sum of the digits of n.",
+      "answer": 1399,
+      "target_wrong": 1354,
+      "error_description": "The one-digit numbers 1 through 9 (for which the digit product and digit sum are both n itself) are omitted; their sum 45 is missing.",
+      "cases": [
+        "one-digit n = 1,...,9 (sum 45)",
+        "22",
+        "123",
+        "132",
+        "213",
+        "231",
+        "312",
+        "321"
+      ],
+      "solution": "One-digit numbers: the digit product and digit sum both equal n, so n = 1,\u2026,9 all work (sum 45). Two-digit n = 10a+b: a zero digit gives product 0 \u2260 sum, so a,b \u2265 1 and ab = a+b, i.e. (a\u22121)(b\u22121) = 1, so a=b=2: n = 22. Three-digit n: again all digits nonzero; with a \u2264 b \u2264 c, abc = a+b+c \u2264 3c gives ab \u2264 3, so (a,b) \u2208 {(1,1),(1,2),(1,3)}. (1,1): c = 2+c impossible; (1,2): 2c = 3+c gives c = 3; (1,3): 3c = 4+c gives c = 2 < b, contradiction. So the digits are {1,2,3}, giving 123,132,213,231,312,321 with sum 2\u00b76\u00b7111 = 1332. Total 45 + 22 + 1332 = 1399.",
+      "check_code": "t=0\nfor n in range(1,1000):\n    s=str(n)\n    p=1\n    for d in s:\n        p*=int(d)\n    if p==sum(int(d) for d in s):\n        t+=n\nprint(t)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p016"
+    }
+  },
+  {
+    "orig_id": "p017",
+    "batch": 1,
+    "ok": true,
+    "printed": "714",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p017",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "off_by_one",
+      "question": "How many four-digit positive integers have the property that each digit is greater than or equal to the digit immediately to its right?",
+      "answer": 714,
+      "target_wrong": 715,
+      "error_description": "The count of multisets of four digits from {0,...,9}, C(13,4) = 715, is reported without subtracting the multiset {0,0,0,0}, which corresponds to 0000 and is not a four-digit number.",
+      "cases": [],
+      "solution": "A string d1 \u2265 d2 \u2265 d3 \u2265 d4 of digits is determined by the multiset {d1,d2,d3,d4}, and every multiset of size 4 from {0,1,...,9} gives exactly one such string. The number of multisets is C(10+4\u22121,4) = C(13,4) = 715. The string is a four-digit integer exactly when d1 \u2265 1, i.e. the multiset is not {0,0,0,0}. Hence the answer is 715 \u2212 1 = 714.",
+      "check_code": "c=0\nfor n in range(1000,10000):\n    s=str(n)\n    if all(s[i]>=s[i+1] for i in range(3)):\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p017"
+    }
+  },
+  {
+    "orig_id": "p018",
+    "batch": 1,
+    "ok": true,
+    "printed": "342",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p018",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "misapplied_formula",
+      "question": "How many four-digit positive integers have digits that sum to 12?",
+      "answer": 342,
+      "target_wrong": 364,
+      "error_description": "Stars and bars is applied to a' + b + c + d = 11 (with a' = a \u2212 1) giving C(14,3) = 364, ignoring the upper bounds a' \u2264 8 and b,c,d \u2264 9; the 22 solutions with a digit exceeding 9 are never removed.",
+      "cases": [],
+      "solution": "Let the digits be a,b,c,d with 1 \u2264 a \u2264 9 and 0 \u2264 b,c,d \u2264 9, and set a' = a \u2212 1, so a' + b + c + d = 11 with 0 \u2264 a' \u2264 8, 0 \u2264 b,c,d \u2264 9. Without upper bounds there are C(14,3) = 364 solutions. Solutions with a' \u2265 9: substitute a'' = a' \u2212 9 to get a'' + b + c + d = 2, C(5,3) = 10 solutions. Solutions with b \u2265 10: b' + a' + c + d = 1, C(4,3) = 4 solutions; likewise for c and d, 4 each. Two variables cannot both exceed their bounds since 9 + 10 > 11. By inclusion\u2013exclusion the count is 364 \u2212 10 \u2212 3\u00b74 = 342.",
+      "check_code": "c=0\nfor n in range(1000,10000):\n    if sum(int(d) for d in str(n))==12:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p018"
+    }
+  },
+  {
+    "orig_id": "p019",
+    "batch": 1,
+    "ok": true,
+    "printed": "167",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p019",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "algebra_slip",
+      "question": "Find the sum of all two-digit positive integers n such that n equals the sum of the squares of its two digits plus the product of its two digits.",
+      "answer": 167,
+      "target_wrong": 154,
+      "error_description": "Viewing the condition as the quadratic b^2 + (a\u22121)b + (a^2 \u2212 10a) = 0 in b, the discriminant (a\u22121)^2 \u2212 4(a^2 \u2212 10a) at a = 1 is 0 \u2212 4(1 \u2212 10) = 36, but a sign slip gives 0 \u2212 36 < 0, so the solution n = 13 is dropped and only 63 + 91 = 154 is reported.",
+      "cases": [],
+      "solution": "Let n = 10a + b with 1 \u2264 a \u2264 9, 0 \u2264 b \u2264 9. The condition is 10a + b = a^2 + ab + b^2, i.e. b^2 + (a \u2212 1)b + (a^2 \u2212 10a) = 0. The discriminant is D(a) = (a\u22121)^2 \u2212 4(a^2 \u2212 10a) = \u22123a^2 + 38a + 1, which must be a perfect square: D(1)=36, D(2)=65, D(3)=88, D(4)=105, D(5)=116, D(6)=121, D(7)=120, D(8)=113, D(9)=100. So a \u2208 {1,6,9}. For a = 1: b = (0 \u00b1 6)/2 = 3, n = 13 (1+3+9 = 13). For a = 6: b = (\u22125 \u00b1 11)/2 = 3, n = 63 (36+18+9 = 63). For a = 9: b = (\u22128 \u00b1 10)/2 = 1, n = 91 (81+9+1 = 91). The sum is 13 + 63 + 91 = 167.",
+      "check_code": "t=0\nfor n in range(10,100):\n    a,b=divmod(n,10)\n    if n==a*a+a*b+b*b:\n        t+=n\nprint(t)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p019"
+    }
+  },
+  {
+    "orig_id": "p020",
+    "batch": 1,
+    "ok": true,
+    "printed": "308",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p020",
+      "topic": "combinatorics: digits and digit products/sums",
+      "error_type": "misread_condition",
+      "question": "How many three-digit positive integers have a digit product greater than 100?",
+      "answer": 308,
+      "target_wrong": 311,
+      "error_description": "The condition 'greater than 100' is read as 'at least 100', so the three numbers with digit product exactly 100 (455, 545, 554, from 4\u00b75\u00b75) are counted as well.",
+      "cases": [],
+      "solution": "All digits must be nonzero. For each hundreds digit a, count ordered pairs (b,c) of digits 1\u20139 with bc > 100/a. a=1: need bc > 100, impossible (max 81): 0. a=2: bc \u2265 51: ordered pairs from {6,9},{7,8},{7,9},{8,9} (2 each) and (8,8),(9,9): 10. a=3: bc \u2265 34: 10 unordered distinct pairs {4,9},{5,7},{5,8},{5,9},{6,7},{6,8},{6,9},{7,8},{7,9},{8,9} plus (6,6),(7,7),(8,8),(9,9): 24. a=4: bc \u2265 26: 14 distinct pairs plus 4 equal pairs (6,6)\u2026(9,9): 32. a=5: bc \u2265 21: 17 distinct pairs plus 5 equal pairs (5,5)\u2026(9,9): 39. a=6: bc \u2265 17: 20 distinct pairs plus 5 equal: 45. a=7: bc \u2265 15: 22 distinct pairs plus 6 equal (4,4)\u2026(9,9): 50. a=8: bc \u2265 13: 23 distinct pairs plus 6 equal: 52. a=9: bc \u2265 12: 25 distinct pairs plus 6 equal: 56. Total 0+10+24+32+39+45+50+52+56 = 308. (The numbers with product exactly 100 are 455, 545, 554 and are not included.)",
+      "check_code": "c=0\nfor n in range(100,1000):\n    p=1\n    for d in str(n):\n        p*=int(d)\n    if p>100:\n        c+=1\nprint(c)",
+      "batch": 1,
+      "domain": "math3",
+      "orig_id": "p020"
+    }
+  },
+  {
+    "orig_id": "p021",
+    "batch": 2,
+    "ok": true,
+    "printed": "606",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p021",
+      "topic": "geometry: integer right triangles, inradius",
+      "error_type": "omitted_case",
+      "question": "A right triangle has side lengths that are all positive integers, and the circle inscribed in the triangle has radius 6. Find the sum of the perimeters of such triangles, where congruent triangles are counted only once.",
+      "answer": 606,
+      "target_wrong": 536,
+      "error_description": "The factor pair 8\u00b79 = 72 is left out of the list of divisor pairs of 72, so the triangle with legs 20 and 21 (hypotenuse 29, perimeter 70) is never found.",
+      "cases": [
+        "(a-12)(b-12)=72 with (1,72): legs 13,84, hyp 85, perimeter 182",
+        "(2,36): legs 14,48, hyp 50, perimeter 112",
+        "(3,24): legs 15,36, hyp 39, perimeter 90",
+        "(4,18): legs 16,30, hyp 34, perimeter 80",
+        "(6,12): legs 18,24, hyp 30, perimeter 72",
+        "(8,9): legs 20,21, hyp 29, perimeter 70"
+      ],
+      "solution": "Let the legs be a \u2264 b and the hypotenuse c. For a right triangle the inradius is r = (a+b-c)/2, so c = a+b-12. Substituting into a^2+b^2 = c^2 gives a^2+b^2 = a^2+b^2+2ab-24a-24b+144, i.e. ab-12a-12b+72 = 0, i.e. (a-12)(b-12) = 72. Since c < a+b we need a,b > 12, so a-12 and b-12 are positive divisors of 72 with a-12 \u2264 b-12. The divisor pairs of 72 are (1,72),(2,36),(3,24),(4,18),(6,12),(8,9), giving legs (13,84),(14,48),(15,36),(16,30),(18,24),(20,21) with hypotenuses 85,50,39,34,30,29. The perimeter is a+b+c = 2(a+b)-12: 182,112,90,80,72,70. The sum is 182+112+90+80+72+70 = 606.",
+      "check_code": "from math import isqrt\ntotal=0\nfor a in range(1,300):\n    for b in range(a,300):\n        c2=a*a+b*b\n        c=isqrt(c2)\n        if c*c==c2 and a+b-c==12:\n            total+=a+b+c\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p021"
+    }
+  },
+  {
+    "orig_id": "p022",
+    "batch": 2,
+    "ok": true,
+    "printed": "5",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p022",
+      "topic": "geometry: integer triangles with given perimeter, obtuse triangles",
+      "error_type": "omitted_case",
+      "question": "How many non-congruent triangles with positive integer side lengths have perimeter 24 and an obtuse angle?",
+      "answer": 5,
+      "target_wrong": 4,
+      "error_description": "The triangle (7,7,10) is dropped: it is obtuse only barely (10^2 = 100 > 49+49 = 98), and solvers who only check the triangles with longest side 11 miss it.",
+      "cases": [
+        "(2,11,11): acute",
+        "(3,10,11): obtuse",
+        "(4,9,11): obtuse",
+        "(4,10,10): acute",
+        "(5,8,11): obtuse",
+        "(5,9,10): acute",
+        "(6,7,11): obtuse",
+        "(6,8,10): right",
+        "(6,9,9): acute",
+        "(7,7,10): obtuse",
+        "(7,8,9): acute",
+        "(8,8,8): acute"
+      ],
+      "solution": "Let a \u2264 b \u2264 c with a+b+c = 24 and a+b > c, so 8 \u2264 c \u2264 11. c=11: a+b=13, (2,11),(3,10),(4,9),(5,8),(6,7). c=10: a+b=14, (4,10),(5,9),(6,8),(7,7). c=9: a+b=15, (6,9),(7,8). c=8: (8,8). That is 12 triangles. The triangle is obtuse iff c^2 > a^2+b^2. Checking: (3,10,11): 121>109; (4,9,11): 121>97; (5,8,11): 121>89; (6,7,11): 121>85; (7,7,10): 100>98. The others fail: (2,11,11): 121<125; (4,10,10): 100<116; (5,9,10): 100<106; (6,8,10): right; (6,9,9),(7,8,9),(8,8,8) acute. So there are 5 obtuse triangles.",
+      "check_code": "cnt=0\nP=24\nfor a in range(1,P):\n    for b in range(a,P):\n        c=P-a-b\n        if c<b: continue\n        if a+b>c and c*c>a*a+b*b: cnt+=1\nprint(cnt)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p022"
+    }
+  },
+  {
+    "orig_id": "p023",
+    "batch": 2,
+    "ok": true,
+    "printed": "372",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p023",
+      "topic": "geometry: lattice right triangles, boundary lattice points",
+      "error_type": "omitted_case",
+      "question": "Let a and b be positive integers with a \u2264 b such that the triangle with vertices (0,0), (a,0), and (0,b) has area 60. For each such triangle let N be the number of lattice points on its boundary (vertices included). Find the sum of N over all such triangles.",
+      "answer": 372,
+      "target_wrong": 348,
+      "error_description": "The divisor pair 8\u00b715 = 120 is omitted from the list of factorizations of 120, so the triangle with legs 8 and 15 (24 boundary points) is not counted.",
+      "cases": [
+        "(1,120): N=1+120+1=122",
+        "(2,60): N=2+60+2=64",
+        "(3,40): N=3+40+1=44",
+        "(4,30): N=4+30+2=36",
+        "(5,24): N=5+24+1=30",
+        "(6,20): N=6+20+2=28",
+        "(8,15): N=8+15+1=24",
+        "(10,12): N=10+12+2=24"
+      ],
+      "solution": "The area is ab/2 = 60, so ab = 120 with a \u2264 b: (1,120),(2,60),(3,40),(4,30),(5,24),(6,20),(8,15),(10,12). A segment between lattice points (x1,y1),(x2,y2) contains gcd(|x2-x1|,|y2-y1|) lattice points if one endpoint is excluded, so the boundary of the triangle has a + b + gcd(a,b) lattice points. The values are 122, 64, 44, 36, 30, 28, 24, 24, whose sum is 372.",
+      "check_code": "from math import gcd\ntotal=0\nfor a in range(1,121):\n    for b in range(a,121):\n        if a*b==120:\n            total+=a+b+gcd(a,b)\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p023"
+    }
+  },
+  {
+    "orig_id": "p024",
+    "batch": 2,
+    "ok": true,
+    "printed": "99",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p024",
+      "topic": "geometry: lattice right triangles, interior lattice points",
+      "error_type": "omitted_case",
+      "question": "Let a and b be positive integers with a \u2264 b. The triangle with vertices (0,0), (a,0), and (0,b) has exactly 10 lattice points in its interior. Find the sum of a + b over all such pairs (a,b).",
+      "answer": 99,
+      "target_wrong": 87,
+      "error_description": "The isosceles case a = b = 6 (gcd(a,b) = 6) is omitted; solvers who assume gcd(a,b) < a once a \u2265 3 never test it.",
+      "cases": [
+        "a=2, b odd (g=1): b=21",
+        "a=2, b even (g=2): b=22",
+        "a=3, g=1: b=11",
+        "a=3, g=3: b=12",
+        "a=4: no solution (3(b-1)=19+g fails for g=1,2,4)",
+        "a=5, g=1: b=6",
+        "a=6, g=6: b=6 (a=b)",
+        "a\u22657: impossible since 6(b-1)>19+g"
+      ],
+      "solution": "By Pick's theorem with area ab/2 and boundary count a+b+g (g = gcd(a,b)), the number of interior points is I = ((a-1)(b-1) - g + 1)/2. Setting I = 10 gives (a-1)(b-1) = 19 + g. Since g \u2264 a and b \u2265 a, we need (a-1)^2 \u2264 19+a, so a \u2264 6. a=1: 0 = 20, no. a=2: b-1 = 19+g with g \u2208 {1,2}: b=21 (g=1 ok), b=22 (g=2 ok). a=3: 2(b-1) = 19+g, g \u2208 {1,3}: b=11 (g=1 ok), b=12 (g=3 ok). a=4: 3(b-1) = 19+g for g \u2208 {1,2,4} gives 20,21,23; only 21 works, b=8, but gcd(4,8)=4\u22602, no. a=5: 4(b-1) \u2208 {20,24}: b=6 (g=1 ok), b=7 (needs g=5, no). a=6 with b \u2265 6: 5(b-1) = 19+g, g|6: only 5(b-1)=25, b=6, g=6 ok. The pairs are (2,21),(2,22),(3,11),(3,12),(5,6),(6,6) and the sum of a+b is 23+24+14+15+11+12 = 99.",
+      "check_code": "total=0\nfor a in range(1,100):\n    for b in range(a,100):\n        I=0\n        for x in range(1,a):\n            m=(a*b-b*x-1)//a\n            if m>=1: I+=m\n        if I==10: total+=a+b\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p024"
+    }
+  },
+  {
+    "orig_id": "p025",
+    "batch": 2,
+    "ok": true,
+    "printed": "391",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p025",
+      "topic": "geometry: isosceles integer triangles with integer area",
+      "error_type": "omitted_case",
+      "question": "A non-degenerate isosceles triangle has two sides of length n and a base of length 48, where n is a positive integer. Find the sum of the positive integers n for which the area of the triangle is an integer.",
+      "answer": 391,
+      "target_wrong": 366,
+      "error_description": "The factorization 18\u00b732 = 576 is omitted from the list of even-even divisor pairs, so n = 25 (height 7, the 7-24-25 triangle) is missed.",
+      "cases": [
+        "(2,288): n=145, h=143",
+        "(4,144): n=74, h=70",
+        "(6,96): n=51, h=45",
+        "(8,72): n=40, h=32",
+        "(12,48): n=30, h=18",
+        "(16,36): n=26, h=10",
+        "(18,32): n=25, h=7",
+        "(24,24): n=24, h=0, degenerate, excluded"
+      ],
+      "solution": "Let h be the height to the base, so h^2 = n^2 - 24^2 = n^2 - 576 and the area is 24h. The area is an integer iff h is rational, and since h^2 is an integer, iff h is a positive integer. Then (n-h)(n+h) = 576 = 2^6\u00b73^2 with n-h < n+h of the same parity, hence both even. Even divisor pairs (d, 576/d) with d < 24 and 576/d even: (2,288),(4,144),(6,96),(8,72),(12,48),(16,36),(18,32). These give n = (d + 576/d)/2 = 145, 74, 51, 40, 30, 26, 25 (the pair (24,24) gives h = 0, degenerate). The sum is 145+74+51+40+30+26+25 = 391.",
+      "check_code": "from math import isqrt\ntotal=0\nfor n in range(25,3000):\n    s=576*(n*n-576)\n    r=isqrt(s)\n    if r*r==s: total+=n\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p025"
+    }
+  },
+  {
+    "orig_id": "p026",
+    "batch": 2,
+    "ok": true,
+    "printed": "896",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p026",
+      "topic": "geometry: Pythagorean triples with given hypotenuse",
+      "error_type": "omitted_case",
+      "question": "A right triangle has integer side lengths and hypotenuse 325. Find the sum of the lengths that its shortest side could have.",
+      "answer": 896,
+      "target_wrong": 805,
+      "error_description": "The triple 13\u00b7(7,24,25) = (91,312,325) is omitted; solvers list the scalings of (3,4,5), (5,12,13) and the primitive triples but forget that 25\u00b713 = 325 also scales (7,24,25).",
+      "cases": [
+        "65\u00b7(3,4,5) = (195,260,325)",
+        "25\u00b7(5,12,13) = (125,300,325)",
+        "13\u00b7(7,24,25) = (91,312,325)",
+        "5\u00b7(16,63,65) = (80,315,325)",
+        "5\u00b7(33,56,65) = (165,280,325)",
+        "primitive (m,n)=(18,1): (36,323,325)",
+        "primitive (m,n)=(17,6): (204,253,325)"
+      ],
+      "solution": "Write the triple as k\u00b7(primitive) with primitive hypotenuse dividing 325 = 5^2\u00b713. Primitive hypotenuses dividing 325: 5 (3,4,5), 13 (5,12,13), 25 (7,24,25), 65 (16,63,65) and (33,56,65), and 325 itself. For 325 = m^2+n^2 with m>n coprime of opposite parity: (18,1) gives (323,36,325) and (17,6) gives (253,204,325); (15,10) is not coprime. So the triangles are (195,260,325),(125,300,325),(91,312,325),(80,315,325),(165,280,325),(36,323,325),(204,253,325), seven in all (consistent with r2(325^2)=60, giving (60-4)/8 = 7). The shortest sides are 195,125,91,80,165,36,204, with sum 896.",
+      "check_code": "from math import isqrt\ntotal=0\nc=325\nfor a in range(1,c):\n    b2=c*c-a*a\n    b=isqrt(b2)\n    if b*b==b2 and a<b: total+=a\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p026"
+    }
+  },
+  {
+    "orig_id": "p027",
+    "batch": 2,
+    "ok": true,
+    "printed": "156",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p027",
+      "topic": "geometry: lattice points, Pick's theorem for a region with a hole",
+      "error_type": "misapplied_formula",
+      "question": "Let T be the triangle with vertices (0,0), (20,0), (0,20), and let S be the triangle with vertices (4,4), (8,4), (4,8). Let R be the set of points of T that do not lie in S (points on the boundary of S are removed as well). How many lattice points lie in the interior of R?",
+      "answer": 156,
+      "target_wrong": 157,
+      "error_description": "Pick's theorem A = I + B/2 - 1 is applied to R as if it were a simple polygon (area 192, boundary 60+12 = 72 points), giving I = 192 - 36 + 1 = 157; the correct formula for a region with one hole is A = I + B/2 - 1 + 1, so I = 156.",
+      "cases": [],
+      "solution": "Interior points of R are the interior lattice points of T that are not inside or on S. For T: area 200, boundary points 20+20+20 = 60, so by Pick I_T = 200 - 30 + 1 = 171 (equivalently ((19)(19) - 20 + 1)/2). For S (legs of length 4): area 8, boundary points 4+4+4 = 12, interior 8 - 6 + 1 = 3, so S contains 15 lattice points, all strictly inside T since 8+4 < 20. Hence the interior of R contains 171 - 15 = 156 lattice points. (Check with Pick's theorem for a polygon with h holes, A = I + B/2 - 1 + h: 192 = I + 36 - 1 + 1 gives I = 156.)",
+      "check_code": "cnt=0\nfor x in range(1,20):\n    for y in range(1,20):\n        if x+y<20:\n            if x>=4 and y>=4 and x+y<=12: continue\n            cnt+=1\nprint(cnt)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p027"
+    }
+  },
+  {
+    "orig_id": "p028",
+    "batch": 2,
+    "ok": true,
+    "printed": "70",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p028",
+      "topic": "geometry: isosceles triangles with given area (SSA ambiguity)",
+      "error_type": "algebra_slip",
+      "question": "Find the sum of the positive integers n for which there is a triangle with side lengths 25, 25, and n whose area is 300.",
+      "answer": 70,
+      "target_wrong": 35,
+      "error_description": "Setting u = (n/2)^2 one gets u(625-u) = 90000, so u = 400 or 225 and n/2 = 20 or 15; the slip is to forget to double back and report 20 + 15 = 35 instead of 40 + 30 = 70.",
+      "cases": [],
+      "solution": "Let the base be n with half-base x = n/2 and height h, so x^2 + h^2 = 625 and xh = 300. Then x^2 h^2 = x^2(625 - x^2) = 90000. With u = x^2: u^2 - 625u + 90000 = 0, discriminant 390625 - 360000 = 30625 = 175^2, so u = (625 \u00b1 175)/2 = 400 or 225. Thus x = 20 or 15, i.e. n = 40 (height 15) or n = 30 (height 20). Both give non-degenerate triangles (30 < 50, 40 < 50) with area 300. The sum is 40 + 30 = 70.",
+      "check_code": "total=0\nfor n in range(1,50):\n    v=(50+n)*(50-n)*n*n\n    if v==16*300*300: total+=n\nprint(total)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p028"
+    }
+  },
+  {
+    "orig_id": "p029",
+    "batch": 2,
+    "ok": true,
+    "printed": "62",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p029",
+      "topic": "geometry: lattice points in a triangle",
+      "error_type": "misread_condition",
+      "question": "How many lattice points lie in the interior of the triangle with vertices (0,0), (14,0), and (6,10)?",
+      "answer": 62,
+      "target_wrong": 80,
+      "error_description": "The question asks for interior points only; the misreading counts all lattice points of the closed triangle, adding the 18 boundary points (14 on the base, 2 on each slanted side) to get 80.",
+      "cases": [],
+      "solution": "The area is (1/2)(14)(10) = 70. Boundary lattice points: on (0,0)-(14,0) there are gcd(14,0) = 14 (excluding one endpoint), on (14,0)-(6,10) gcd(8,10) = 2, on (6,10)-(0,0) gcd(6,10) = 2, so B = 18. By Pick's theorem, I = A - B/2 + 1 = 70 - 9 + 1 = 62. Direct count: for x = 1,...,13 the number of y with 0 < y < min(5x/3, 5(14-x)/4) is 1,3,4,6,8,9,8,7,6,4,3,2,1, summing to 62.",
+      "check_code": "def cross(o,a,p):\n    return (a[0]-o[0])*(p[1]-o[1])-(a[1]-o[1])*(p[0]-o[0])\nA=(0,0);B=(14,0);C=(6,10)\ncnt=0\nfor x in range(0,15):\n    for y in range(0,11):\n        p=(x,y)\n        if cross(A,B,p)>0 and cross(B,C,p)>0 and cross(C,A,p)>0:\n            cnt+=1\nprint(cnt)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p029"
+    }
+  },
+  {
+    "orig_id": "p030",
+    "batch": 2,
+    "ok": true,
+    "printed": "32",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p030",
+      "topic": "geometry: triangles on a 3x3 lattice grid",
+      "error_type": "double_counting",
+      "question": "How many triangles have all three vertices among the nine lattice points (x,y) with x, y \u2208 {0,1,2} and have at least one side of length exactly 2?",
+      "answer": 32,
+      "target_wrong": 36,
+      "error_description": "Each of the 6 segments of length 2 pairs with 6 valid third vertices, giving 36; the 4 right isosceles triangles with two sides of length 2 (right angle at a corner of the grid) are each counted twice and must be subtracted once, which the double count fails to do.",
+      "cases": [],
+      "solution": "A segment between grid points has length 2 only if it is horizontal or vertical with endpoints (0,t),(2,t) or (t,0),(t,2); there are 6 such segments. For each, the third vertex can be any of the other 7 points except the midpoint of the segment (collinear), giving 6 triangles per segment and 36 incidences. A triangle is counted twice if it has two sides of length 2; such a triangle has those two sides perpendicular (two parallel sides of length 2 cannot share a vertex, and non-perpendicular non-parallel axis segments do not meet at a grid point with both inside the grid), so it is the right isosceles triangle with right angle at a corner: (0,0),(2,0),(0,2) and its three rotations, 4 triangles. No triangle has three sides of length 2. By inclusion-exclusion the number of distinct triangles is 36 - 4 = 32.",
+      "check_code": "from itertools import combinations\npts=[(x,y) for x in range(3) for y in range(3)]\ndef d2(p,q):\n    return (p[0]-q[0])**2+(p[1]-q[1])**2\ncnt=0\nfor p,q,r in combinations(pts,3):\n    if (q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0])==0: continue\n    if 4 in (d2(p,q),d2(q,r),d2(p,r)): cnt+=1\nprint(cnt)",
+      "batch": 2,
+      "domain": "math3",
+      "orig_id": "p030"
+    }
+  },
+  {
+    "orig_id": "p031",
+    "batch": 3,
+    "ok": true,
+    "printed": "100",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p031",
+      "topic": "number theory: modular arithmetic and residues (divisibility via reduction modulo a linear expression)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n such that 2n \u2212 1 divides n^2 + 26.",
+      "answer": 100,
+      "target_wrong": 89,
+      "error_description": "The divisor 21 of 105 is left out of the list 1, 3, 5, 7, 15, 35, 105, so the solution n = 11 (where 2n\u22121 = 21 divides 121+26 = 147) is missing.",
+      "cases": [
+        "2n-1=1 -> n=1",
+        "2n-1=3 -> n=2",
+        "2n-1=5 -> n=3",
+        "2n-1=7 -> n=4",
+        "2n-1=15 -> n=8",
+        "2n-1=21 -> n=11",
+        "2n-1=35 -> n=18",
+        "2n-1=105 -> n=53"
+      ],
+      "solution": "Since 2n\u22121 is odd, gcd(2n\u22121, 4) = 1, so 2n\u22121 | n^2+26 iff 2n\u22121 | 4(n^2+26) = 4n^2+104. Now 4n^2 + 104 = (2n\u22121)(2n+1) + 105, so the condition is 2n\u22121 | 105 = 3\u00b75\u00b77. The divisors of 105 are 1, 3, 5, 7, 15, 21, 35, 105, giving n = (d+1)/2 = 1, 2, 3, 4, 8, 11, 18, 53. Each works (e.g. n = 11: 147 = 7\u00b721; n = 53: 2835 = 27\u00b7105). The sum is 1+2+3+4+8+11+18+53 = 100.",
+      "check_code": "print(sum(n for n in range(1,100000) if (n*n+26)%(2*n-1)==0))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p031"
+    }
+  },
+  {
+    "orig_id": "p032",
+    "batch": 3,
+    "ok": true,
+    "printed": "577",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p032",
+      "topic": "number theory: modular arithmetic and residues (difference of squares, parity of factor pairs)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n for which n^2 + 72n is a perfect square.",
+      "answer": 577,
+      "target_wrong": 528,
+      "error_description": "The factor pair 4\u00b781 = 324 is skipped when listing the factor pairs of 324 (the list jumps from 3\u00b7108 to 6\u00b754), so the solution n = 4+81\u221236 = 49 is omitted.",
+      "cases": [
+        "(1,324) -> n=289",
+        "(2,162) -> n=128",
+        "(3,108) -> n=75",
+        "(4,81) -> n=49",
+        "(6,54) -> n=24",
+        "(9,36) -> n=9",
+        "(12,27) -> n=3"
+      ],
+      "solution": "Write n^2 + 72n = m^2 with m \u2265 0. Completing the square, (n+36)^2 \u2212 m^2 = 1296, i.e. (n+36\u2212m)(n+36+m) = 1296. Both factors have the same parity and their product is even, so both are even: write them as 2d and 2e with de = 324, d \u2264 e. If d = e then m = 0 and n(n+72) = 0, impossible for positive n, so d < e. Then n + 36 = d + e. The factor pairs of 324 = 2^2\u00b73^4 with d < e are (1,324), (2,162), (3,108), (4,81), (6,54), (9,36), (12,27), giving n = 289, 128, 75, 49, 24, 9, 3. (Check: 49\u00b7121 = 77^2, 3\u00b775 = 15^2, etc.) The sum is 289+128+75+49+24+9+3 = 577.",
+      "check_code": "import math\ns=0\nfor n in range(1,100000):\n    v=n*n+72*n\n    r=math.isqrt(v)\n    if r*r==v:\n        s+=n\nprint(s)",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p032"
+    }
+  },
+  {
+    "orig_id": "p033",
+    "batch": 3,
+    "ok": true,
+    "printed": "3110",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p033",
+      "topic": "number theory: modular arithmetic and residues (cycles of powers mod 10)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n \u2264 100 for which n^n and n have the same units digit.",
+      "answer": 3110,
+      "target_wrong": 2570,
+      "error_description": "The units digit 9 is grouped with the failing digit 4 (both have period 2) and discarded, but 9^n ends in 9 for every odd n and every n ending in 9 is odd; the ten numbers 9, 19, ..., 99 (sum 540) are omitted.",
+      "cases": [
+        "units digit 0: 10,20,...,100 (sum 550)",
+        "units digit 1: 1,11,...,91 (sum 460)",
+        "units digit 5: 5,...,95 (sum 500)",
+        "units digit 6: 6,...,96 (sum 510)",
+        "units digit 9: 9,...,99 (sum 540)",
+        "units digit 3 with n \u2261 1 mod 4: 13,33,53,73,93 (sum 265)",
+        "units digit 7 with n \u2261 1 mod 4: 17,37,57,77,97 (sum 285)",
+        "units digits 2,4,8: never (n even forces 2^n,4^n,8^n to end in 4 or 6)"
+      ],
+      "solution": "Work by the units digit d of n. If d \u2208 {0,1,5,6} then every power of n ends in d, so all ten such n \u2264 100 work: sums 550, 460, 500, 510. If d = 9, then 9^n ends in 9 iff n is odd, and every n ending in 9 is odd, so 9, 19, ..., 99 all work: sum 540. If d = 4, 4^n ends in 4 iff n is odd, but n ending in 4 is even, so none work; similarly for d = 2 and d = 8 (2^n and 8^n end in 2 or 8 only for odd n). If d = 3, 3^n ends in 3 iff n \u2261 1 (mod 4); among 3, 13, ..., 93 this holds for 13, 33, 53, 73, 93 (sum 265). If d = 7, 7^n ends in 7 iff n \u2261 1 (mod 4), giving 17, 37, 57, 77, 97 (sum 285). Total: 550+460+500+510+540+265+285 = 3110.",
+      "check_code": "print(sum(n for n in range(1,101) if pow(n,n,10)==n%10))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p033"
+    }
+  },
+  {
+    "orig_id": "p034",
+    "batch": 3,
+    "ok": true,
+    "printed": "168",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p034",
+      "topic": "number theory: modular arithmetic and residues (products divisible by a modulus, gcd casework)",
+      "error_type": "omitted_case",
+      "question": "How many ordered pairs (a, b) of integers with 1 \u2264 a \u2264 36 and 1 \u2264 b \u2264 36 satisfy ab \u2261 0 (mod 36)?",
+      "answer": 168,
+      "target_wrong": 150,
+      "error_description": "The divisor 18 of 36 is dropped from the list of possible values of gcd(a,36), so the case a = 18 (where b may be any of the 18 even numbers) is omitted.",
+      "cases": [
+        "gcd(a,36)=1: 12 values of a, 1 b each (12)",
+        "gcd=2: 6 values of a, 2 b each (12)",
+        "gcd=3: 4 values of a, 3 b each (12)",
+        "gcd=4: 6 values of a, 4 b each (24)",
+        "gcd=6: 2 values of a, 6 b each (12)",
+        "gcd=9: 2 values of a, 9 b each (18)",
+        "gcd=12: 2 values of a, 12 b each (24)",
+        "gcd=18: a=18, 18 values of b (18)",
+        "gcd=36: a=36, 36 values of b (36)"
+      ],
+      "solution": "Fix a and let g = gcd(a, 36). Then 36 | ab iff (36/g) | b, and there are exactly g multiples of 36/g in 1..36. The number of a in 1..36 with gcd(a,36) = g is \u03c6(36/g). So the count is \u03a3_{g | 36} g\u00b7\u03c6(36/g): g=1: 1\u00b712 = 12; g=2: 2\u00b76 = 12; g=3: 3\u00b74 = 12; g=4: 4\u00b76 = 24; g=6: 6\u00b72 = 12; g=9: 9\u00b72 = 18; g=12: 12\u00b72 = 24; g=18: 18\u00b71 = 18; g=36: 36\u00b71 = 36. Total 12+12+12+24+12+18+24+18+36 = 168.",
+      "check_code": "print(sum(1 for a in range(1,37) for b in range(1,37) if (a*b)%36==0))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p034"
+    }
+  },
+  {
+    "orig_id": "p035",
+    "batch": 3,
+    "ok": true,
+    "printed": "4437",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p035",
+      "topic": "number theory: modular arithmetic and residues (divisibility by 9 via digit sums)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers N < 1000 such that N is divisible by 9 and every digit of N is odd.",
+      "answer": 4437,
+      "target_wrong": 4104,
+      "error_description": "When listing triples of odd digits with sum 9, the repeated-digit triple 3+3+3 is missed (only 1+1+7 and 1+3+5 are found), so N = 333 is omitted.",
+      "cases": [
+        "one-digit: 9",
+        "two-digit, digit sum 18: 99",
+        "three-digit, digit sum 27: 999",
+        "three-digit, digits {1,1,7}: 117, 171, 711 (sum 999)",
+        "three-digit, digits {1,3,5}: six permutations (sum 1998)",
+        "three-digit, digits {3,3,3}: 333"
+      ],
+      "solution": "N is divisible by 9 iff its digit sum is a multiple of 9. One-digit: only 9. Two-digit: two odd digits have even sum between 2 and 18, so the sum must be 18, giving 99. Three-digit: the sum of three odd digits is odd and at most 27, so it is 9 or 27. Sum 27 gives 999. Sum 9 with digits from {1,3,5,7,9}: the multisets are {1,1,7}, {1,3,5}, {3,3,3}. These give 117, 171, 711 (sum 999); the six permutations of 1,3,5, whose sum is 2\u00b7(1+3+5)\u00b7111 = 1998; and 333. Total: 9 + 99 + 999 + 999 + 1998 + 333 = 4437.",
+      "check_code": "print(sum(N for N in range(1,1000) if N%9==0 and all(int(d)%2==1 for d in str(N))))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p035"
+    }
+  },
+  {
+    "orig_id": "p036",
+    "batch": 3,
+    "ok": true,
+    "printed": "743",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p036",
+      "topic": "number theory: modular arithmetic and residues (idempotents mod 60 via CRT)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n \u2264 100 for which n^2 \u2212 n is divisible by 60.",
+      "answer": 743,
+      "target_wrong": 683,
+      "error_description": "The residue class n \u2261 0 (mod 60) is omitted: the solver lists the classes 1, 16, 21, 25, 36, 40, 45 from the CRT choices but forgets the all-zero choice, dropping n = 60.",
+      "cases": [
+        "n \u2261 0 mod 60: 60",
+        "n \u2261 1 mod 60: 1, 61",
+        "n \u2261 16 mod 60: 16, 76",
+        "n \u2261 21 mod 60: 21, 81",
+        "n \u2261 25 mod 60: 25, 85",
+        "n \u2261 36 mod 60: 36, 96",
+        "n \u2261 40 mod 60: 40, 100",
+        "n \u2261 45 mod 60: 45"
+      ],
+      "solution": "We need 60 | n(n\u22121). Since n and n\u22121 are coprime, 4 | n(n\u22121) iff n \u2261 0 or 1 (mod 4); similarly n \u2261 0 or 1 (mod 3) and n \u2261 0 or 1 (mod 5). By CRT there are 2^3 = 8 residue classes mod 60: 0, 1, 16, 21, 25, 36, 40, 45. In 1..100 these give 60; 1, 61; 16, 76; 21, 81; 25, 85; 36, 96; 40, 100; 45. The sum is 60 + 62 + 92 + 102 + 110 + 132 + 140 + 45 = 743.",
+      "check_code": "print(sum(n for n in range(1,101) if (n*n-n)%60==0))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p036"
+    }
+  },
+  {
+    "orig_id": "p037",
+    "batch": 3,
+    "ok": true,
+    "printed": "202",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p037",
+      "topic": "number theory: modular arithmetic and residues (binomial expansion mod 1000)",
+      "error_type": "algebra_slip",
+      "question": "Find the remainder when 11^2024 + 9^2024 is divided by 1000.",
+      "answer": 202,
+      "target_wrong": 682,
+      "error_description": "In expanding 9^2024 = (10 \u2212 1)^2024, the linear term is taken as +2024\u00b710 instead of \u22122024\u00b710 (the sign of (\u22121)^2023 is dropped), giving 841 instead of 361 for 9^2024 mod 1000 and a final answer of 682.",
+      "cases": [],
+      "solution": "Expand with the binomial theorem; terms with 10^3 or higher vanish mod 1000. 11^2024 = (1+10)^2024 \u2261 1 + 2024\u00b710 + C(2024,2)\u00b7100 (mod 1000). C(2024,2) = 2024\u00b72023/2 = 2047276, so C(2024,2)\u00b7100 \u2261 600, and 2024\u00b710 \u2261 240. Hence 11^2024 \u2261 1 + 240 + 600 = 841. Similarly 9^2024 = (\u22121+10)^2024 \u2261 1 \u2212 2024\u00b710 + C(2024,2)\u00b7100 \u2261 1 \u2212 240 + 600 = 361 (mod 1000). (Check via CRT: 9^2024 \u2261 1 mod 8 and 9^24 \u2261 111 mod 125, consistent with 361.) The sum is 841 + 361 = 1202 \u2261 202 (mod 1000).",
+      "check_code": "print((pow(11,2024,1000)+pow(9,2024,1000))%1000)",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p037"
+    }
+  },
+  {
+    "orig_id": "p038",
+    "batch": 3,
+    "ok": true,
+    "printed": "419",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p038",
+      "topic": "number theory: modular arithmetic and residues (remainder conditions, inclusion-exclusion)",
+      "error_type": "misread_condition",
+      "question": "How many integers n with 1 \u2264 n \u2264 1000 leave a remainder of 1 when divided by exactly one of the three numbers 3, 5, and 7?",
+      "answer": 419,
+      "target_wrong": 543,
+      "error_description": "The condition 'exactly one of 3, 5, 7' is read as 'at least one of 3, 5, 7', so the solver computes |A \u222a B \u222a C| = 677 \u2212 144 + 10 = 543 instead of the exactly-one count.",
+      "cases": [],
+      "solution": "Let A, B, C be the sets of n in 1..1000 with n \u2261 1 mod 3, mod 5, mod 7 respectively. |A| = 334 (n = 3k+1, k = 0..333), |B| = 200, |C| = 143. Intersections correspond to n \u2261 1 modulo 15, 21, 35, 105: |A\u2229B| = 67, |A\u2229C| = 48, |B\u2229C| = 29, |A\u2229B\u2229C| = 10. The number of n lying in exactly one set is |A|+|B|+|C| \u2212 2(|A\u2229B|+|A\u2229C|+|B\u2229C|) + 3|A\u2229B\u2229C| = 677 \u2212 2\u00b7144 + 30 = 419.",
+      "check_code": "print(sum(1 for n in range(1,1001) if sum(1 for m in (3,5,7) if n%m==1)==1))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p038"
+    }
+  },
+  {
+    "orig_id": "p039",
+    "batch": 3,
+    "ok": true,
+    "printed": "492",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p039",
+      "topic": "number theory: modular arithmetic and residues (solutions of n^2 \u2261 \u22121, union of residue classes)",
+      "error_type": "double_counting",
+      "question": "How many positive integers n \u2264 1000 are there for which n^2 + 1 is divisible by 5 or by 13?",
+      "answer": 492,
+      "target_wrong": 554,
+      "error_description": "The two counts 400 (divisible by 5) and 154 (divisible by 13) are added without subtracting the 62 values of n for which n^2 + 1 is divisible by 65, double counting the overlap.",
+      "cases": [],
+      "solution": "n^2 \u2261 \u22121 (mod 5) iff n \u2261 2 or 3 (mod 5); each class has 200 members in 1..1000, so 400 values. n^2 \u2261 \u22121 (mod 13) iff n \u2261 5 or 8 (mod 13); since 1000 = 13\u00b776 + 12, each nonzero residue class has 77 members, so 154 values. Both hold iff n^2 \u2261 \u22121 (mod 65), i.e. n \u2261 8, 18, 47, or 57 (mod 65) (e.g. 8^2+1 = 65, 18^2+1 = 325, 47^2+1 = 2210, 57^2+1 = 3250). Since 1000 = 65\u00b715 + 25, residues 8 and 18 give 16 values each and residues 47 and 57 give 15 each: 62 in total. By inclusion-exclusion the answer is 400 + 154 \u2212 62 = 492.",
+      "check_code": "print(sum(1 for n in range(1,1001) if (n*n+1)%5==0 or (n*n+1)%13==0))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p039"
+    }
+  },
+  {
+    "orig_id": "p040",
+    "batch": 3,
+    "ok": true,
+    "printed": "3710",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p040",
+      "topic": "number theory: modular arithmetic and residues (simultaneous congruences, counting terms in a progression)",
+      "error_type": "off_by_one",
+      "question": "Find the sum of the positive integers n < 500 that satisfy n \u2261 7 (mod 12) and n \u2261 4 (mod 9).",
+      "answer": 3710,
+      "target_wrong": 3211,
+      "error_description": "The number of terms 31, 67, ..., 499 is taken as floor((500\u221231)/36) = 13 instead of 13 + 1 = 14, so the boundary term n = 499 is dropped and the sum becomes 13\u00b7(31+463)/2 = 3211.",
+      "cases": [],
+      "solution": "Both congruences force n \u2261 1 (mod 3), so they are compatible; lcm(12, 9) = 36. Write n = 4 + 9j; then 4 + 9j \u2261 7 (mod 12) gives 9j \u2261 3 (mod 12), i.e. 3j \u2261 1 (mod 4), so j \u2261 3 (mod 4) and n \u2261 4 + 27 = 31 (mod 36). The solutions below 500 are n = 31 + 36k with 31 + 36k \u2264 499, i.e. k = 0, 1, ..., 13: fourteen terms 31, 67, ..., 499. Their sum is 14\u00b7(31 + 499)/2 = 14\u00b7265 = 3710.",
+      "check_code": "print(sum(n for n in range(1,500) if n%12==7 and n%9==4))",
+      "batch": 3,
+      "domain": "math3",
+      "orig_id": "p040"
+    }
+  },
+  {
+    "orig_id": "p041",
+    "batch": 4,
+    "ok": true,
+    "printed": "6220",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p041",
+      "topic": "combinatorics: counting lattice paths (binomial coefficients)",
+      "error_type": "omitted_case",
+      "question": "A lattice path from (0,0) to (a,b) consists of unit steps, each going one unit right or one unit up. Find the sum of a + b over the ordered pairs (a, b) of positive integers for which there are exactly 3003 such lattice paths from (0,0) to (a,b).",
+      "answer": 6220,
+      "target_wrong": 6192,
+      "error_description": "The solution finds C(3003,1), C(78,2) and C(15,5) but misses that C(14,6) = 3003 as well, so the ordered pairs (6,8) and (8,6) are left out, losing 14+14 = 28.",
+      "cases": [
+        "(1,3002)",
+        "(3002,1)",
+        "(2,76)",
+        "(76,2)",
+        "(5,10)",
+        "(10,5)",
+        "(6,8)",
+        "(8,6)"
+      ],
+      "solution": "The number of paths from (0,0) to (a,b) is C(a+b, a). Put n = a+b and k = a, so 1 <= k <= n-1 and we need C(n,k) = 3003; by symmetry it suffices to find k <= n/2. k=1: n = 3003. k=2: n(n-1)/2 = 3003 gives n = 78. k=3: n(n-1)(n-2) = 18018 has no integer solution (26*25*24 = 15600, 27*26*25 = 17550, 28*27*26 = 19656). k=4: n(n-1)(n-2)(n-3) = 72072 has none (17*16*15*14 = 57120, 18*17*16*15 = 73440). k=5: C(15,5) = 3003 works (C(14,5) = 2002, C(16,5) = 4368). k=6: C(14,6) = 3003 works (C(13,6) = 1716, C(15,6) = 5005). k >= 7: C(n,k) >= C(2k,k) >= C(14,7) = 3432 > 3003, so nothing more. The representations are (n,k) = (3003,1), (78,2), (15,5), (14,6), giving ordered pairs (1,3002), (3002,1), (2,76), (76,2), (5,10), (10,5), (6,8), (8,6). The requested sum is 2(3003 + 78 + 15 + 14) = 6220.",
+      "check_code": "from math import comb\ntotal = 0\nfor a in range(1, 8):\n    b = a\n    while comb(a + b, a) <= 3003:\n        if comb(a + b, a) == 3003:\n            total += (a + b) if a == b else 2 * (a + b)\n        b += 1\nprint(total)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p041"
+    }
+  },
+  {
+    "orig_id": "p042",
+    "batch": 4,
+    "ok": true,
+    "printed": "15712",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p042",
+      "topic": "combinatorics: counting words by letter multiplicities",
+      "error_type": "omitted_case",
+      "question": "How many strings of length 8 over the alphabet {A, B, C, D} have the property that every letter that occurs in the string occurs at least twice?",
+      "answer": 15712,
+      "target_wrong": 15708,
+      "error_description": "The solution lists the count patterns (6,2), (5,3), (4,4), (4,2,2), (3,3,2), (2,2,2,2) but omits the pattern (8) in which a single letter fills the whole string (4 strings).",
+      "cases": [
+        "(8): 4",
+        "(6,2): 336",
+        "(5,3): 672",
+        "(4,4): 420",
+        "(4,2,2): 5040",
+        "(3,3,2): 6720",
+        "(2,2,2,2): 2520"
+      ],
+      "solution": "Classify strings by the multiset of letter counts, which is a partition of 8 into parts each at least 2 with at most 4 parts. (8): 4 strings. (6,2): choose the letter appearing 6 times and the one appearing twice in 4*3 = 12 ways, arrange in C(8,2) = 28 ways: 336. (5,3): 12 * C(8,3) = 12*56 = 672. (4,4): choose the two letters in C(4,2) = 6 ways, arrange in C(8,4) = 70 ways: 420. (4,2,2): choose the 4-letter (4 ways) and the two 2-letters (C(3,2) = 3 ways), arrange in 8!/(4!2!2!) = 420 ways: 12*420 = 5040. (3,3,2): choose the 2-letter (4 ways) and the two 3-letters (3 ways), arrange in 8!/(3!3!2!) = 560 ways: 12*560 = 6720. (2,2,2,2): 8!/(2!)^4 = 2520. Total 4 + 336 + 672 + 420 + 5040 + 6720 + 2520 = 15712.",
+      "check_code": "from itertools import product\nfrom collections import Counter\ncnt = 0\nfor s in product('ABCD', repeat=8):\n    c = Counter(s)\n    if all(v >= 2 for v in c.values()):\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p042"
+    }
+  },
+  {
+    "orig_id": "p043",
+    "batch": 4,
+    "ok": true,
+    "printed": "22748",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p043",
+      "topic": "combinatorics: lattice paths through points on a line",
+      "error_type": "omitted_case",
+      "question": "A path from (0,0) to (11,7) is made of unit steps, each going one unit right or one unit up. How many such paths visit at least one lattice point lying on the line x + 2y = 12?",
+      "answer": 22748,
+      "target_wrong": 22736,
+      "error_description": "The solution enumerates the lattice points (10,1), (8,2), (6,3), (4,4), (2,5) on the line inside the rectangle but omits (0,6), the point on the y-axis, which contributes 1 * 12 = 12 paths.",
+      "cases": [
+        "(10,1): 11*7 = 77",
+        "(8,2): 45*56 = 2520",
+        "(6,3): 84*126 = 10584",
+        "(4,4): 70*120 = 8400",
+        "(2,5): 21*55 = 1155",
+        "(0,6): 1*12 = 12"
+      ],
+      "solution": "The lattice points on x + 2y = 12 with 0 <= x <= 11 and 0 <= y <= 7 are (10,1), (8,2), (6,3), (4,4), (2,5), (0,6) (y = 0 would need x = 12, outside the rectangle). Distinct points on this line have different x and different y with opposite orderings, so a monotone path can pass through at most one of them; hence the counts for the six points can simply be added. A path through (x,y) is counted by C(x+y, y) * C((11-x)+(7-y), 7-y): (10,1): C(11,1)*C(7,6) = 11*7 = 77; (8,2): C(10,2)*C(8,5) = 45*56 = 2520; (6,3): C(9,3)*C(9,4) = 84*126 = 10584; (4,4): C(8,4)*C(10,3) = 70*120 = 8400; (2,5): C(7,5)*C(11,2) = 21*55 = 1155; (0,6): C(6,6)*C(12,1) = 1*12 = 12. Total 77 + 2520 + 10584 + 8400 + 1155 + 12 = 22748.",
+      "check_code": "from itertools import combinations\ncnt = 0\nfor ups in combinations(range(18), 7):\n    U = set(ups)\n    x = y = 0\n    hit = False\n    for i in range(18):\n        if i in U:\n            y += 1\n        else:\n            x += 1\n        if x + 2 * y == 12:\n            hit = True\n    if hit:\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p043"
+    }
+  },
+  {
+    "orig_id": "p044",
+    "batch": 4,
+    "ok": true,
+    "printed": "288",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p044",
+      "topic": "combinatorics: counting words with a value condition",
+      "error_type": "omitted_case",
+      "question": "The letters A, B, C, D, E, F, G, H, I are assigned the values 1, 2, 3, 4, 5, 6, 7, 8, 9 respectively. A word is any ordered sequence of letters. How many four-letter words, using four different letters from A through I, have letter values that sum to 20?",
+      "answer": 288,
+      "target_wrong": 264,
+      "error_description": "When listing the 4-element subsets of {1,...,9} with sum 20, the solution stops after {3,4,5,8} and omits {3,4,6,7}, losing 4! = 24 words.",
+      "cases": [
+        "{1,2,8,9}",
+        "{1,3,7,9}",
+        "{1,4,6,9}",
+        "{1,4,7,8}",
+        "{1,5,6,8}",
+        "{2,3,6,9}",
+        "{2,3,7,8}",
+        "{2,4,5,9}",
+        "{2,4,6,8}",
+        "{2,5,6,7}",
+        "{3,4,5,8}",
+        "{3,4,6,7}"
+      ],
+      "solution": "A word corresponds to a 4-element subset of {1,...,9} with sum 20 together with an ordering, so the answer is 24 times the number of such subsets. Enumerate by smallest element a. a = 1: {b,c,d} from {2..9} summing to 19: b=2: {8,9}; b=3: {7,9}; b=4: {6,9},{7,8}; b=5: {6,8}; b>=6 impossible. (5 subsets.) a = 2: sum 18 from {3..9}: b=3: {6,9},{7,8}; b=4: {5,9},{6,8}; b=5: {6,7}; (5 subsets.) a = 3: sum 17 from {4..9}: b=4: {5,8},{6,7}; b=5 needs c+d=12 with c>=6, impossible. (2 subsets.) a = 4: b>=5, c>=6, d>=7 gives sum >= 22 > 20, none. In total 12 subsets, so 12 * 24 = 288 words.",
+      "check_code": "from itertools import permutations\ncnt = 0\nfor w in permutations(range(1, 10), 4):\n    if sum(w) == 20:\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p044"
+    }
+  },
+  {
+    "orig_id": "p045",
+    "batch": 4,
+    "ok": true,
+    "printed": "84",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p045",
+      "topic": "combinatorics: arrangements with run-length restrictions",
+      "error_type": "omitted_case",
+      "question": "How many arrangements of five A's and five B's in a row contain no three consecutive identical letters?",
+      "answer": 84,
+      "target_wrong": 82,
+      "error_description": "In the casework on (number of A-runs, number of B-runs), the solution omits the case (5,5), where every run has length 1; this case contributes the 2 strictly alternating strings.",
+      "cases": [
+        "(3,3): 2*3*3 = 18",
+        "(4,4): 2*4*4 = 32",
+        "(5,5): 2*1*1 = 2",
+        "(3,4): 3*4 = 12",
+        "(4,3): 4*3 = 12",
+        "(4,5): 4*1 = 4",
+        "(5,4): 1*4 = 4"
+      ],
+      "solution": "Split the string into maximal runs; each run has length 1 or 2, and runs of A and B alternate. The number of ways to write 5 as an ordered sum of r parts each equal to 1 or 2 is C(r, 5-r) (choose which parts are 2): r = 3 gives 3, r = 4 gives 4, r = 5 gives 1 (r <= 2 is impossible). If the A's form r runs and the B's form s runs, alternation forces |r - s| <= 1; when r = s either letter may start (2 choices), otherwise the letter with more runs must start (1 choice). Summing: r = s: 2(3*3 + 4*4 + 1*1) = 52; |r - s| = 1: (r,s) = (3,4),(4,3): 2*3*4 = 24, and (4,5),(5,4): 2*4*1 = 8. Total 52 + 24 + 8 = 84.",
+      "check_code": "from itertools import combinations\ncnt = 0\nfor pos in combinations(range(10), 5):\n    s = ['B'] * 10\n    for p in pos:\n        s[p] = 'A'\n    t = ''.join(s)\n    if 'AAA' not in t and 'BBB' not in t:\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p045"
+    }
+  },
+  {
+    "orig_id": "p046",
+    "batch": 4,
+    "ok": true,
+    "printed": "486",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p046",
+      "topic": "combinatorics: counting squares in a grid (configurations)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of m + n over the ordered pairs (m, n) of positive integers for which an m \u00d7 n grid of unit squares contains exactly 140 squares whose sides lie along the grid lines (squares of every size are counted).",
+      "answer": 486,
+      "target_wrong": 472,
+      "error_description": "The solution finds the grids 1\u00d7140, 2\u00d747, 3\u00d724, 4\u00d715 (and their transposes) but stops before m = 7 and omits the 7\u00d77 grid, which has 49+36+25+16+9+4+1 = 140 squares and contributes 14.",
+      "cases": [
+        "(1,140)",
+        "(140,1)",
+        "(2,47)",
+        "(47,2)",
+        "(3,24)",
+        "(24,3)",
+        "(4,15)",
+        "(15,4)",
+        "(7,7)"
+      ],
+      "solution": "For m <= n, the number of k\u00d7k squares in an m\u00d7n grid is (m-k+1)(n-k+1), so the total is S(m,n) = sum_{k=1}^{m} (m-k+1)(n-k+1) = m(m+1)(3n-m+1)/6. For m = n = 8 this is already 204 > 140, and S is increasing in n, so m <= 7. m = 1: S = n = 140, n = 140. m = 2: 3n - 1 = 140, n = 47. m = 3: 2(3n-2) = 140, n = 24. m = 4: 10(n-1) = 140, n = 15. m = 5: 5(3n-4) = 140 has no integer solution. m = 6: 7(3n-5) = 140 has none. m = 7: 28(n-2) = 140, n = 7. So the grids (with m <= n) are 1\u00d7140, 2\u00d747, 3\u00d724, 4\u00d715, 7\u00d77; as ordered pairs the first four each give two pairs and 7\u00d77 gives one. The sum is 2(141 + 49 + 27 + 19) + 14 = 486.",
+      "check_code": "total = 0\nfor m in range(1, 141):\n    for n in range(1, 141):\n        sq = sum((m - k + 1) * (n - k + 1) for k in range(1, min(m, n) + 1))\n        if sq == 140:\n            total += m + n\nprint(total)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p046"
+    }
+  },
+  {
+    "orig_id": "p047",
+    "batch": 4,
+    "ok": true,
+    "printed": "720",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p047",
+      "topic": "combinatorics: counting words with a non-adjacency condition",
+      "error_type": "misread_condition",
+      "question": "How many strings of length 8 over the alphabet {A, B, C} contain at least three A's and have no two A's in adjacent positions?",
+      "answer": 720,
+      "target_wrong": 640,
+      "error_description": "The solution reads 'at least three A's' as 'exactly three A's' and reports C(6,3)*2^5 = 640, dropping the 80 strings with four non-adjacent A's.",
+      "cases": [],
+      "solution": "If a string of length 8 has exactly k non-adjacent A's, the positions of the A's can be chosen in C(9-k, k) ways (place k A's into the 9-k gaps formed by the 8-k other letters), and each of the other 8-k positions holds B or C: 2^(8-k) choices. k = 3: C(6,3)*2^5 = 20*32 = 640. k = 4: C(5,4)*2^4 = 5*16 = 80. k >= 5 is impossible since C(9-k,k) = 0 (five non-adjacent letters need length at least 9). Total 640 + 80 = 720.",
+      "check_code": "from itertools import product\ncnt = 0\nfor s in product('ABC', repeat=8):\n    t = ''.join(s)\n    if t.count('A') >= 3 and 'AA' not in t:\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p047"
+    }
+  },
+  {
+    "orig_id": "p048",
+    "batch": 4,
+    "ok": true,
+    "printed": "1532",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p048",
+      "topic": "combinatorics: lattice paths avoiding points",
+      "error_type": "double_counting",
+      "question": "How many paths from (0,0) to (7,7), using unit steps that each go one unit right or one unit up, pass through neither the point (3,2) nor the point (4,6)?",
+      "answer": 1532,
+      "target_wrong": 1332,
+      "error_description": "The solution subtracts the 1260 paths through (3,2) and the 840 paths through (4,6) from the 3432 total but fails to add back the 200 paths that pass through both points, so those are subtracted twice.",
+      "cases": [],
+      "solution": "Total paths: C(14,7) = 3432. Paths through (3,2): C(5,2) * C(9,4) = 10 * 126 = 1260. Paths through (4,6): C(10,4) * C(4,1) = 210 * 4 = 840. Paths through both (3,2) and (4,6): C(5,2) * [paths from (3,2) to (4,6): 1 right and 4 up, C(5,1) = 5] * C(4,1) = 10 * 5 * 4 = 200. By inclusion-exclusion the number of paths through at least one of the points is 1260 + 840 - 200 = 1900, so the number avoiding both is 3432 - 1900 = 1532.",
+      "check_code": "from itertools import combinations\ncnt = 0\nfor rs in combinations(range(14), 7):\n    R = set(rs)\n    x = y = 0\n    ok = True\n    for i in range(14):\n        if i in R:\n            x += 1\n        else:\n            y += 1\n        if (x, y) in ((3, 2), (4, 6)):\n            ok = False\n            break\n    if ok:\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p048"
+    }
+  },
+  {
+    "orig_id": "p049",
+    "batch": 4,
+    "ok": true,
+    "printed": "17160",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p049",
+      "topic": "combinatorics: arrangements of a multiset with a non-adjacency condition",
+      "error_type": "off_by_one",
+      "question": "How many arrangements of the fourteen letters X, X, Y, Y, Y, Z, Z, Z, Z, Z, Z, Z, Z, Z in a row have the two X's not adjacent to each other?",
+      "answer": 17160,
+      "target_wrong": 14520,
+      "error_description": "After arranging the twelve Y's and Z's, the solution places the X's into 12 gaps instead of 13 (it forgets that both ends are gaps), using C(12,2) = 66 instead of C(13,2) = 78, giving 220*66 = 14520.",
+      "cases": [],
+      "solution": "First arrange the three Y's and nine Z's in a row: 12!/(3! 9!) = C(12,3) = 220 ways. These twelve letters create 13 gaps (eleven between consecutive letters plus one at each end). Placing the two identical X's into two different gaps guarantees they are not adjacent and every valid arrangement arises exactly once this way: C(13,2) = 78 choices. Total 220 * 78 = 17160. (Check by complement: 14!/(2!3!9!) = 20020 total arrangements, minus 13!/(3!9!) = 2860 with the X's glued together, gives 17160.)",
+      "check_code": "from itertools import combinations\ncnt = 0\nfor xs in combinations(range(14), 2):\n    if xs[1] - xs[0] == 1:\n        continue\n    rest = [i for i in range(14) if i not in xs]\n    cnt += sum(1 for _ in combinations(rest, 3))\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p049"
+    }
+  },
+  {
+    "orig_id": "p050",
+    "batch": 4,
+    "ok": true,
+    "printed": "112",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p050",
+      "topic": "combinatorics: circular arrangements / non-adjacent selections",
+      "error_type": "misapplied_formula",
+      "question": "Twelve chairs, numbered 1 through 12, are equally spaced around a round table. In how many ways can three of the chairs be chosen so that no two of the chosen chairs are adjacent?",
+      "answer": 112,
+      "target_wrong": 120,
+      "error_description": "The solution applies the linear formula C(n-k+1, k) = C(10,3) = 120 for choosing k non-adjacent items from a row of n, ignoring that chairs 1 and 12 are adjacent around the table; the 8 selections containing both chairs 1 and 12 must be excluded.",
+      "cases": [],
+      "solution": "Split according to whether chair 1 is chosen. If chair 1 is chosen, chairs 2 and 12 are excluded and the other two chairs are chosen non-adjacently from the row of nine chairs 3,4,...,11: C(9-2+1, 2) = C(8,2) = 28 ways. If chair 1 is not chosen, all three chairs come from the row of eleven chairs 2,3,...,12 (chairs 2 and 12 are not adjacent to each other, so this is a genuine row): C(11-3+1, 3) = C(9,3) = 84 ways. Total 28 + 84 = 112. (Equivalently, the circular formula n/(n-k) * C(n-k, k) = 12/9 * C(9,3) = 112.)",
+      "check_code": "from itertools import combinations\ncnt = 0\nfor c in combinations(range(12), 3):\n    if all((b - a) % 12 not in (1, 11) for a in c for b in c if a != b):\n        cnt += 1\nprint(cnt)",
+      "batch": 4,
+      "domain": "math3",
+      "orig_id": "p050"
+    }
+  },
+  {
+    "orig_id": "p051",
+    "batch": 5,
+    "ok": true,
+    "printed": "1768",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p051",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n for which n^2 + 2025 is a perfect square.",
+      "answer": 1768,
+      "target_wrong": 1744,
+      "error_description": "The factor pair (27, 75) of 2025 is left out (27\u00b775 = 2025 is the least obvious pair), losing n = (75\u221227)/2 = 24.",
+      "cases": [
+        "(1,2025) \u2192 n=1012",
+        "(3,675) \u2192 n=336",
+        "(5,405) \u2192 n=200",
+        "(9,225) \u2192 n=108",
+        "(15,135) \u2192 n=60",
+        "(25,81) \u2192 n=28",
+        "(27,75) \u2192 n=24"
+      ],
+      "solution": "Write m^2 \u2212 n^2 = 2025, so (m\u2212n)(m+n) = 2025 with 0 < m\u2212n < m+n. Since 2025 is odd, every factor pair (d, e) with d < e and de = 2025 has both factors odd, so n = (e\u2212d)/2 is an integer. The divisors of 2025 = 3^4\u00b75^2 are 1,3,5,9,15,25,27,45,75,81,135,225,405,675,2025, giving the pairs (1,2025),(3,675),(5,405),(9,225),(15,135),(25,81),(27,75) (the pair (45,45) gives n = 0, not positive). The corresponding n are 1012, 336, 200, 108, 60, 28, 24, whose sum is 1768.",
+      "check_code": "from math import isqrt\ns=0\nfor n in range(1,5000):\n    m=n*n+2025\n    r=isqrt(m)\n    if r*r==m:\n        s+=n\nprint(s)",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p051"
+    }
+  },
+  {
+    "orig_id": "p052",
+    "batch": 5,
+    "ok": true,
+    "printed": "715",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p052",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers c for which every root of the polynomial x^2 \u2212 20x + c is an integer.",
+      "answer": 715,
+      "target_wrong": 615,
+      "error_description": "The repeated-root case x = 10, 10 (c = 100) is omitted; only the pairs of distinct roots 1+19, \u2026, 9+11 are listed.",
+      "cases": [
+        "roots 1,19 \u2192 c=19",
+        "roots 2,18 \u2192 c=36",
+        "roots 3,17 \u2192 c=51",
+        "roots 4,16 \u2192 c=64",
+        "roots 5,15 \u2192 c=75",
+        "roots 6,14 \u2192 c=84",
+        "roots 7,13 \u2192 c=91",
+        "roots 8,12 \u2192 c=96",
+        "roots 9,11 \u2192 c=99",
+        "roots 10,10 \u2192 c=100"
+      ],
+      "solution": "Let the roots be integers r, s with r + s = 20 and rs = c. Since c > 0 the roots have the same sign, and since their sum is 20 both are positive. Taking r \u2264 s, the pairs are (1,19),(2,18),(3,17),(4,16),(5,15),(6,14),(7,13),(8,12),(9,11),(10,10), with products 19, 36, 51, 64, 75, 84, 91, 96, 99, 100. Each product is a distinct value of c, and the sum is 715.",
+      "check_code": "from math import isqrt\ns=0\nfor c in range(1,500):\n    D=400-4*c\n    if D<0:\n        continue\n    r=isqrt(D)\n    if r*r==D and (20+r)%2==0:\n        s+=c\nprint(s)",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p052"
+    }
+  },
+  {
+    "orig_id": "p053",
+    "batch": 5,
+    "ok": true,
+    "printed": "758",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p053",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers n for which (n^2 \u2212 n + 270)/(n + 6) is an integer.",
+      "answer": 758,
+      "target_wrong": 738,
+      "error_description": "The divisor 26 of 312 = 2^3\u00b73\u00b713 is skipped in the list of divisors exceeding 6, losing n = 26 \u2212 6 = 20.",
+      "cases": [
+        "n+6=8 \u2192 n=2",
+        "n+6=12 \u2192 n=6",
+        "n+6=13 \u2192 n=7",
+        "n+6=24 \u2192 n=18",
+        "n+6=26 \u2192 n=20",
+        "n+6=39 \u2192 n=33",
+        "n+6=52 \u2192 n=46",
+        "n+6=78 \u2192 n=72",
+        "n+6=104 \u2192 n=98",
+        "n+6=156 \u2192 n=150",
+        "n+6=312 \u2192 n=306"
+      ],
+      "solution": "Dividing, n^2 \u2212 n + 270 = (n + 6)(n \u2212 7) + 312, so n + 6 must divide 312 = 2^3\u00b73\u00b713. The divisors of 312 are 1,2,3,4,6,8,12,13,24,26,39,52,78,104,156,312. Since n is positive, n + 6 \u2265 7, leaving 8,12,13,24,26,39,52,78,104,156,312. Hence n \u2208 {2, 6, 7, 18, 20, 33, 46, 72, 98, 150, 306}, and the sum is 758.",
+      "check_code": "s=0\nfor n in range(1,5000):\n    if (n*n-n+270)%(n+6)==0:\n        s+=n\nprint(s)",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p053"
+    }
+  },
+  {
+    "orig_id": "p054",
+    "batch": 5,
+    "ok": true,
+    "printed": "583",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p054",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "Ordered pairs (x, y) of positive integers satisfy 1/x + 1/y = 1/12. Find the sum of x over these pairs.",
+      "answer": 583,
+      "target_wrong": 534,
+      "error_description": "The divisor pair 9\u00b716 = 144 is omitted, dropping the two ordered solutions (x, y) = (21, 28) and (28, 21) and hence 21 + 28 = 49 from the sum.",
+      "cases": [
+        "(x\u221212, y\u221212) = (1,144) and (144,1)",
+        "(2,72) and (72,2)",
+        "(3,48) and (48,3)",
+        "(4,36) and (36,4)",
+        "(6,24) and (24,6)",
+        "(8,18) and (18,8)",
+        "(9,16) and (16,9)",
+        "(12,12)"
+      ],
+      "solution": "Clearing denominators gives xy = 12x + 12y, i.e. (x \u2212 12)(y \u2212 12) = 144. If x \u2212 12 and y \u2212 12 were both negative we would need x, y < 12, but then (12 \u2212 x)(12 \u2212 y) < 144, impossible; so both are positive divisors of 144. Thus x \u2212 12 ranges over all 15 divisors of 144 = 2^4\u00b73^2, each giving exactly one ordered pair. The sum of x is 15\u00b712 + \u03c3(144) = 180 + (1+2+4+8+16)(1+3+9) = 180 + 31\u00b713 = 180 + 403 = 583.",
+      "check_code": "s=0\nfor x in range(1,1000):\n    for y in range(1,1000):\n        if 12*(x+y)==x*y:\n            s+=x\nprint(s)",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p054"
+    }
+  },
+  {
+    "orig_id": "p055",
+    "batch": 5,
+    "ok": true,
+    "printed": "66",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p055",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "How many integers n with 1 \u2264 n \u2264 500 have the property that n^2 \u2212 n is divisible by 60?",
+      "answer": 66,
+      "target_wrong": 58,
+      "error_description": "The residue class n \u2261 21 (mod 60) (n \u2261 1 mod 4, n \u2261 0 mod 3, n \u2261 1 mod 5) is omitted from the list of eight classes; it contributes 8 values (21, 81, \u2026, 441).",
+      "cases": [
+        "n \u2261 0 (mod 60): 8 values",
+        "n \u2261 1: 9 values",
+        "n \u2261 16: 9 values",
+        "n \u2261 21: 8 values",
+        "n \u2261 25: 8 values",
+        "n \u2261 36: 8 values",
+        "n \u2261 40: 8 values",
+        "n \u2261 45: 8 values"
+      ],
+      "solution": "n^2 \u2212 n = n(n \u2212 1) is a product of consecutive integers, which are coprime, so each of 4, 3, 5 must divide n or n \u2212 1. Thus n \u2261 0 or 1 modulo each of 4, 3, 5, giving 2^3 = 8 residue classes modulo 60 by CRT: n \u2261 0, 1, 16, 21, 25, 36, 40, 45 (mod 60). In 1 \u2264 n \u2264 500 = 8\u00b760 + 20, each class contributes 8 values from the full blocks, plus the extra values 481 (class 1) and 496 (class 16) in 481\u2013500. Total 8\u00b78 + 2 = 66.",
+      "check_code": "print(sum(1 for n in range(1,501) if (n*n-n)%60==0))",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p055"
+    }
+  },
+  {
+    "orig_id": "p056",
+    "batch": 5,
+    "ok": true,
+    "printed": "386",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p056",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "omitted_case",
+      "question": "The polynomial x^3 \u2212 ax^2 + bx \u2212 36 has integer coefficients, and every root of it is a positive integer. Find the sum of the distinct values that b can take.",
+      "answer": 386,
+      "target_wrong": 346,
+      "error_description": "The repeated-root triple (2, 2, 9) is omitted from the list of root triples with product 36, losing b = 4 + 18 + 18 = 40.",
+      "cases": [
+        "(1,1,36) \u2192 b=73",
+        "(1,2,18) \u2192 b=56",
+        "(1,3,12) \u2192 b=51",
+        "(1,4,9) \u2192 b=49",
+        "(1,6,6) \u2192 b=48",
+        "(2,2,9) \u2192 b=40",
+        "(2,3,6) \u2192 b=36",
+        "(3,3,4) \u2192 b=33"
+      ],
+      "solution": "Let the roots be positive integers r \u2264 s \u2264 t. By Vieta, rst = 36 and b = rs + st + tr. The unordered triples with product 36 are (1,1,36), (1,2,18), (1,3,12), (1,4,9), (1,6,6), (2,2,9), (2,3,6), (3,3,4), giving b = 73, 56, 51, 49, 48, 40, 36, 33 respectively. These are all distinct, so the sum is 386.",
+      "check_code": "bs=set()\nfor r in range(1,37):\n    for s in range(r,37):\n        for t in range(s,37):\n            if r*s*t==36:\n                bs.add(r*s+s*t+t*r)\nprint(sum(bs))",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p056"
+    }
+  },
+  {
+    "orig_id": "p057",
+    "batch": 5,
+    "ok": true,
+    "printed": "65",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p057",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "double_counting",
+      "question": "How many ordered pairs (a, b) of integers with 1 \u2264 a \u2264 20 and 1 \u2264 b \u2264 20 are there such that at least one of the polynomials x^2 \u2212 ax + b and x^2 \u2212 bx + a has only integer roots?",
+      "answer": 65,
+      "target_wrong": 68,
+      "error_description": "Each polynomial condition is satisfied by 34 pairs; adding 34 + 34 = 68 counts the three pairs (4,4), (5,6), (6,5) that satisfy both conditions twice, instead of subtracting the overlap to get 65.",
+      "cases": [],
+      "solution": "Let A be the set of pairs for which x^2 \u2212 ax + b has integer roots. Then the roots r, s are integers with r + s = a > 0 and rs = b > 0, so both are positive. Counting r \u2264 s with r + s \u2264 20 and rs \u2264 20: r = 1 gives s = 1..19 (19 pairs); r = 2 gives s = 2..10 (9); r = 3 gives s = 3..6 (4); r = 4 gives s = 4,5 (2); r \u2265 5 is impossible. So |A| = 34, and distinct root pairs give distinct (a, b). By symmetry the set B for x^2 \u2212 bx + a also has 34 elements. A \u2229 B consists of (a,b) with both (a,b) and (b,a) in A; checking the 34 elements of A, only (4,4) [roots 2,2], (5,6) [roots 2,3; reversed (6,5) has roots 1,5] and (6,5) qualify, so |A \u2229 B| = 3. The answer is 34 + 34 \u2212 3 = 65.",
+      "check_code": "from math import isqrt\ndef ok(a,b):\n    D=a*a-4*b\n    if D<0:\n        return False\n    r=isqrt(D)\n    return r*r==D and (a+r)%2==0\nprint(sum(1 for a in range(1,21) for b in range(1,21) if ok(a,b) or ok(b,a)))",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p057"
+    }
+  },
+  {
+    "orig_id": "p058",
+    "batch": 5,
+    "ok": true,
+    "printed": "63",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p058",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "off_by_one",
+      "question": "How many integers x satisfy (x \u2212 3)(x + 5) < 1000?",
+      "answer": 63,
+      "target_wrong": 62,
+      "error_description": "After reducing to |x + 1| \u2264 31, the count is taken as 2\u00b731 = 62, forgetting the value x + 1 = 0 (x = \u22121); the correct count of integers in [\u221231, 31] is 63.",
+      "cases": [],
+      "solution": "Expanding, (x \u2212 3)(x + 5) = x^2 + 2x \u2212 15, so the inequality is x^2 + 2x \u2212 15 < 1000, i.e. (x + 1)^2 < 1016. Since 31^2 = 961 < 1016 < 1024 = 32^2, this holds exactly when |x + 1| \u2264 31, i.e. \u221232 \u2264 x \u2264 30. That interval contains 30 \u2212 (\u221232) + 1 = 63 integers.",
+      "check_code": "print(sum(1 for x in range(-2000,2001) if (x-3)*(x+5)<1000))",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p058"
+    }
+  },
+  {
+    "orig_id": "p059",
+    "batch": 5,
+    "ok": true,
+    "printed": "12",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p059",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "misapplied_formula",
+      "question": "How many ordered pairs (x, y) of positive integers satisfy x^2 \u2212 y^2 = 2016?",
+      "answer": 12,
+      "target_wrong": 18,
+      "error_description": "Uses the rule 'number of solutions = half the number of divisors of N' (valid for odd N) directly on N = 2016, which has 36 divisors, giving 18; it ignores that x \u2212 y and x + y must have the same parity, so only the factorizations with both factors even (equivalent to ab = 504, giving 12 pairs) count.",
+      "cases": [],
+      "solution": "Write (x \u2212 y)(x + y) = 2016 with 0 < x \u2212 y < x + y. Since x \u2212 y and x + y have the same parity and their product is even, both are even: x \u2212 y = 2a, x + y = 2b with ab = 504 and a < b. Then x = a + b, y = b \u2212 a are positive integers, and every such (a, b) works. 504 = 2^3\u00b73^2\u00b77 has (3+1)(2+1)(1+1) = 24 divisors and is not a square, so there are 24/2 = 12 pairs (a, b) with a < b. Hence there are 12 solutions.",
+      "check_code": "from math import isqrt\ncnt=0\nfor y in range(1,3000):\n    m=y*y+2016\n    x=isqrt(m)\n    if x*x==m:\n        cnt+=1\nprint(cnt)",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p059"
+    }
+  },
+  {
+    "orig_id": "p060",
+    "batch": 5,
+    "ok": true,
+    "printed": "365",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p060",
+      "topic": "algebra: integer solutions of equations and polynomial roots",
+      "error_type": "algebra_slip",
+      "question": "Let r, s, t be the roots of x^3 \u2212 9x^2 + 20x \u2212 11. Find (r^2 + 1)(s^2 + 1)(t^2 + 1).",
+      "answer": 365,
+      "target_wrong": 464,
+      "error_description": "In the Vieta expansion, the term r^2s^2 + s^2t^2 + t^2r^2 is computed as e2^2 \u2212 e1\u00b7e3 = 400 \u2212 99 = 301 (dropping the factor 2 in e2^2 \u2212 2e1e3 = 202), giving 121 + 301 + 41 + 1 = 464 instead of 365.",
+      "cases": [],
+      "solution": "By Vieta, e1 = r+s+t = 9, e2 = rs+st+tr = 20, e3 = rst = 11. Expanding, (r^2+1)(s^2+1)(t^2+1) = (rst)^2 + (r^2s^2 + s^2t^2 + t^2r^2) + (r^2 + s^2 + t^2) + 1. We have r^2+s^2+t^2 = e1^2 \u2212 2e2 = 81 \u2212 40 = 41 and r^2s^2 + s^2t^2 + t^2r^2 = e2^2 \u2212 2e1e3 = 400 \u2212 198 = 202. So the product is 121 + 202 + 41 + 1 = 365. (Check: the product equals P(i)P(\u2212i) = |P(i)|^2 with P(i) = \u2212i + 9 + 20i \u2212 11 = \u22122 + 19i, and 4 + 361 = 365.)",
+      "check_code": "coeffs=[1,-9,20,-11]\ndef P(z):\n    r=0\n    for c in coeffs:\n        r=r*z+c\n    return r\nroots=[(0.4+0.9j)**k for k in range(3)]\nfor _ in range(300):\n    roots=[r-P(r)/((r-roots[(i+1)%3])*(r-roots[(i+2)%3])) for i,r in enumerate(roots)]\nprod=1\nfor r in roots:\n    prod*=r*r+1\nprint(round(prod.real))",
+      "batch": 5,
+      "domain": "math3",
+      "orig_id": "p060"
+    }
+  },
+  {
+    "orig_id": "p061",
+    "batch": 6,
+    "ok": true,
+    "printed": "4800",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p061",
+      "topic": "number theory: gcd/lcm (coprime factor pairs)",
+      "error_type": "omitted_case",
+      "question": "Let S be the set of ordered pairs (a, b) of positive integers with a < b, gcd(a, b) = 2, and lcm(a, b) = 2520. Find the sum of a + b over all pairs (a, b) in S.",
+      "answer": 4800,
+      "target_wrong": 4658,
+      "error_description": "The pair (a,b) = (70,72), coming from the coprime factorization 1260 = 35\u00b736 (the two factors closest to \u221a1260), is left out of the list of coprime factor pairs.",
+      "cases": [
+        "(2,2520) from 1\u00b71260",
+        "(8,630) from 4\u00b7315",
+        "(10,504) from 5\u00b7252",
+        "(14,360) from 7\u00b7180",
+        "(18,280) from 9\u00b7140",
+        "(40,126) from 20\u00b763",
+        "(56,90) from 28\u00b745",
+        "(70,72) from 35\u00b736"
+      ],
+      "solution": "Write a = 2m, b = 2n with gcd(m, n) = 1. Then lcm(a, b) = 2mn = 2520, so mn = 1260 = 2^2\u00b73^2\u00b75\u00b77. Since m and n are coprime, each full prime power 4, 9, 5, 7 goes entirely to m or entirely to n. Taking m < n, the pairs (m, n) are (1,1260), (4,315), (5,252), (7,180), (9,140), (20,63), (28,45), (35,36). Their sums m + n are 1261, 319, 257, 187, 149, 83, 73, 71, which total 2400. Hence the sum of a + b = 2(m + n) over all pairs is 2\u00b72400 = 4800.",
+      "check_code": "from math import gcd\nN=2520\ntotal=0\nfor a in range(1,N+1):\n    if N%a: continue\n    for b in range(a+1,N+1):\n        if N%b: continue\n        if gcd(a,b)==2 and a*b//gcd(a,b)==N:\n            total+=a+b\nprint(total)",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p061"
+    }
+  },
+  {
+    "orig_id": "p062",
+    "batch": 6,
+    "ok": true,
+    "printed": "135",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p062",
+      "topic": "number theory: divisibility and divisor enumeration",
+      "error_type": "omitted_case",
+      "question": "Find the sum of all positive integers n such that n + 3 divides n^2 + 51.",
+      "answer": 135,
+      "target_wrong": 123,
+      "error_description": "The divisor 15 of 60 (giving n + 3 = 15, n = 12) is skipped when listing the divisors of 60 greater than 3.",
+      "cases": [
+        "n+3=4, n=1",
+        "n+3=5, n=2",
+        "n+3=6, n=3",
+        "n+3=10, n=7",
+        "n+3=12, n=9",
+        "n+3=15, n=12",
+        "n+3=20, n=17",
+        "n+3=30, n=27",
+        "n+3=60, n=57"
+      ],
+      "solution": "Since n^2 + 51 = (n + 3)(n \u2212 3) + 60, the condition n + 3 | n^2 + 51 is equivalent to n + 3 | 60. The divisors of 60 are 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60; since n \u2265 1 we need n + 3 \u2265 4, so n + 3 \u2208 {4, 5, 6, 10, 12, 15, 20, 30, 60}, giving n \u2208 {1, 2, 3, 7, 9, 12, 17, 27, 57}. The sum is 1 + 2 + 3 + 7 + 9 + 12 + 17 + 27 + 57 = 135.",
+      "check_code": "print(sum(n for n in range(1,10000) if (n*n+51)%(n+3)==0))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p062"
+    }
+  },
+  {
+    "orig_id": "p063",
+    "batch": 6,
+    "ok": true,
+    "printed": "29",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p063",
+      "topic": "number theory: floor of square root",
+      "error_type": "omitted_case",
+      "question": "How many positive integers n \u2264 110 have the property that \u230a\u221an\u230b divides n?",
+      "answer": 29,
+      "target_wrong": 27,
+      "error_description": "The final partial block k = \u230a\u221an\u230b = 10 (which contributes n = 100 and n = 110) is omitted, as if the count stopped at n = 99.",
+      "cases": [
+        "k=1: n=1,2,3",
+        "k=2: n=4,6,8",
+        "k=3: n=9,12,15",
+        "k=4: n=16,20,24",
+        "k=5: n=25,30,35",
+        "k=6: n=36,42,48",
+        "k=7: n=49,56,63",
+        "k=8: n=64,72,80",
+        "k=9: n=81,90,99",
+        "k=10: n=100,110"
+      ],
+      "solution": "Let k = \u230a\u221an\u230b, so k^2 \u2264 n \u2264 k^2 + 2k. The multiples of k in this range are exactly k^2, k^2 + k, k^2 + 2k, so each k contributes 3 values of n as long as k^2 + 2k \u2264 110. For k = 1, \u2026, 9 we have k^2 + 2k \u2264 99, giving 27 values. For k = 10 the candidates are 100, 110, 120, of which 100 and 110 are \u2264 110, giving 2 more. Total 27 + 2 = 29.",
+      "check_code": "from math import isqrt\nprint(sum(1 for n in range(1,111) if n%isqrt(n)==0))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p063"
+    }
+  },
+  {
+    "orig_id": "p064",
+    "batch": 6,
+    "ok": true,
+    "printed": "47",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p064",
+      "topic": "number theory: sums of consecutive integers (arithmetic sequences)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of all integers k \u2265 2 for which 105 can be written as the sum of k consecutive positive integers.",
+      "answer": 47,
+      "target_wrong": 33,
+      "error_description": "The boundary representation 1 + 2 + \u22ef + 14 = 105 (k = 14, starting term m = 1) is missed, typically by requiring the starting term to exceed 1 or by using a strict inequality k(k+1)/2 < 105 in the wrong direction.",
+      "cases": [
+        "k=2: 52+53",
+        "k=3: 34+35+36",
+        "k=5: 19+...+23",
+        "k=6: 15+...+20",
+        "k=7: 12+...+18",
+        "k=10: 6+...+15",
+        "k=14: 1+...+14"
+      ],
+      "solution": "If 105 = m + (m+1) + \u22ef + (m+k\u22121) with m \u2265 1, then k\u00b7m + k(k\u22121)/2 = 105, i.e. k(2m + k \u2212 1) = 210. The two factors k and 2m + k \u2212 1 have opposite parity and 2m + k \u2212 1 \u2265 k + 1. Checking the divisors k of 210 with k \u2265 2: k = 2 gives 2m + 1 = 105, m = 52; k = 3 gives m = 34; k = 5 gives m = 19; k = 6 gives 2m + 5 = 35, m = 15; k = 7 gives 2m + 6 = 30, m = 12; k = 10 gives 2m + 9 = 21, m = 6; k = 14 gives 2m + 13 = 15, m = 1; k = 15 gives 2m + 14 = 14, m = 0, invalid, and larger k give m \u2264 0. So k \u2208 {2, 3, 5, 6, 7, 10, 14} and the sum is 47.",
+      "check_code": "total=0\nfor k in range(2,106):\n    for m in range(1,106):\n        if k*m+k*(k-1)//2==105:\n            total+=k\nprint(total)",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p064"
+    }
+  },
+  {
+    "orig_id": "p065",
+    "batch": 6,
+    "ok": true,
+    "printed": "607",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p065",
+      "topic": "number theory: Egyptian fraction / divisor pairs (lattice points)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of x + y over all pairs of positive integers (x, y) with x \u2264 y that satisfy 1/x + 1/y = 1/12.",
+      "answer": 607,
+      "target_wrong": 559,
+      "error_description": "The square factorization 144 = 12\u00b712, i.e. the pair (x, y) = (24, 24) where x = y, is left out when listing factor pairs d\u00b7(144/d) with d \u2264 144/d.",
+      "cases": [
+        "d=1: (13,156)",
+        "d=2: (14,84)",
+        "d=3: (15,60)",
+        "d=4: (16,48)",
+        "d=6: (18,36)",
+        "d=8: (20,30)",
+        "d=9: (21,28)",
+        "d=12: (24,24)"
+      ],
+      "solution": "Clearing denominators, 12(x + y) = xy, so xy \u2212 12x \u2212 12y + 144 = 144, i.e. (x \u2212 12)(y \u2212 12) = 144. Since x, y > 12 (both must exceed 12 for the sum of reciprocals to be 1/12 with positive terms), write x \u2212 12 = d, y \u2212 12 = 144/d with d \u2264 144/d, so d \u2208 {1, 2, 3, 4, 6, 8, 9, 12}. Then x + y = 24 + d + 144/d, with d + 144/d taking the values 145, 74, 51, 40, 30, 26, 25, 24, which sum to 415. The total is 8\u00b724 + 415 = 607.",
+      "check_code": "total=0\nfor x in range(1,400):\n    for y in range(x,400):\n        if 12*(x+y)==x*y:\n            total+=x+y\nprint(total)",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p065"
+    }
+  },
+  {
+    "orig_id": "p066",
+    "batch": 6,
+    "ok": true,
+    "printed": "354",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p066",
+      "topic": "number theory: floor function equation",
+      "error_type": "omitted_case",
+      "question": "Find the sum of all positive integers n such that \u230an/3\u230b + \u230an/4\u230b = \u230an/2\u230b + 2.",
+      "answer": 354,
+      "target_wrong": 316,
+      "error_description": "The residue class n \u2261 2 (mod 12) is the only one whose solution has quotient q = 3, namely n = 38; a solver who checks n up to the mid-30s (or mishandles r = 2) misses it.",
+      "cases": [
+        "r=0: n=24",
+        "r=1: n=25",
+        "r=2: n=38",
+        "r=3: n=27",
+        "r=4: n=28",
+        "r=5: n=29",
+        "r=6: n=30",
+        "r=7: n=31",
+        "r=8: n=32",
+        "r=9: n=21",
+        "r=10: n=34",
+        "r=11: n=35"
+      ],
+      "solution": "Write n = 12q + r with 0 \u2264 r \u2264 11. Then \u230an/3\u230b + \u230an/4\u230b = 7q + \u230ar/3\u230b + \u230ar/4\u230b and \u230an/2\u230b + 2 = 6q + \u230ar/2\u230b + 2, so the equation becomes q = \u230ar/2\u230b + 2 \u2212 \u230ar/3\u230b \u2212 \u230ar/4\u230b. Evaluating for r = 0, 1, \u2026, 11 gives q = 2, 2, 3, 2, 2, 2, 2, 2, 2, 1, 2, 2 respectively, each nonnegative, so every residue class gives exactly one solution: n = 24, 25, 38, 27, 28, 29, 30, 31, 32, 21, 34, 35. Their sum is 354.",
+      "check_code": "print(sum(n for n in range(1,10000) if n//3+n//4==n//2+2))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p066"
+    }
+  },
+  {
+    "orig_id": "p067",
+    "batch": 6,
+    "ok": true,
+    "printed": "54",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p067",
+      "topic": "number theory: floors, counting",
+      "error_type": "off_by_one",
+      "question": "How many positive integers n satisfy \u230an/10\u230b = \u230an/11\u230b?",
+      "answer": 54,
+      "target_wrong": 55,
+      "error_description": "The block with common value 0 is counted as the 10 integers 0 through 9 instead of the 9 positive integers 1 through 9, i.e. n = 0 is wrongly included.",
+      "cases": [],
+      "solution": "Let q be the common value. Then 10q \u2264 n \u2264 10q + 9 and 11q \u2264 n \u2264 11q + 10, so 11q \u2264 n \u2264 10q + 9, which is nonempty exactly when q \u2264 9 and then contains 10 \u2212 q integers. For q = 0 this interval is 0 \u2264 n \u2264 9, but n must be positive, giving 9 values. For q = 1, \u2026, 9 we get 9 + 8 + \u22ef + 1 = 45 values. Total 9 + 45 = 54.",
+      "check_code": "print(sum(1 for n in range(1,10000) if n//10==n//11))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p067"
+    }
+  },
+  {
+    "orig_id": "p068",
+    "batch": 6,
+    "ok": true,
+    "printed": "406",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p068",
+      "topic": "number theory: gcd and lattice points (Pick's theorem)",
+      "error_type": "misapplied_formula",
+      "question": "How many lattice points (points with integer coordinates) lie strictly inside the triangle with vertices (0, 0), (25, 0), and (0, 35)?",
+      "answer": 406,
+      "target_wrong": 408,
+      "error_description": "Uses the shortcut I = (a\u22121)(b\u22121)/2 for the interior points of a right triangle with legs a = 25, b = 35, which is only valid when gcd(a, b) = 1; this gives 24\u00b734/2 = 408 and ignores the gcd(25,35) \u2212 1 = 4 interior lattice points of the hypotenuse.",
+      "cases": [],
+      "solution": "The triangle has area A = (25\u00b735)/2 = 437.5. Boundary lattice points: 26 on the segment from (0,0) to (25,0), 36 on the segment from (0,0) to (0,35), and gcd(25, 35) + 1 = 6 on the hypotenuse, with the three vertices each counted twice, so B = 26 + 36 + 6 \u2212 3 = 65. By Pick's theorem, A = I + B/2 \u2212 1, so I = 437.5 \u2212 32.5 + 1 = 406. Equivalently, the (24)(34) = 816 points with 1 \u2264 x \u2264 24, 1 \u2264 y \u2264 34 split symmetrically about the hypotenuse, except for the 4 lattice points lying on it, giving (816 \u2212 4)/2 = 406.",
+      "check_code": "count=0\nfor x in range(1,25):\n    for y in range(1,35):\n        if 35*x+25*y<875:\n            count+=1\nprint(count)",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p068"
+    }
+  },
+  {
+    "orig_id": "p069",
+    "batch": 6,
+    "ok": true,
+    "printed": "600",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p069",
+      "topic": "number theory: gcd via Euclidean reduction",
+      "error_type": "algebra_slip",
+      "question": "How many positive integers n \u2264 1000 satisfy gcd(n^2 + 2n + 7, n + 3) > 1?",
+      "answer": 600,
+      "target_wrong": 546,
+      "error_description": "When reducing n^2 + 2n + 7 modulo n + 3 by substituting n = \u22123, the middle term is evaluated with the wrong sign: 9 + 6 + 7 = 22 instead of 9 \u2212 6 + 7 = 10, so the condition becomes gcd(n+3, 22) > 1 (n odd or n \u2261 8 mod 11), giving 500 + 91 \u2212 45 = 546.",
+      "cases": [],
+      "solution": "Since n^2 + 2n + 7 = (n + 3)(n \u2212 1) + 10, we have gcd(n^2 + 2n + 7, n + 3) = gcd(10, n + 3). This exceeds 1 exactly when n + 3 is even or divisible by 5, i.e. when n is odd or n \u2261 2 (mod 5). Among 1 \u2264 n \u2264 1000 there are 500 odd n, 200 with n \u2261 2 (mod 5), and 100 with both (n \u2261 7 mod 10). By inclusion\u2013exclusion the count is 500 + 200 \u2212 100 = 600.",
+      "check_code": "from math import gcd\nprint(sum(1 for n in range(1,1001) if gcd(n*n+2*n+7,n+3)>1))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p069"
+    }
+  },
+  {
+    "orig_id": "p070",
+    "batch": 6,
+    "ok": true,
+    "printed": "66",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p070",
+      "topic": "number theory: lcm and inclusion\u2013exclusion",
+      "error_type": "misread_condition",
+      "question": "How many positive integers n \u2264 500 are divisible by at least two of the numbers 4, 6, and 10?",
+      "answer": 66,
+      "target_wrong": 58,
+      "error_description": "Reads 'at least two' as 'exactly two', subtracting 3\u00b78 for the multiples of 60 instead of 2\u00b78, which gives 41 + 25 + 16 \u2212 24 = 58.",
+      "cases": [],
+      "solution": "Let A, B, C be the sets of multiples of 4, 6, 10 up to 500. Pairwise intersections are multiples of lcm(4,6) = 12, lcm(4,10) = 20, lcm(6,10) = 30, with sizes \u230a500/12\u230b = 41, \u230a500/20\u230b = 25, \u230a500/30\u230b = 16, and the triple intersection is the multiples of lcm(4,6,10) = 60, with \u230a500/60\u230b = 8 elements. The number of n in at least two of the sets is |A\u2229B| + |A\u2229C| + |B\u2229C| \u2212 2|A\u2229B\u2229C| = 41 + 25 + 16 \u2212 16 = 66.",
+      "check_code": "print(sum(1 for n in range(1,501) if (n%4==0)+(n%6==0)+(n%10==0)>=2))",
+      "batch": 6,
+      "domain": "math3",
+      "orig_id": "p070"
+    }
+  },
+  {
+    "orig_id": "p071",
+    "batch": 7,
+    "ok": true,
+    "printed": "168",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p071",
+      "topic": "lattice points on a circle (sums of two squares)",
+      "error_type": "omitted_case",
+      "question": "Consider the lattice points (x, y) with x > 0 and y > 0 that lie on the circle x\u00b2 + y\u00b2 = 1105. Find the sum of the x-coordinates of these points.",
+      "answer": 168,
+      "target_wrong": 121,
+      "error_description": "The representation 1105 = 23\u00b2 + 24\u00b2 is left out (the search 1105 \u2212 k\u00b2 is stopped before k = 23), so the points (23, 24) and (24, 23) are missing and the sum is 4+33+9+32+12+31 = 121 instead of 168.",
+      "cases": [
+        "(4,33)",
+        "(33,4)",
+        "(9,32)",
+        "(32,9)",
+        "(12,31)",
+        "(31,12)",
+        "(23,24)",
+        "(24,23)"
+      ],
+      "solution": "We need positive integers x, y with x\u00b2 + y\u00b2 = 1105 = 5\u00b713\u00b717. Since 1105 has three distinct prime factors all \u2261 1 (mod 4), it has 4\u00b78 = 32 lattice points on the circle, none on the axes, hence 8 in the open first quadrant. Checking 1105 \u2212 k\u00b2 for k = 1, 2, \u2026, 23 (we only need k \u2264 23 since 2\u00b723\u00b2 < 1105 < 2\u00b724\u00b2): 1105 \u2212 16 = 1089 = 33\u00b2, 1105 \u2212 81 = 1024 = 32\u00b2, 1105 \u2212 144 = 961 = 31\u00b2, 1105 \u2212 529 = 576 = 24\u00b2, and no other k works. So the representations are 4\u00b2 + 33\u00b2, 9\u00b2 + 32\u00b2, 12\u00b2 + 31\u00b2, 23\u00b2 + 24\u00b2, giving the eight points (4,33), (33,4), (9,32), (32,9), (12,31), (31,12), (23,24), (24,23). The sum of the x-coordinates is 4+33+9+32+12+31+23+24 = 168.",
+      "check_code": "import math\nn=1105\ns=0\nfor x in range(1,n):\n    y2=n-x*x\n    if y2<=0: continue\n    y=math.isqrt(y2)\n    if y*y==y2: s+=x\nprint(s)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p071"
+    }
+  },
+  {
+    "orig_id": "p072",
+    "batch": 7,
+    "ok": true,
+    "printed": "865",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p072",
+      "topic": "integer distances from the origin to lattice points on a vertical line",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the distinct positive integers that occur as the distance from the origin to a lattice point on the line x = 36.",
+      "answer": 865,
+      "target_wrong": 829,
+      "error_description": "The boundary case y = 0 (the point (36, 0) itself, distance 36, coming from the square factor pair 18\u00b718 of 324) is omitted; only the seven pairs with s < t are listed, giving 829 instead of 865.",
+      "cases": [
+        "1\u00b7324 \u2192 d = 325",
+        "2\u00b7162 \u2192 d = 164",
+        "3\u00b7108 \u2192 d = 111",
+        "4\u00b781 \u2192 d = 85",
+        "6\u00b754 \u2192 d = 60",
+        "9\u00b736 \u2192 d = 45",
+        "12\u00b727 \u2192 d = 39",
+        "18\u00b718 \u2192 d = 36 (y = 0)"
+      ],
+      "solution": "A lattice point on x = 36 is (36, y) and its distance to the origin is d = \u221a(1296 + y\u00b2). We need d\u00b2 \u2212 y\u00b2 = 1296, i.e. (d \u2212 y)(d + y) = 1296 with d \u2265 |y| \u2265 0. Since 1296 is even and d \u2212 y, d + y have the same parity, both are even: write d \u2212 y = 2s, d + y = 2t with st = 324, s \u2264 t. The factor pairs of 324 = 2\u00b2\u00b73\u2074 with s \u2264 t are (1,324), (2,162), (3,108), (4,81), (6,54), (9,36), (12,27), (18,18), and d = s + t gives 325, 164, 111, 85, 60, 45, 39, 36 respectively (the last is the point (36, 0)). All eight distances are distinct, and their sum is 325+164+111+85+60+45+39+36 = 865.",
+      "check_code": "import math\ns=set()\nfor y in range(0,1300):\n    d2=36*36+y*y\n    d=math.isqrt(d2)\n    if d*d==d2: s.add(d)\nprint(sum(s))",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p072"
+    }
+  },
+  {
+    "orig_id": "p073",
+    "batch": 7,
+    "ok": true,
+    "printed": "44",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p073",
+      "topic": "lattice points in a disk with half-integer center",
+      "error_type": "omitted_case",
+      "question": "How many lattice points lie inside or on the circle with center (1/2, 1/2) and radius 5/\u221a2?",
+      "answer": 44,
+      "target_wrong": 40,
+      "error_description": "The class |2x\u22121| = |2y\u22121| = 5, i.e. the four points (3,3), (3,\u22122), (\u22122,3), (\u22122,\u22122) which lie exactly on the circle (25 + 25 = 50), is omitted, giving 10 classes \u00d7 4 = 40 instead of 44.",
+      "cases": [
+        "(|u|,|v|)=(1,1)",
+        "(1,3)",
+        "(3,1)",
+        "(1,5)",
+        "(5,1)",
+        "(1,7)",
+        "(7,1)",
+        "(3,3)",
+        "(3,5)",
+        "(5,3)",
+        "(5,5) [on the circle]"
+      ],
+      "solution": "The condition (x \u2212 1/2)\u00b2 + (y \u2212 1/2)\u00b2 \u2264 25/2 is equivalent to (2x \u2212 1)\u00b2 + (2y \u2212 1)\u00b2 \u2264 50. Put u = 2x \u2212 1, v = 2y \u2212 1; these are odd integers and (x, y) \u2194 (u, v) is a bijection between lattice points and pairs of odd integers. The odd squares at most 50 are 1, 9, 25, 49. The ordered pairs (u\u00b2, v\u00b2) with sum \u2264 50 are (1,1), (1,9), (9,1), (1,25), (25,1), (1,49), (49,1), (9,9), (9,25), (25,9), (25,25) \u2014 eleven pairs, where (1,49) and (25,25) give equality (points on the circle). Each pair of absolute values gives 4 sign choices, each a different lattice point, so the total is 11 \u00b7 4 = 44.",
+      "check_code": "c=0\nfor x in range(-20,21):\n    for y in range(-20,21):\n        if (2*x-1)**2+(2*y-1)**2<=50: c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p073"
+    }
+  },
+  {
+    "orig_id": "p074",
+    "batch": 7,
+    "ok": true,
+    "printed": "267",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p074",
+      "topic": "incircle of a lattice right triangle (factor pairs)",
+      "error_type": "omitted_case",
+      "question": "Let S be the set of positive integers c for which there exists a right triangle whose two legs lie along the coordinate axes, whose three vertices are lattice points, whose inscribed circle has radius 6, and whose hypotenuse has length c. Find the sum of the elements of S.",
+      "answer": 267,
+      "target_wrong": 238,
+      "error_description": "The factor pair 8\u00b79 of 72 (giving legs 20, 21 and hypotenuse 29) is left out of the list (1,72), (2,36), (3,24), (4,18), (6,12), so the sum is 85+50+39+34+30 = 238 instead of 267.",
+      "cases": [
+        "(a\u221212,b\u221212)=(1,72): 13-84-85",
+        "(2,36): 14-48-50",
+        "(3,24): 15-36-39",
+        "(4,18): 16-30-34",
+        "(6,12): 18-24-30",
+        "(8,9): 20-21-29"
+      ],
+      "solution": "Place the right angle at the origin with legs a, b (positive integers) along the axes and hypotenuse c. The inradius of a right triangle is r = (a + b \u2212 c)/2, so c = a + b \u2212 12 is an integer. From a\u00b2 + b\u00b2 = (a + b \u2212 12)\u00b2 we get 0 = \u221224a \u2212 24b + 144 + 2ab, i.e. ab \u2212 12a \u2212 12b + 72 = 0, so (a \u2212 12)(b \u2212 12) = 72. Both factors must be positive (if both were negative, a, b < 12 would give a + b < c + 12 contradiction with c > 0 and the triangle inequality forces a + b > c, so a + b \u2212 12 = c < a + b; in fact a \u2212 12 < 0 would force b \u2212 12 < 0 and then a, b < 12, c = a + b \u2212 12 < a, impossible). With a \u2264 b the factor pairs of 72 are (1,72), (2,36), (3,24), (4,18), (6,12), (8,9), giving (a, b, c) = (13,84,85), (14,48,50), (15,36,39), (16,30,34), (18,24,30), (20,21,29). The hypotenuses are distinct, so the sum is 85+50+39+34+30+29 = 267.",
+      "check_code": "import math\ns=set()\nfor a in range(1,300):\n    for b in range(1,300):\n        c2=a*a+b*b\n        c=math.isqrt(c2)\n        if c*c==c2 and a+b-c==12: s.add(c)\nprint(sum(s))",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p074"
+    }
+  },
+  {
+    "orig_id": "p075",
+    "batch": 7,
+    "ok": true,
+    "printed": "50",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p075",
+      "topic": "squares with vertices in a lattice grid",
+      "error_type": "omitted_case",
+      "question": "How many squares have all four vertices in the set of lattice points {(x, y) : 0 \u2264 x \u2264 4, 0 \u2264 y \u2264 4}?",
+      "answer": 50,
+      "target_wrong": 46,
+      "error_description": "The tilted squares with side vector (1, 2) are omitted: the solution counts the side-\u221a5 squares inscribed in 3\u00d73 boxes only once (side vector (2,1), 4 squares) instead of recognizing the two mirror-image orientations (8 squares), giving 46 instead of 50.",
+      "cases": [
+        "side (1,0): 16",
+        "side (2,0): 9",
+        "side (1,1): 9",
+        "side (3,0): 4",
+        "side (2,1): 4",
+        "side (1,2): 4",
+        "side (4,0): 1",
+        "side (3,1): 1",
+        "side (2,2): 1",
+        "side (1,3): 1"
+      ],
+      "solution": "Every square with lattice vertices has a side vector (p, q) with p \u2265 1, q \u2265 0 (exactly one of the four edge vectors lies in that half-open quadrant), and its vertices are (x,y), (x+p, y+q), (x+p\u2212q, y+p+q), (x\u2212q, y+p). Its axis-parallel bounding box is a (p+q)\u00d7(p+q) square, and the square fits in the 5\u00d75 point grid in exactly (5 \u2212 (p+q))\u00b2 positions when p + q \u2264 4. Summing over side vectors: p+q = 1: (1,0) \u2192 16; p+q = 2: (2,0), (1,1) \u2192 9 each, 18; p+q = 3: (3,0), (2,1), (1,2) \u2192 4 each, 12; p+q = 4: (4,0), (3,1), (2,2), (1,3) \u2192 1 each, 4. Total 16 + 18 + 12 + 4 = 50.",
+      "check_code": "pts=set((x,y) for x in range(5) for y in range(5))\nc=0\nfor p in range(1,5):\n    for q in range(0,5):\n        for x in range(5):\n            for y in range(5):\n                v=[(x,y),(x+p,y+q),(x+p-q,y+q+p),(x-q,y+p)]\n                if all(t in pts for t in v): c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p075"
+    }
+  },
+  {
+    "orig_id": "p076",
+    "batch": 7,
+    "ok": true,
+    "printed": "64",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p076",
+      "topic": "circles with lattice centers internally tangent to a given circle",
+      "error_type": "omitted_case",
+      "question": "How many circles of positive integer radius less than 13, centered at a lattice point, are internally tangent to the circle x\u00b2 + y\u00b2 = 169?",
+      "answer": 64,
+      "target_wrong": 56,
+      "error_description": "For radius r = 3 the center must be at distance 10 from the origin, and 10\u00b2 = 100 = 6\u00b2 + 8\u00b2 gives 12 lattice centers, not 4; the solution notices the extra points only for distance 5 (r = 8) and treats distance 10 like the other distances, giving 56 instead of 64.",
+      "cases": [
+        "r=1 (dist 12): 4",
+        "r=2 (dist 11): 4",
+        "r=3 (dist 10): 12",
+        "r=4 (dist 9): 4",
+        "r=5 (dist 8): 4",
+        "r=6 (dist 7): 4",
+        "r=7 (dist 6): 4",
+        "r=8 (dist 5): 12",
+        "r=9 (dist 4): 4",
+        "r=10 (dist 3): 4",
+        "r=11 (dist 2): 4",
+        "r=12 (dist 1): 4"
+      ],
+      "solution": "A circle of radius r < 13 is internally tangent to x\u00b2 + y\u00b2 = 169 exactly when its center is at distance 13 \u2212 r from the origin. So for each r = 1, \u2026, 12 we count lattice points (h, k) with h\u00b2 + k\u00b2 = (13 \u2212 r)\u00b2 = m\u00b2, m = 12, 11, \u2026, 1. A circle of integer radius m centered at the origin passes through the 4 axis points, and through additional lattice points exactly when m has a prime factor \u2261 1 (mod 4); for m \u2264 12 that means m = 5 (3\u00b2 + 4\u00b2 = 25) and m = 10 (6\u00b2 + 8\u00b2 = 100), each giving 4 + 8 = 12 points. Hence the total is 10 \u00b7 4 + 2 \u00b7 12 = 64.",
+      "check_code": "c=0\nfor r in range(1,13):\n    k=13-r\n    for h in range(-13,14):\n        for v in range(-13,14):\n            if h*h+v*v==k*k: c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p076"
+    }
+  },
+  {
+    "orig_id": "p077",
+    "batch": 7,
+    "ok": true,
+    "printed": "568",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p077",
+      "topic": "lattice points inside a right triangle",
+      "error_type": "misapplied_formula",
+      "question": "How many lattice points lie strictly inside the triangle with vertices (0, 0), (45, 0), and (45, 27)?",
+      "answer": 568,
+      "target_wrong": 572,
+      "error_description": "The formula I = (a\u22121)(b\u22121)/2 for the interior points of a right triangle with legs a, b is applied although it requires gcd(a, b) = 1; here gcd(45, 27) = 9, so the 8 interior lattice points of the hypotenuse must be removed first: (44\u00b726 \u2212 8)/2 = 568, not 44\u00b726/2 = 572.",
+      "cases": [],
+      "solution": "The triangle is half of the 45 \u00d7 27 rectangle [0,45] \u00d7 [0,27], cut by the diagonal from (0,0) to (45,27). The rectangle has 44 \u00b7 26 = 1144 interior lattice points. The diagonal contains gcd(45, 27) + 1 = 10 lattice points, 8 of which are interior to the rectangle. The remaining 1144 \u2212 8 = 1136 interior points are split evenly between the two triangles by the symmetry (x, y) \u21a6 (45 \u2212 x, 27 \u2212 y), so our triangle has 1136/2 = 568 interior lattice points. (Check with Pick's theorem: area 607.5, boundary points 45 + 27 + 9 = 81, so I = 607.5 \u2212 81/2 + 1 = 568.)",
+      "check_code": "c=0\nfor x in range(1,45):\n    for y in range(1,27):\n        if 45*y<27*x: c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p077"
+    }
+  },
+  {
+    "orig_id": "p078",
+    "batch": 7,
+    "ok": true,
+    "printed": "24",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p078",
+      "topic": "common chord of two intersecting circles",
+      "error_type": "algebra_slip",
+      "question": "The circles x\u00b2 + y\u00b2 = 169 and (x \u2212 3)\u00b2 + (y \u2212 4)\u00b2 = 144 intersect at two points. Find the distance between these two points.",
+      "answer": 24,
+      "target_wrong": 26,
+      "error_description": "When subtracting the two equations the right-hand side is taken as 144 \u2212 169 = \u221225 instead of 169 \u2212 144 = 25, so 6x + 8y \u2212 25 = \u221225 gives the radical axis 3x + 4y = 0 through the origin, and the chord becomes a diameter of length 26 instead of 24.",
+      "cases": [],
+      "solution": "Expanding the second equation gives x\u00b2 + y\u00b2 \u2212 6x \u2212 8y + 25 = 144. Subtracting it from x\u00b2 + y\u00b2 = 169 yields 6x + 8y \u2212 25 = 25, i.e. 3x + 4y = 25, which is the line through the two intersection points (the radical axis). Its distance from the origin is |25|/\u221a(9 + 16) = 5. The chord of the circle of radius 13 at distance 5 from its center has length 2\u221a(169 \u2212 25) = 2 \u00b7 12 = 24. (Consistently, the line passes through (3, 4), the center of the second circle, so the chord is a diameter of that circle, length 2 \u00b7 12 = 24.)",
+      "check_code": "import math\nd2=3*3+4*4\nnum=d2+169-144\nc2=(4*169*d2-num*num)//d2\nprint(math.isqrt(c2))",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p078"
+    }
+  },
+  {
+    "orig_id": "p079",
+    "batch": 7,
+    "ok": true,
+    "printed": "103",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p079",
+      "topic": "lattice points in a disk restricted to the closed first quadrant",
+      "error_type": "misread_condition",
+      "question": "How many lattice points (x, y) with x \u2265 0 and y \u2265 0 lie strictly inside the circle (x \u2212 3)\u00b2 + (y \u2212 4)\u00b2 = 49?",
+      "answer": 103,
+      "target_wrong": 84,
+      "error_description": "The condition x \u2265 0, y \u2265 0 is read as x > 0, y > 0 (points with positive coordinates), dropping the 19 points on the axes (11 with x = 0, 9 with y = 0, (0,0) shared), giving 84 instead of 103.",
+      "cases": [],
+      "solution": "We need (x \u2212 3)\u00b2 + (y \u2212 4)\u00b2 < 49 with x, y \u2265 0. For each x from 0 to 10 (x \u2264 9 actually, since x = 10 gives 49 < 49 false), the allowed y satisfy (y \u2212 4)\u00b2 < 49 \u2212 (x \u2212 3)\u00b2 and y \u2265 0. x = 0,1,2,3,4,5,6: (x\u22123)\u00b2 \u2208 {9,4,1,0,1,4,9}, so (y\u22124)\u00b2 \u2264 36, y \u2208 [\u22122,10] \u2229 [0,\u221e) = 0..10: 11 values each, 77 total. x = 7: (y\u22124)\u00b2 < 33 so |y\u22124| \u2264 5, y = 0..9: 10. x = 8: (y\u22124)\u00b2 < 24 so |y\u22124| \u2264 4, y = 0..8: 9. x = 9: (y\u22124)\u00b2 < 13 so |y\u22124| \u2264 3, y = 1..7: 7. Total 77 + 10 + 9 + 7 = 103.",
+      "check_code": "c=0\nfor x in range(0,20):\n    for y in range(0,20):\n        if (x-3)**2+(y-4)**2<49: c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p079"
+    }
+  },
+  {
+    "orig_id": "p080",
+    "batch": 7,
+    "ok": true,
+    "printed": "97",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p080",
+      "topic": "lattice points in the union of two disks",
+      "error_type": "double_counting",
+      "question": "How many lattice points lie inside or on at least one of the circles x\u00b2 + y\u00b2 = 25 and (x \u2212 4)\u00b2 + (y \u2212 3)\u00b2 = 9?",
+      "answer": 97,
+      "target_wrong": 110,
+      "error_description": "The counts for the two disks, 81 and 29, are simply added (110) without subtracting the 13 lattice points that lie in both disks, so those 13 points are counted twice.",
+      "cases": [],
+      "solution": "Disk A: x\u00b2 + y\u00b2 \u2264 25. Column counts for x = 0, \u00b11, \u00b12, \u00b13, \u00b14, \u00b15 are 11, 9, 9, 9, 7, 1, so |A| = 11 + 2(9+9+9+7+1) = 81. Disk B: (x\u22124)\u00b2 + (y\u22123)\u00b2 \u2264 9, a radius-3 disk around a lattice point; column counts for x \u2212 4 = 0, \u00b11, \u00b12, \u00b13 are 7, 5, 5, 1, so |B| = 7 + 2(5+5+1) = 29. Points in both: go through B column by column. x = 1: only (1,3), 1 + 9 = 10 \u2264 25 \u2713 (1 point). x = 2: y = 1..5; (2,1),(2,2),(2,3),(2,4) have x\u00b2+y\u00b2 = 5, 8, 13, 20 \u2713, (2,5) gives 29 \u2717 (4 points). x = 3: y = 1..5; (3,1),(3,2),(3,3),(3,4) give 10, 13, 18, 25 \u2713, (3,5) gives 34 \u2717 (4 points). x = 4: y = 0..6; (4,0),(4,1),(4,2),(4,3) give 16, 17, 20, 25 \u2713, y \u2265 4 fails (4 points). x = 5, 6, 7: the smallest value of x\u00b2 + y\u00b2 is 26 \u2717. So |A \u2229 B| = 13 and |A \u222a B| = 81 + 29 \u2212 13 = 97.",
+      "check_code": "c=0\nfor x in range(-15,16):\n    for y in range(-15,16):\n        if x*x+y*y<=25 or (x-4)**2+(y-3)**2<=9: c+=1\nprint(c)",
+      "batch": 7,
+      "domain": "math3",
+      "orig_id": "p080"
+    }
+  },
+  {
+    "orig_id": "p081",
+    "batch": 8,
+    "ok": true,
+    "printed": "484",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p081",
+      "topic": "combinatorics: selections (two-element subsets and factor pairs)",
+      "error_type": "omitted_case",
+      "question": "Find the sum of the positive integers a for which there exists a positive integer b such that a set with a elements has exactly 210 more two-element subsets than a set with b elements.",
+      "answer": 484,
+      "target_wrong": 429,
+      "error_description": "The factor pair (a-b, a+b-1) = (4, 105), giving (a, b) = (55, 51), is omitted; solvers who assume the odd factor must be the smaller one skip it.",
+      "cases": [
+        "(a-b, a+b-1) = (1,420): (a,b) = (211,210)",
+        "(3,140): (72,69)",
+        "(5,84): (45,40)",
+        "(7,60): (34,27)",
+        "(15,28): (22,7)",
+        "(20,21): (21,1)",
+        "(12,35): (24,12)",
+        "(4,105): (55,51)"
+      ],
+      "solution": "The condition is C(a,2) - C(b,2) = 210, i.e. a(a-1) - b(b-1) = 420, which factors as (a-b)(a+b-1) = 420. The two factors have opposite parity (their sum is 2a-1, odd), and since b >= 1 we have a+b-1 >= a > a-b, so the smaller factor is a-b and the larger is a+b-1. Write 420 = 4*105; a factorization into opposite-parity factors puts the full factor 4 on one side, so the pairs correspond to the odd divisors of 105: {1,420},{3,140},{5,84},{7,60},{15,28},{21,20},{35,12},{105,4}. Ordering each pair as (a-b, a+b-1) with the smaller first gives (1,420),(3,140),(5,84),(7,60),(15,28),(20,21),(12,35),(4,105). From a = (d+e+1)/2 and b = (e-d+1)/2 these yield (a,b) = (211,210),(72,69),(45,40),(34,27),(22,7),(21,1),(24,12),(55,51); all have b >= 1 and are valid (e.g. C(55,2)-C(51,2)=1485-1275=210, and C(21,2)-C(1,2)=210-0=210). The eight values of a are distinct, and their sum is 211+72+45+34+22+21+24+55 = 484.",
+      "check_code": "from math import comb\ntotal=0\nfor a in range(1,1000):\n    for b in range(1,a):\n        if comb(a,2)-comb(b,2)==210:\n            total+=a\n            break\nprint(total)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p081"
+    }
+  },
+  {
+    "orig_id": "p082",
+    "batch": 8,
+    "ok": true,
+    "printed": "680",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p082",
+      "topic": "combinatorics: subsets with a divisibility condition on the sum (residue classes)",
+      "error_type": "omitted_case",
+      "question": "How many 3-element subsets of {1, 2, ..., 30} have the property that the sum of their elements is divisible by 6?",
+      "answer": 680,
+      "target_wrong": 630,
+      "error_description": "The residue pattern {3,3,0} (two elements congruent to 3 mod 6 and one multiple of 6), contributing C(5,2)*5 = 50 subsets, is omitted; it is easy to miss because 3+3 already looks like 0 mod 6.",
+      "cases": [
+        "{0,0,0}: C(5,3)=10",
+        "{2,2,2}: 10",
+        "{4,4,4}: 10",
+        "{1,1,4}: C(5,2)*5=50",
+        "{3,3,0}: 50",
+        "{5,5,2}: 50",
+        "{0,1,5}: 5^3=125",
+        "{0,2,4}: 125",
+        "{1,2,3}: 125",
+        "{3,4,5}: 125"
+      ],
+      "solution": "Each residue class mod 6 contains exactly 5 elements of {1,...,30}. A 3-element subset has sum divisible by 6 exactly when the multiset of residues {r1,r2,r3} sums to 0 mod 6. Three equal residues: 3r = 0 mod 6 forces r even, giving {0,0,0},{2,2,2},{4,4,4}, each contributing C(5,3) = 10. Exactly two equal residues {r,r,s} with s = -2r (mod 6), s != r: r=1 gives s=4, r=3 gives s=0, r=5 gives s=2 (r=0,2,4 give s=r); so {1,1,4},{3,3,0},{5,5,2}, each contributing C(5,2)*5 = 50. Three distinct residues summing to 0 mod 6: {0,1,5},{0,2,4},{1,2,3},{3,4,5}, each contributing 5^3 = 125. Total: 3*10 + 3*50 + 4*125 = 30 + 150 + 500 = 680.",
+      "check_code": "from itertools import combinations\nprint(sum(1 for c in combinations(range(1,31),3) if sum(c)%6==0))",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p082"
+    }
+  },
+  {
+    "orig_id": "p083",
+    "batch": 8,
+    "ok": true,
+    "printed": "49",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p083",
+      "topic": "combinatorics: two-element selections with a perfect-square product",
+      "error_type": "omitted_case",
+      "question": "How many 2-element subsets {a, b} of {1, 2, ..., 60} have the property that the product ab is a perfect square?",
+      "answer": 49,
+      "target_wrong": 48,
+      "error_description": "The squarefree class 15, whose only members up to 60 are 15 and 60 (the boundary element 60 = 15*4), is omitted, losing the pair {15,60}.",
+      "cases": [
+        "squarefree part 1: {1,4,9,16,25,36,49}, C(7,2)=21",
+        "2: {2,8,18,32,50}, 10",
+        "3: {3,12,27,48}, 6",
+        "5: {5,20,45}, 3",
+        "6: {6,24,54}, 3",
+        "7: {7,28}, 1",
+        "10: {10,40}, 1",
+        "11: {11,44}, 1",
+        "13: {13,52}, 1",
+        "14: {14,56}, 1",
+        "15: {15,60}, 1"
+      ],
+      "solution": "Write each n as n = k*m^2 with k squarefree. Then ab is a perfect square exactly when a and b have the same squarefree part k. So we count, for each squarefree k, the number N_k of integers k*m^2 <= 60 and sum C(N_k, 2). k=1: m <= 7, N=7, C(7,2)=21. k=2: 2m^2 <= 60 gives m <= 5, C(5,2)=10. k=3: m <= 4, C(4,2)=6. k=5: m <= 3, 3. k=6: 6m^2 <= 60 gives m <= 3 (6,24,54), 3. k=7: m <= 2 (7,28), 1. k=10: (10,40), 1. k=11: (11,44), 1. k=13: (13,52), 1. k=14: (14,56), 1. k=15: (15,60), 1. For every other squarefree k (17, 19, 21, 22, 23, 26, ...), 4k > 60 so N_k <= 1 and there is no pair. Total: 21+10+6+3+3+1+1+1+1+1+1 = 49.",
+      "check_code": "from itertools import combinations\nfrom math import isqrt\ncnt=0\nfor a,b in combinations(range(1,61),2):\n    p=a*b\n    if isqrt(p)**2==p: cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p083"
+    }
+  },
+  {
+    "orig_id": "p084",
+    "batch": 8,
+    "ok": true,
+    "printed": "987",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p084",
+      "topic": "combinatorics: subsets whose size equals their minimum",
+      "error_type": "omitted_case",
+      "question": "How many nonempty subsets S of {1, 2, ..., 16} have the property that the number of elements of S is equal to the smallest element of S?",
+      "answer": 987,
+      "target_wrong": 979,
+      "error_description": "The boundary case k = 8 (smallest element 8, size 8: choose 7 more elements from {9,...,16}, C(8,7) = 8 subsets) is omitted; solvers often stop at k = 7 when the binomial coefficients start shrinking.",
+      "cases": [
+        "min=1, size 1: C(15,0)=1",
+        "min=2, size 2: C(14,1)=14",
+        "min=3, size 3: C(13,2)=78",
+        "min=4, size 4: C(12,3)=220",
+        "min=5, size 5: C(11,4)=330",
+        "min=6, size 6: C(10,5)=252",
+        "min=7, size 7: C(9,6)=84",
+        "min=8, size 8: C(8,7)=8"
+      ],
+      "solution": "Let the smallest element be k; then S has k elements, namely k together with k-1 elements chosen from {k+1, ..., 16}, which has 16-k elements. So there are C(16-k, k-1) such subsets, and we need k-1 <= 16-k, i.e. k <= 8. Summing: k=1: C(15,0)=1; k=2: C(14,1)=14; k=3: C(13,2)=78; k=4: C(12,3)=220; k=5: C(11,4)=330; k=6: C(10,5)=252; k=7: C(9,6)=84; k=8: C(8,7)=8 (these are the subsets {8} together with 7 of the 8 numbers 9,...,16). Total 1+14+78+220+330+252+84+8 = 987 (the 16th Fibonacci number, as expected from the identity sum_k C(n-k, k-1) = F_n).",
+      "check_code": "from itertools import combinations\nn=16\ncnt=0\nfor k in range(1,n+1):\n    for c in combinations(range(1,n+1),k):\n        if min(c)==k: cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p084"
+    }
+  },
+  {
+    "orig_id": "p085",
+    "batch": 8,
+    "ok": true,
+    "printed": "80",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p085",
+      "topic": "combinatorics: distributions / partitions with a forbidden part size",
+      "error_type": "omitted_case",
+      "question": "In how many ways can 8 identical candies be distributed among 4 distinguishable children if no child receives exactly 2 candies? (A child may receive no candies.)",
+      "answer": 80,
+      "target_wrong": 74,
+      "error_description": "The distribution pattern 3+3+1+1 (choose which 2 of the 4 children get 3 candies: C(4,2) = 6 ways) is omitted from the list of patterns.",
+      "cases": [
+        "8+0+0+0: 4",
+        "7+1+0+0: 12",
+        "6+1+1+0: 12",
+        "5+3+0+0: 12",
+        "5+1+1+1: 4",
+        "4+4+0+0: 6",
+        "4+3+1+0: 24",
+        "3+3+1+1: 6"
+      ],
+      "solution": "List the partitions of 8 into at most 4 parts, none equal to 2, and count the ways to assign the parts to the 4 children. 8: 4 ways. 7+1: 4*3 = 12. 6+1+1: 4 choices for the child with 6, C(3,2)=3 for the two with 1: 12. 5+3: 12. 5+1+1+1: 4. 4+4: C(4,2) = 6. 4+3+1: 4*3*2 = 24. 3+3+1+1: C(4,2) = 6. (Patterns such as 6+2, 4+2+2, 3+3+2, 2+2+2+2, 4+2+1+1, 3+2+2+1 are excluded because they contain a 2; 4+1+1+1 and 3+1+1+1 do not sum to 8.) Total: 4+12+12+12+4+6+24+6 = 80. Check via generating functions: the coefficient of x^8 in (1/(1-x) - x^2)^4 is C(11,3) - 4*C(8,2) + 6*C(5,1) - 4*1 + 1 = 165 - 112 + 30 - 4 + 1 = 80.",
+      "check_code": "cnt=0\nfor a in range(9):\n    for b in range(9):\n        for c in range(9):\n            d=8-a-b-c\n            if d>=0 and 2 not in (a,b,c,d): cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p085"
+    }
+  },
+  {
+    "orig_id": "p086",
+    "batch": 8,
+    "ok": true,
+    "printed": "11",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p086",
+      "topic": "combinatorics: multiplicative partitions (unordered factorizations)",
+      "error_type": "omitted_case",
+      "question": "In how many ways can 48 be written as a product of two or more positive integers, each greater than 1, if the order of the factors does not matter? (For example, 2*24 and 24*2 count as the same way.)",
+      "answer": 11,
+      "target_wrong": 10,
+      "error_description": "The three-factor factorization 3*4*4, the only one with a repeated factor other than 2, is omitted from the list.",
+      "cases": [
+        "2*24",
+        "3*16",
+        "4*12",
+        "6*8",
+        "2*2*12",
+        "2*3*8",
+        "2*4*6",
+        "3*4*4",
+        "2*2*2*6",
+        "2*2*3*4",
+        "2*2*2*2*3"
+      ],
+      "solution": "Since 48 = 2^4 * 3, list factorizations with factors in nondecreasing order. Two factors: 2*24, 3*16, 4*12, 6*8 (4 ways; the divisor pairs of 48 other than 1*48). Three factors a <= b <= c with abc = 48 and a >= 2: a=2 gives bc = 24 with 2 <= b <= c: 2*12, 3*8, 4*6, so 2*2*12, 2*3*8, 2*4*6; a=3 gives bc = 16 with 3 <= b <= c: 4*4, so 3*4*4; a=4 would need bc = 12 with b >= 4, impossible. That is 4 ways. Four factors: 2*2*2*6, 2*2*3*4 (2 ways). Five factors: 2*2*2*2*3 (1 way); six or more factors would need product at least 2^6 = 64 > 48. Total 4+4+2+1 = 11.",
+      "check_code": "def fact(n,m):\n    res=0\n    d=m\n    while d*d<=n:\n        if n%d==0:\n            res+=fact(n//d,d)\n        d+=1\n    return res+1\nprint(fact(48,2)-1)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p086"
+    }
+  },
+  {
+    "orig_id": "p087",
+    "batch": 8,
+    "ok": true,
+    "printed": "7181",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p087",
+      "topic": "combinatorics: sums over all subsets (max minus min)",
+      "error_type": "algebra_slip",
+      "question": "For each nonempty subset A of {1, 2, ..., 10}, let r(A) denote the largest element of A minus the smallest element of A. Find the sum of r(A) over all nonempty subsets A of {1, 2, ..., 10}.",
+      "answer": 7181,
+      "target_wrong": 7179,
+      "error_description": "In evaluating the sum of the maxima, sum_{k=1}^{10} k*2^{k-1} = (10-1)*2^10 + 1 = 9217, the constant term's sign is flipped to give 9*2^10 - 1 = 9215, so the final difference comes out as 9215 - 2036 = 7179 instead of 7181.",
+      "cases": [],
+      "solution": "The requested sum equals (sum over nonempty A of max A) minus (sum over nonempty A of min A). The number of subsets with maximum k is 2^{k-1}, so the sum of maxima is M = sum_{k=1}^{10} k*2^{k-1}. The standard evaluation (e.g. by differentiating the geometric series or by telescoping) gives sum_{k=1}^{n} k*2^{k-1} = (n-1)*2^n + 1, so M = 9*1024 + 1 = 9217. The number of subsets with minimum k is 2^{10-k}, so the sum of minima is m = sum_{k=1}^{10} k*2^{10-k} = 2^{10} * sum_{k=1}^{10} k/2^k = 2^{10} * (2 - 12/2^{10}) = 2048 - 12 = 2036. Therefore the answer is 9217 - 2036 = 7181. (Sanity check with n=2: the subsets {1},{2},{1,2} give 0+0+1 = 1, and the formulas give (1*4+1) - (8-4) = 5-4 = 1.)",
+      "check_code": "n=10\ntot=0\nfor mask in range(1,1<<n):\n    s=[i+1 for i in range(n) if mask>>i&1]\n    tot+=max(s)-min(s)\nprint(tot)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p087"
+    }
+  },
+  {
+    "orig_id": "p088",
+    "batch": 8,
+    "ok": true,
+    "printed": "379",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p088",
+      "topic": "combinatorics: subsets with lower bounds on two types of elements",
+      "error_type": "misread_condition",
+      "question": "How many 6-element subsets of {1, 2, ..., 15} contain at least two multiples of 5 and at least two multiples of 4?",
+      "answer": 379,
+      "target_wrong": 324,
+      "error_description": "Reads 'at least two' as 'exactly two' for both types, counting only C(3,2)*C(3,2)*C(9,2) = 324 and dropping the cases with three multiples of 5 or three multiples of 4 (27 + 27 + 1 = 55 subsets).",
+      "cases": [],
+      "solution": "The multiples of 5 in the set are {5,10,15} and the multiples of 4 are {4,8,12}; these sets are disjoint, and the remaining 9 numbers are neither. Let i and j be the numbers of chosen multiples of 5 and of 4, with i >= 2, j >= 2, i + j <= 6, and the other 6-i-j elements chosen from the 9 neutral numbers. (i,j) = (2,2): C(3,2)*C(3,2)*C(9,2) = 3*3*36 = 324. (2,3): C(3,2)*C(3,3)*C(9,1) = 3*1*9 = 27. (3,2): 27. (3,3): 1. Total 324 + 27 + 27 + 1 = 379.",
+      "check_code": "from itertools import combinations\ncnt=0\nfor c in combinations(range(1,16),6):\n    f=sum(1 for x in c if x%5==0); g=sum(1 for x in c if x%4==0)\n    if f>=2 and g>=2: cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p088"
+    }
+  },
+  {
+    "orig_id": "p089",
+    "batch": 8,
+    "ok": true,
+    "printed": "1386",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p089",
+      "topic": "combinatorics: subsets via inclusion-exclusion",
+      "error_type": "double_counting",
+      "question": "How many 5-element subsets of {1, 2, ..., 15} contain at least one multiple of 4 and at least one multiple of 6?",
+      "answer": 1386,
+      "target_wrong": 1176,
+      "error_description": "In the 'neither' term of inclusion-exclusion, the excluded elements are counted as 3 multiples of 4 plus 2 multiples of 6 = 5, counting 12 twice; this gives C(10,5) = 252 instead of C(11,5) = 462, so the total becomes 3003 - 792 - 1287 + 252 = 1176.",
+      "cases": [],
+      "solution": "The multiples of 4 are {4,8,12} and the multiples of 6 are {6,12}; note 12 belongs to both, so their union is {4,6,8,12} with 4 elements. By inclusion-exclusion, the count is (all 5-subsets) - (those with no multiple of 4) - (those with no multiple of 6) + (those with neither). All: C(15,5) = 3003. No multiple of 4: choose from the other 12 numbers, C(12,5) = 792. No multiple of 6: C(13,5) = 1287. Neither: choose from the 15 - 4 = 11 numbers outside the union, C(11,5) = 462. Answer: 3003 - 792 - 1287 + 462 = 1386.",
+      "check_code": "from itertools import combinations\ncnt=0\nfor c in combinations(range(1,16),5):\n    if any(x%4==0 for x in c) and any(x%6==0 for x in c): cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p089"
+    }
+  },
+  {
+    "orig_id": "p090",
+    "batch": 8,
+    "ok": true,
+    "printed": "1078",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p090",
+      "topic": "combinatorics: selecting triangle side lengths from a set",
+      "error_type": "off_by_one",
+      "question": "How many 3-element subsets of {1, 2, ..., 25} consist of three numbers that can be the side lengths of a triangle with positive area?",
+      "answer": 1078,
+      "target_wrong": 1222,
+      "error_description": "Uses the non-strict inequality a + b >= c instead of a + b > c, thereby including the 144 degenerate triples {a, b, a+b} with a < b and a + b <= 25.",
+      "cases": [],
+      "solution": "Let the subset be {a, b, c} with a < b < c. It forms a triangle of positive area exactly when a + b > c (the other two triangle inequalities are automatic). Fix the largest side c. We need pairs a < b < c with a + b >= c + 1. For each b from ceil((c+1)/2) to c-1 the valid a run from c+1-b to b-1, giving 2b - c - 1 values; summing over b yields floor((c-1)/2) * floor((c-2)/2). (Check: c = 6 gives 2*2 = 4, namely {2,5},{3,4},{3,5},{4,5}.) Summing for c = 4, 5, ..., 25: the terms are 1, 2, 4, 6, 9, 12, 16, 20, 25, 30, 36, 42, 49, 56, 64, 72, 81, 90, 100, 110, 121, 132, whose sum is 1078. Equivalently, for odd n the count of triangles with distinct integer sides at most n is (n-1)(n-3)(2n-1)/24 = 24*22*49/24 = 1078. The degenerate triples with a + b = c (which do not count) number sum_{c=3}^{25} floor((c-1)/2) = 144, so a solver who allows a + b >= c would get 1222.",
+      "check_code": "from itertools import combinations\ncnt=0\nfor a,b,c in combinations(range(1,26),3):\n    if a+b>c: cnt+=1\nprint(cnt)",
+      "batch": 8,
+      "domain": "math3",
+      "orig_id": "p090"
+    }
+  },
+  {
+    "orig_id": "p091",
+    "batch": 9,
+    "ok": true,
+    "printed": "751",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p091",
+      "topic": "functions (iterated maps on a finite set)",
+      "error_type": "omitted_case",
+      "question": "How many functions f from the set {1,2,3,4,5} to itself satisfy f(f(f(x))) = f(x) for every x in {1,2,3,4,5}?",
+      "answer": 751,
+      "target_wrong": 691,
+      "error_description": "The case where the image has size 4 and f acts on it as two disjoint transpositions (5 choices of image, 3 pairings, 4 choices for where the remaining element maps = 60 functions) is left out, giving 691.",
+      "cases": [
+        "|image|=1, 0 transpositions: 5",
+        "|image|=2, 0 transpositions: 80",
+        "|image|=2, 1 transposition: 80",
+        "|image|=3, 0 transpositions: 90",
+        "|image|=3, 1 transposition: 270",
+        "|image|=4, 0 transpositions: 20",
+        "|image|=4, 1 transposition: 120",
+        "|image|=4, 2 transpositions: 60",
+        "|image|=5, 0 transpositions: 1",
+        "|image|=5, 1 transposition: 10",
+        "|image|=5, 2 transpositions: 15"
+      ],
+      "solution": "Let S be the image of f. If y = f(x) is in S, then f(f(y)) = f(f(f(x))) = f(x) = y, so f restricted to S is an involution of S (in particular a bijection S -> S). Conversely, if f maps S to S as an involution and maps every element outside S somewhere into S, then f(f(f(x))) = f(f(y)) = y = f(x) with y = f(x) in S, and the image is exactly S. So the functions are counted by: choose S of size k, choose an involution of S (I(1)=1, I(2)=2, I(3)=4, I(4)=10, I(5)=26), and map the other 5-k elements into S in k^(5-k) ways. Total = C(5,1)*1*1^4 + C(5,2)*2*2^3 + C(5,3)*4*3^2 + C(5,4)*10*4^1 + C(5,5)*26*5^0 = 5 + 160 + 360 + 200 + 26 = 751. Splitting the involutions by number of transpositions gives the eleven cases: (k=1):5; (k=2): 80+80; (k=3): 90+270; (k=4): 20+120+60; (k=5): 1+10+15. Sum 751.",
+      "check_code": "from itertools import product\nn=5\ncnt=0\nfor f in product(range(1,n+1),repeat=n):\n    g=lambda x:f[x-1]\n    if all(g(g(g(x)))==g(x) for x in range(1,n+1)):\n        cnt+=1\nprint(cnt)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p091"
+    }
+  },
+  {
+    "orig_id": "p092",
+    "batch": 9,
+    "ok": true,
+    "printed": "146",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p092",
+      "topic": "probability (m+n), lattice points",
+      "error_type": "omitted_case",
+      "question": "A point P is chosen uniformly at random from the set of all lattice points (x, y), with x and y integers, satisfying x^2 + y^2 <= 36. The probability that the distance from P to the origin is an integer can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+      "answer": 146,
+      "target_wrong": 145,
+      "error_description": "The origin (distance 0, which is an integer) is omitted from the favorable points, giving 32/113 and m+n = 145 instead of 33/113 and 146.",
+      "cases": [
+        "distance 0: 1 point (the origin)",
+        "distance 1: 4 points",
+        "distance 2: 4 points",
+        "distance 3: 4 points",
+        "distance 4: 4 points",
+        "distance 5: 12 points (+-5,0),(0,+-5),(+-3,+-4),(+-4,+-3)",
+        "distance 6: 4 points"
+      ],
+      "solution": "Count lattice points with x^2+y^2 <= 36 column by column: x=0 gives 13 points; x=+-1, +-2, +-3 each give 11 points (|y|<=5), total 66; x=+-4 gives 9 each (|y|<=4), total 18; x=+-5 gives 7 each (|y|<=3), total 14; x=+-6 gives 1 each, total 2. Total 13+66+18+14+2 = 113. The distance is an integer exactly when x^2+y^2 is in {0,1,4,9,16,25,36}. Counting solutions: 0 -> 1 point; 1,4,9,16 -> 4 points each (only (+-r,0),(0,+-r)); 25 -> 12 points ((+-5,0),(0,+-5),(+-3,+-4),(+-4,+-3)); 36 -> 4 points. Total favorable = 1+16+12+4 = 33. Probability 33/113, and 113 is prime, so m+n = 146.",
+      "check_code": "import math\ntot=0;good=0\nfor x in range(-6,7):\n    for y in range(-6,7):\n        s=x*x+y*y\n        if s<=36:\n            tot+=1\n            r=math.isqrt(s)\n            if r*r==s:\n                good+=1\ng=math.gcd(good,tot)\nprint(good//g+tot//g)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p092"
+    }
+  },
+  {
+    "orig_id": "p093",
+    "batch": 9,
+    "ok": true,
+    "printed": "45",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p093",
+      "topic": "functions, divisibility by residue classes",
+      "error_type": "omitted_case",
+      "question": "Let f(n) = n^3 - n. How many integers n with 1 <= n <= 100 have f(n) divisible by 60?",
+      "answer": 45,
+      "target_wrong": 40,
+      "error_description": "The residue class n = 0 (mod 20), i.e. n = 20, 40, 60, 80, 100 (n divisible by both 4 and 5), is omitted from the list of nine residue classes mod 20, giving 8*5 = 40.",
+      "cases": [
+        "n = 0 (mod 20): 5 values",
+        "n = 1 (mod 20): 5 values",
+        "n = 4 (mod 20): 5 values",
+        "n = 5 (mod 20): 5 values",
+        "n = 9 (mod 20): 5 values",
+        "n = 11 (mod 20): 5 values",
+        "n = 15 (mod 20): 5 values",
+        "n = 16 (mod 20): 5 values",
+        "n = 19 (mod 20): 5 values"
+      ],
+      "solution": "n^3 - n = (n-1)n(n+1) is always divisible by 3, so we need divisibility by 4 and by 5. Divisible by 5 iff one of n-1, n, n+1 is a multiple of 5, i.e. n = 0, 1, or 4 (mod 5). Divisible by 4: if n is odd then n-1 and n+1 are consecutive even numbers so their product is divisible by 8; if n is even then n-1 and n+1 are odd, so we need 4 | n. Hence n = 0, 1, or 3 (mod 4). Combining via CRT gives 3*3 = 9 residue classes mod 20: n = 0, 1, 4, 5, 9, 11, 15, 16, 19 (mod 20). Each class contains exactly 5 integers in [1,100], so the answer is 9*5 = 45.",
+      "check_code": "print(sum(1 for n in range(1,101) if (n**3-n)%60==0))",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p093"
+    }
+  },
+  {
+    "orig_id": "p094",
+    "batch": 9,
+    "ok": true,
+    "printed": "72",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p094",
+      "topic": "digit patterns / counting",
+      "error_type": "omitted_case",
+      "question": "How many four-digit positive integers have the property that the product of their digits equals 36?",
+      "answer": 72,
+      "target_wrong": 66,
+      "error_description": "The digit multiset {2,2,3,3} (the only one with no digit 1), contributing 4!/(2!2!) = 6 numbers, is omitted, giving 66.",
+      "cases": [
+        "{1,1,4,9}: 12 arrangements",
+        "{1,1,6,6}: 6 arrangements",
+        "{1,2,2,9}: 12 arrangements",
+        "{1,2,3,6}: 24 arrangements",
+        "{1,3,3,4}: 12 arrangements",
+        "{2,2,3,3}: 6 arrangements"
+      ],
+      "solution": "No digit can be 0, and every digit must divide 36 = 2^2 * 3^2, so digits come from {1,2,3,4,6,9}. Classify multisets of four such digits with product 36 by the number of 1s. Three 1s would force the fourth digit to be 36, impossible. Two 1s: the other two multiply to 36: {4,9} or {6,6}. One 1: three digits >= 2 with product 36: {2,2,9}, {2,3,6}, {3,3,4}. No 1s: four digits >= 2 with product 36: only {2,2,3,3}. The number of four-digit integers from each multiset is the number of distinct arrangements: {1,1,4,9}: 12; {1,1,6,6}: 6; {1,2,2,9}: 12; {1,2,3,6}: 24; {1,3,3,4}: 12; {2,2,3,3}: 6. Total 12+6+12+24+12+6 = 72.",
+      "check_code": "cnt=0\nfor n in range(1000,10000):\n    p=1\n    for c in str(n):\n        p*=int(c)\n    if p==36:\n        cnt+=1\nprint(cnt)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p094"
+    }
+  },
+  {
+    "orig_id": "p095",
+    "batch": 9,
+    "ok": true,
+    "printed": "38",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p095",
+      "topic": "probability with dice (counting outcomes)",
+      "error_type": "omitted_case",
+      "question": "Three standard six-sided dice, one red, one green, and one blue, are rolled. In how many of the 216 equally likely outcomes is the product of the three numbers showing a perfect square?",
+      "answer": 38,
+      "target_wrong": 32,
+      "error_description": "The case of three distinct values {2,3,6} (product 36), contributing 3! = 6 ordered outcomes, is omitted, giving 32.",
+      "cases": [
+        "all three values in {1,4}: 8 outcomes",
+        "two 2s and a value from {1,4}: 6 outcomes",
+        "two 3s and a value from {1,4}: 6 outcomes",
+        "two 5s and a value from {1,4}: 6 outcomes",
+        "two 6s and a value from {1,4}: 6 outcomes",
+        "the values 2,3,6 in some order: 6 outcomes"
+      ],
+      "solution": "Replace each die value by its squarefree part: 1->1, 2->2, 3->3, 4->1, 5->5, 6->6. The product is a perfect square iff the product of the squarefree parts is a square. Working with exponent vectors mod 2 over the primes 2,3,5: 1,4 -> (0,0,0); 2 -> (1,0,0); 3 -> (0,1,0); 5 -> (0,0,1); 6 -> (1,1,0). We need three vectors summing to zero. Either all three are zero vectors (values from {1,4}: 2^3 = 8 outcomes); or two are equal nonzero vectors and the third is zero: for each of the values 2,3,5,6 choose the position of the odd die (3 ways) and its value from {1,4} (2 ways): 4*6 = 24 outcomes; or three distinct nonzero vectors summing to zero, which forces {2,3,6}: 3! = 6 outcomes. Total 8 + 24 + 6 = 38.",
+      "check_code": "import math\ncnt=0\nfor a in range(1,7):\n    for b in range(1,7):\n        for c in range(1,7):\n            p=a*b*c\n            r=math.isqrt(p)\n            if r*r==p:\n                cnt+=1\nprint(cnt)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p095"
+    }
+  },
+  {
+    "orig_id": "p096",
+    "batch": 9,
+    "ok": true,
+    "printed": "105",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p096",
+      "topic": "lattice points / configurations",
+      "error_type": "omitted_case",
+      "question": "Consider the 36 points (x, y) in the coordinate plane with x and y both in {0, 1, 2, 3, 4, 5}. How many squares have all four of their vertices among these 36 points?",
+      "answer": 105,
+      "target_wrong": 103,
+      "error_description": "The tilted squares with side vector (2,3) (bounding box 5 by 5, so 1 position, 2 orientations = 2 squares) are omitted, giving 103.",
+      "cases": [
+        "axis-parallel side 1: 25",
+        "axis-parallel side 2: 16",
+        "axis-parallel side 3: 9",
+        "axis-parallel side 4: 4",
+        "axis-parallel side 5: 1",
+        "tilted side vector (1,1): 16",
+        "tilted side vector (1,2) (two orientations): 18",
+        "tilted side vector (2,2): 4",
+        "tilted side vector (1,3) (two orientations): 8",
+        "tilted side vector (1,4) (two orientations): 2",
+        "tilted side vector (2,3) (two orientations): 2"
+      ],
+      "solution": "Every square with vertices in the grid has a side vector (a,b) with a >= 0, b >= 1, and its axis-parallel bounding box is an s-by-s square with s = a+b. A bounding box of side s can be placed in (6-s)^2 positions in the 6x6 point grid. Axis-parallel squares (a=0): s = 1,...,5 give 25+16+9+4+1 = 55. Tilted squares: (1,1): s=2, 16 positions, 1 square each -> 16; (1,2) and (2,1): s=3, 9 positions, 2 squares each -> 18; (2,2): s=4, 4 positions -> 4; (1,3) and (3,1): s=4, 4 positions, 2 each -> 8; (1,4) and (4,1): s=5, 1 position, 2 each -> 2; (2,3) and (3,2): s=5, 1 position, 2 each -> 2. Tilted total 16+18+4+8+2+2 = 50. Grand total 55+50 = 105. (Equivalently, sum over s of s*(6-s)^2 = 25+32+27+16+5 = 105.)",
+      "check_code": "pts={(x,y) for x in range(6) for y in range(6)}\ncnt=0\nfor (x1,y1) in pts:\n    for (x2,y2) in pts:\n        if (x1,y1)==(x2,y2):\n            continue\n        dx,dy=x2-x1,y2-y1\n        p3=(x2-dy,y2+dx)\n        p4=(x1-dy,y1+dx)\n        if p3 in pts and p4 in pts:\n            cnt+=1\nprint(cnt//4)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p096"
+    }
+  },
+  {
+    "orig_id": "p097",
+    "batch": 9,
+    "ok": true,
+    "printed": "59",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p097",
+      "topic": "probability (m+n), dice",
+      "error_type": "misread_condition",
+      "question": "Four fair six-sided dice are rolled. The probability that exactly three of the four dice show the same number can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+      "answer": 59,
+      "target_wrong": 79,
+      "error_description": "Reading 'exactly three show the same number' as 'at least three show the same number' adds the 6 outcomes where all four dice match: 126/1296 = 7/72, giving 79 instead of 59.",
+      "cases": [],
+      "solution": "Choose the value that appears three times (6 ways), choose which die is the odd one out (4 ways), and choose its value, which must differ from the triple (5 ways). This gives 6*4*5 = 120 favorable outcomes out of 6^4 = 1296. The probability is 120/1296 = 5/54, so m + n = 5 + 54 = 59.",
+      "check_code": "from itertools import product\nfrom collections import Counter\nimport math\ngood=0;tot=0\nfor r in product(range(1,7),repeat=4):\n    tot+=1\n    if max(Counter(r).values())==3:\n        good+=1\ng=math.gcd(good,tot)\nprint(good//g+tot//g)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p097"
+    }
+  },
+  {
+    "orig_id": "p098",
+    "batch": 9,
+    "ok": true,
+    "printed": "1525",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p098",
+      "topic": "functions / counting with inclusion-exclusion",
+      "error_type": "double_counting",
+      "question": "How many functions f from {1, 2, 3, 4, 5} to {1, 2, 3, 4, 5} satisfy f(k) = k for at least one k in {1, 2, 3}?",
+      "answer": 1525,
+      "target_wrong": 1500,
+      "error_description": "In the inclusion-exclusion 3*5^4 - 3*5^3 + 5^2, the final term (functions fixing all of 1, 2, 3, which were subtracted three times after being added three times) is dropped, giving 1875 - 375 = 1500.",
+      "cases": [],
+      "solution": "Let A_k be the set of functions with f(k) = k, for k = 1,2,3. Each |A_k| = 5^4 = 625, each pairwise intersection has 5^3 = 125 functions, and the triple intersection has 5^2 = 25. By inclusion-exclusion, |A_1 U A_2 U A_3| = 3*625 - 3*125 + 25 = 1875 - 375 + 25 = 1525. Alternatively, the complement has f(1) != 1, f(2) != 2, f(3) != 3 with f(4), f(5) free: 4*4*4*5*5 = 1600, and 3125 - 1600 = 1525.",
+      "check_code": "from itertools import product\ncnt=0\nfor f in product(range(1,6),repeat=5):\n    if any(f[k-1]==k for k in (1,2,3)):\n        cnt+=1\nprint(cnt)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p098"
+    }
+  },
+  {
+    "orig_id": "p099",
+    "batch": 9,
+    "ok": true,
+    "printed": "580",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p099",
+      "topic": "recursion",
+      "error_type": "off_by_one",
+      "question": "Define a function f on the positive integers by f(1) = 1 and f(n) = f(floor(n/2)) + 1 for n >= 2. Find f(1) + f(2) + f(3) + ... + f(100).",
+      "answer": 580,
+      "target_wrong": 573,
+      "error_description": "The block 64 <= n <= 100 (where f(n) = 7) is counted as having 100 - 64 = 36 integers instead of 37, losing one 7 and giving 573.",
+      "cases": [],
+      "solution": "By induction f(n) is the number of binary digits of n: for 2^k <= n < 2^(k+1), f(n) = k + 1. The integers in [1,100] split into blocks: n = 1 (f = 1): 1 value; 2-3 (f = 2): 2 values; 4-7 (f = 3): 4 values; 8-15 (f = 4): 8 values; 16-31 (f = 5): 16 values; 32-63 (f = 6): 32 values; 64-100 (f = 7): 37 values. The sum is 1*1 + 2*2 + 4*3 + 8*4 + 16*5 + 32*6 + 37*7 = 1 + 4 + 12 + 32 + 80 + 192 + 259 = 580.",
+      "check_code": "import sys\nsys.setrecursionlimit(10000)\nmemo={1:1}\ndef f(n):\n    if n not in memo:\n        memo[n]=f(n//2)+1\n    return memo[n]\nprint(sum(f(n) for n in range(1,101)))",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p099"
+    }
+  },
+  {
+    "orig_id": "p100",
+    "batch": 9,
+    "ok": true,
+    "printed": "241",
+    "checks": {
+      "check_code prints answer": true,
+      "integer answer": true,
+      "target_wrong differs": true,
+      "6+ cases": true,
+      "not a duplicate": true
+    },
+    "item": {
+      "id": "p100",
+      "topic": "probability (m+n), dice sums",
+      "error_type": "misapplied_formula",
+      "question": "Three fair six-sided dice are rolled. The probability that the sum of the three numbers showing is 12 can be written as m/n, where m and n are relatively prime positive integers. Find m + n.",
+      "answer": 241,
+      "target_wrong": 271,
+      "error_description": "Stars and bars is applied to a+b+c = 12 with a,b,c >= 1 without enforcing the upper bound of 6, giving C(11,2) = 55 outcomes and 55/216, so m+n = 271 instead of 241.",
+      "cases": [],
+      "solution": "Write a = a'+1, b = b'+1, c = c'+1 with 0 <= a',b',c' <= 5 and a'+b'+c' = 9. Without the upper bound there are C(11,2) = 55 nonnegative solutions. Those violating a bound have some variable >= 6; setting a'' = a'-6 gives a''+b'+c' = 3 with C(5,2) = 10 solutions, and similarly for b' and c', so 30 solutions violate a bound (no two variables can both be >= 6 since 12 > 9). Valid outcomes: 55 - 30 = 25. The probability is 25/216, which is in lowest terms, so m + n = 241.",
+      "check_code": "import math\ngood=0;tot=0\nfor a in range(1,7):\n    for b in range(1,7):\n        for c in range(1,7):\n            tot+=1\n            if a+b+c==12:\n                good+=1\ng=math.gcd(good,tot)\nprint(good//g+tot//g)",
+      "batch": 9,
+      "domain": "math3",
+      "orig_id": "p100"
+    }
+  }
+]

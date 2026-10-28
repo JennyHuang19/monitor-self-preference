@@ -34,7 +34,9 @@ OPEN_MODELS = [
     {"name": "gemma-4-31b", "id": "google/gemma-4-31b-it", "family": "Gemma"},
     {"name": "gemma-4-26b-a4b", "id": "google/gemma-4-26b-a4b-it", "family": "Gemma"},
 ]
-POOLS = {"frontier": GRADERS, "open": OPEN_MODELS}
+# math3/trivia3 pool: two sibling pairs (GLM, gpt-oss) plus Kimi. Every model both attacks and grades.
+MIX5 = [g for g in GRADERS if g["name"] in ("glm-5.3", "glm-5.3-flash", "kimi-k3")] + OPEN_MODELS[:2]
+POOLS = {"frontier": GRADERS, "open": OPEN_MODELS, "mix5": MIX5}
 
 
 def _load_key() -> str:
@@ -144,8 +146,26 @@ def parse_json(text: str, first: bool = False) -> dict:
     raise ValueError("no JSON object found")
 
 
-DOMAINS = ["math", "code", "trivia", "math2"]
-DEFAULT_SAMPLES = {"math": 3, "code": 1, "trivia": 1, "math2": 1}
+DOMAINS = ["math", "code", "trivia", "math2", "math3", "trivia3"]
+DEFAULT_SAMPLES = {"math": 3, "code": 1, "trivia": 1, "math2": 1, "math3": 1, "trivia3": 1}
+# Free-response domains: a claimed answer instead of a lettered option. Numeric ones are compared as integers.
+FREE_RESPONSE = {"math2", "math3", "trivia3"}
+NUMERIC_DOMAINS = {"math2", "math3"}
+
+
+def norm_answer(x) -> str:
+    """Loose form of a short answer for matching: lowercase, no markdown/punctuation/leading 'the', and a number
+    reduced to its digits ('1,799.' -> '1799', 'about 4,810 m' -> '4810')."""
+    s = re.sub(r"[*_`$\\]", "", str(x or "")).strip().lower()
+    num = re.fullmatch(r"[^\d-]{0,12}?(-?[\d,]+(?:\.\d+)?)\s*[a-z%.]{0,12}\.?", s)
+    if num:
+        return num.group(1).replace(",", "").removesuffix(".0")
+    s = re.sub(r"[^a-z0-9 ]+", " ", s.replace("&", " and "))
+    return re.sub(r"^the ", "", re.sub(r"\s+", " ", s).strip())
+
+
+def answer_matches(x, keys) -> bool:
+    return x is not None and norm_answer(x) in {norm_answer(k) for k in keys}
 
 
 def domain_args(desc: str):
@@ -159,6 +179,8 @@ def domain_args(desc: str):
     ap.add_argument("--baseline-only", action="store_true", help="grade.py: only run the no-pitch baseline")
     ap.add_argument("--frame", choices=["neutral", "self", "skim", "skim1k"], default="neutral",
                     help="grade.py: neutral = judge a proposed answer; self = the pitch is shown as the grader's own earlier reply")
+    ap.add_argument("--limit", type=int, default=None, help="generate/grade: only the first N items (pilots)")
+    ap.add_argument("--batches", default=None, help="make_questions.py, math3/trivia3: comma-separated batch numbers")
     ap.add_argument("--reparse", action="store_true", help="grade.py: re-parse stored replies, no model calls")
     a = ap.parse_args()
     if a.samples is None:
@@ -176,14 +198,14 @@ def attacker(name: str, pool: str = "frontier") -> dict:
 
 
 def _dir_name(domain: str, attacker_name: str, pool: str) -> str:
-    if pool == "open":
-        return f"{domain}_open__{attacker_name}"
+    if pool != "frontier":
+        return f"{domain}_{pool}__{attacker_name}"
     return domain if attacker_name == GENERATOR["name"] else f"{domain}__{attacker_name}"
 
 
 def run_dir(domain: str, attacker_name: str = GENERATOR["name"], pool: str = "frontier") -> Path:
     """Frontier: GLM (the original attacker) keeps runs/<domain>/, others get runs/<domain>__<name>/.
-    Open pool: runs/<domain>_open__<name>/."""
+    Other pools: runs/<domain>_<pool>__<name>/."""
     d = RUNS / _dir_name(domain, attacker_name, pool)
     d.mkdir(exist_ok=True)
     return d
@@ -209,12 +231,12 @@ def run_dirs(domain: str, pool: str = "frontier") -> list[tuple[dict, Path]]:
     return out
 
 
-def load_questions(domain: str = "math") -> list[dict]:
-    return json.loads((HERE / f"questions_{domain}.json").read_text())
+def load_questions(domain: str = "math", limit: int | None = None) -> list[dict]:
+    return json.loads((HERE / f"questions_{domain}.json").read_text())[:limit]
 
 
 def format_question(q: dict) -> str:
-    if "answer" in q:  # math2: free response, no options
+    if "answer" in q:  # math2/math3/trivia3: free response, no options
         return q["question"]
     if "options" not in q:  # code item
         return f"Specification:\n{q['spec']}\n\n```python\n{q['buggy_code']}\n```"
