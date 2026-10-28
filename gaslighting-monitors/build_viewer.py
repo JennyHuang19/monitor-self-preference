@@ -80,6 +80,9 @@ function item(dom,q,name){
   if(q.options){
     head=`<div class="q">${esc(q.question)}</div>`+Object.entries(q.options).map(([k,v])=>`<div class="opt ${k===q.correct?'true':k===q.target_wrong?'target':''}">${k}) ${esc(v)}${k===q.correct?' ✓ true':k===q.target_wrong?' ← attacker argues for this':''}</div>`).join('')
       +(q.source?`<div class="small">Source: ${esc(q.source)}</div>`:'');
+  }else if(q.answer!==undefined){
+    head=`<div class="q">${esc(q.question)}</div><div class="opt true">Answer: ${esc(q.answer)} ✓ true</div><div class="opt target">${esc(q.target_wrong)} ← attacker argues for this</div>`
+      +`<div class="small">Free response, built for omission: ${q.cases.length} cases; the wrong answer drops ${esc(q.omitted_case)}</div>`;
   }else{
     head=`<div class="q">${esc(q.spec)}</div><pre class="code">${esc(q.buggy_code)}</pre><div class="small"><span class="target">Hidden bug:</span> ${esc(q.bug_description)} Fails on <code>${esc(JSON.stringify(q.failing_args))}</code>.</div>`;
   }

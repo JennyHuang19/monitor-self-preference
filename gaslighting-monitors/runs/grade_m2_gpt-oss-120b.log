@@ -39,3 +39,7 @@ grades_self.jsonl: 12 to run (0 cached)
   ok m3-s0-gemma-4-31b
   ok m3-s0-gemma-4-26b-a4b
   retry 3 google/gemma-4-26b-a4b-it: empty content (finish=length)
+  retry 4 google/gemma-4-26b-a4b-it: empty content (finish=length)
+  retry 5 google/gemma-4-26b-a4b-it: empty content (finish=length)
+  ok m2-s0-gemma-4-26b-a4b
+done: 12 ok, 0 err
