@@ -16,3 +16,6 @@ model-tunnel-visioned/SWE-chat/
 __pycache__/
 *.pyc
 .DS_Store
+
+# AITA full dataset (680MB, third-party)
+aita/data/cleaned_dataset.csv

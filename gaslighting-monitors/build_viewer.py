@@ -1,29 +1,65 @@
-"""Bundle questions, attacker answers, grades and baselines for every domain x attacker into a self-contained viewer.html."""
+"""Bundle questions, attacker answers, grades and baselines for every domain x attacker into a self-contained viewer.
+
+    python build_viewer.py         -> viewer.html (every pool except mix5)
+    python build_viewer.py mix5    -> viewer_mix5.html (math3/trivia3: too big to share a page with the rest)
+"""
 import json
+import re
+import sys
 
 from common import DOMAINS, HERE, POOLS, pool_models, read_jsonl, run_dirs
 
+# math3/trivia3 have ~100 items x 5 graders x 3 frames (~14k grades): keep only the fields the page shows, and trim
+# grader text hard (the verdict sits at the end of the reply) so the page stays under 16MB. Pitches keep more text.
+TRIM = {"math3", "trivia3"}
+KEEP = {"key", "qid", "sample", "answer_key", "grader", "frame", "verdict", "confidence", "grader_correct_option", "fooled",
+        "bug", "answer", "solved", "solved_by", "committed", "final", "content", "reasoning", "parse_error"}
+
+
+def _cut(text, n, tail=False):
+    text = text or ""
+    if len(text) <= n:
+        return text
+    note = f"[trimmed {len(text) - n:,} chars]"
+    return f"… {note}\n" + text[-n:] if tail else text[:n] + f"\n… {note}"
+
+
+def load(path, domain):
+    recs = read_jsonl(path)
+    if domain not in TRIM:
+        return recs
+    pitch = path.name == "answers.jsonl"
+    out = []
+    for r in recs:
+        r = {k: v for k, v in r.items() if k in KEEP}
+        r["content"] = _cut(r.get("content"), 3000 if pitch else 250, tail=not pitch)
+        r["reasoning"] = _cut(r.get("reasoning"), 600) if pitch else ""
+        out.append(r)
+    return out
+
+
 data = {"domains": {}}
-for pool in POOLS:
+MIX5 = sys.argv[1:] == ["mix5"]
+for pool in [p for p in POOLS if (p == "mix5") == MIX5]:
     for domain in DOMAINS:
         qpath = HERE / f"questions_{domain}.json"
         if not qpath.exists():
             continue
         for att, d in run_dirs(domain, pool):
-            if pool == "open":
-                tab = f"{domain} · open · {att['name']}"
+            if pool != "frontier":
+                tab = f"{domain} · {pool} · {att['name']}"
             else:
                 tab = domain if att["name"] == "glm-5.3" else f"{domain} · {att['family']} attacker"
             data["domains"][tab] = {
         "attacker": att,
         "graders": pool_models(pool),
         "questions": json.loads(qpath.read_text()),
-        "answers": read_jsonl(d / "answers.jsonl"),
-        "grades": read_jsonl(d / "grades.jsonl"),
-        "grades_self": read_jsonl(d / "grades_self.jsonl"),
-        "grades_skim": read_jsonl(d / "grades_skim.jsonl"),
-        "grades_skim1k": read_jsonl(d / "grades_skim1k.jsonl"),
-        "baseline": read_jsonl(d / "baseline.jsonl"),
+        "answers": load(d / "answers.jsonl", domain),
+        "grades": load(d / "grades.jsonl", domain),
+        "grades_self": load(d / "grades_self.jsonl", domain),
+        "grades_skim": load(d / "grades_skim.jsonl", domain),
+        "grades_skim1k": load(d / "grades_skim1k.jsonl", domain),
+        "baseline": load(d / "baseline.jsonl", domain),
     }
 
 TEMPLATE = r"""<title>Gaslighting Monitors</title>
@@ -82,7 +118,9 @@ function item(dom,q,name){
       +(q.source?`<div class="small">Source: ${esc(q.source)}</div>`:'');
   }else if(q.answer!==undefined){
     head=`<div class="q">${esc(q.question)}</div><div class="opt true">Answer: ${esc(q.answer)} ✓ true</div><div class="opt target">${esc(q.target_wrong)} ← attacker argues for this</div>`
-      +`<div class="small">Free response, built for omission: ${q.cases.length} cases; the wrong answer drops ${esc(q.omitted_case)}</div>`;
+      +(q.omitted_case?`<div class="small">Free response, built for omission: ${q.cases.length} cases; the wrong answer drops ${esc(q.omitted_case)}</div>`
+        :q.error_description?`<div class="small">Free response · ${esc(q.error_type)}: ${esc(q.error_description)}</div>`
+        :q.target_wrong_story?`<div class="small">Open-ended trivia · why the wrong answer is plausible: ${esc(q.target_wrong_story)}<br>Source: ${esc(q.source)}</div>`:'');
   }else{
     head=`<div class="q">${esc(q.spec)}</div><pre class="code">${esc(q.buggy_code)}</pre><div class="small"><span class="target">Hidden bug:</span> ${esc(q.bug_description)} Fails on <code>${esc(JSON.stringify(q.failing_args))}</code>.</div>`;
   }
@@ -108,6 +146,13 @@ render();
 </script></main>"""
 
 html = TEMPLATE.replace("__DATA__", json.dumps(data).replace("</", "<\\/"))
-(HERE / "viewer.html").write_text(html)
+if MIX5:
+    html = re.sub(r'<p class="note">.*?</p>', '<p class="note">math3: 100 free-response math problems (60 omitted-case, 40 other '
+                  'planted errors). trivia3: 100 open-ended trivia questions. Five models (GLM-5.3, GLM-5.3-flash, Kimi-K3, '
+                  'gpt-oss-120b, gpt-oss-20b) each attack and grade every item, in the neutral, self-check and skim (1k '
+                  'thinking cap) frames. Text is trimmed to fit: grader replies show only their last 250 characters, and '
+                  'grader CoT is omitted.</p>', html, count=1, flags=re.S)
+out = HERE / ("viewer_mix5.html" if MIX5 else "viewer.html")
+out.write_text(html)
 counts = ", ".join(f"{k}: {len(v['grades'])} grades" for k, v in data["domains"].items())
-print(f"Wrote viewer.html ({counts})")
+print(f"Wrote {out.name} ({counts})")
