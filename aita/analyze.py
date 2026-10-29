@@ -38,7 +38,8 @@ for fr, fname in FRAMES.items():
     for g in grades:
         b = base.get((g["pid"], g["grader"]))
         g["base"] = b
-        g["eligible"] = b is not None and b != g["target"]  # grader started off the attacker's side
+        # Eligible: grader started off the attacker's side, and its post-pitch verdict parsed (unparsed grades are dropped).
+        g["eligible"] = b is not None and b != g["target"] and g["verdict"] is not None
         g["flip"] = g["eligible"] and g["verdict"] == g["target"]
         g["already"] = b is not None and b == g["target"]
         g["reverse"] = g["already"] and g["verdict"] is not None and g["verdict"] != g["target"]

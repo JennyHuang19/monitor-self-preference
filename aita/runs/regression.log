@@ -1,0 +1,84 @@
+
+##### all 10 models: glm-5.3, glm-5.3-flash, gpt-oss-120b, gpt-oss-20b, kimi-k3, qwen3.8-max, qwen3.8-flash, gemma-4-31b, gemma-4-26b-a4b, kimi-k3.1-pro
+=== both frames (16813 rows, 3310 flips, 98 posts) ===
+  by frame: neutral 1917/8420, self 1393/8393
+
+=== A: fixed effects ===
+  OR self vs cross                  1.259  [1.126, 1.422]
+  pp self vs cross                  2.970  [1.437, 4.588]
+  OR sibling vs cross               1.182  [1.049, 1.335]
+  pp sibling vs cross               2.064  [0.573, 3.588]
+  pp frame self-check vs neutral   -6.162  [-8.059, -4.391]
+
+=== B: + |strength gap| ===
+  OR self vs cross                  0.987  [0.870, 1.123]
+  pp self vs cross                 -0.184  [-1.875, 1.594]
+  OR sibling vs cross               1.077  [0.955, 1.212]
+  pp sibling vs cross               0.919  [-0.557, 2.444]
+  pp frame self-check vs neutral   -6.163  [-8.060, -4.391]
+  OR per unit |gap|                 0.634  [0.536, 0.755]
+
+=== C: + |tier gap| ===
+  OR self vs cross                  1.255  [1.121, 1.416]
+  pp self vs cross                  2.935  [1.431, 4.672]
+  OR sibling vs cross               1.181  [1.049, 1.328]
+  pp sibling vs cross               2.052  [0.595, 3.510]
+  pp frame self-check vs neutral   -6.162  [-8.059, -4.391]
+  OR per unit |gap|                 0.998  [0.940, 1.057]
+
+=== A × frame ===
+  neutral  OR self vs cross        1.249  [1.083, 1.448]
+  neutral  pp self vs cross        3.552  [1.180, 6.218]
+  neutral  OR sibling vs cross     1.022  [0.896, 1.161]
+  neutral  pp sibling vs cross     0.320  [-1.600, 2.252]
+  self     OR self vs cross        1.288  [1.042, 1.589]
+  self     pp self vs cross        2.479  [0.380, 4.471]
+  self     OR sibling vs cross     1.491  [1.212, 1.832]
+  self     pp sibling vs cross     3.915  [1.834, 5.946]
+  LR test of relation x frame: chi2 6.39 on 2 df, p = 0.041
+
+corr(same-family, |gap|) across cells: B -0.38, C -0.42
+Pearson chi2/df (model A): 1.64
+
+##### gpt-oss + Gemma only: gpt-oss-120b, gpt-oss-20b, gemma-4-31b, gemma-4-26b-a4b
+=== both frames (2605 rows, 672 flips, 98 posts) ===
+  by frame: neutral 300/1304, self 372/1301
+
+=== A: fixed effects ===
+  OR self vs cross                  1.752  [1.396, 2.367]
+  pp self vs cross                  8.644  [5.224, 12.723]
+  OR sibling vs cross               1.915  [1.530, 2.535]
+  pp sibling vs cross               9.338  [5.953, 12.858]
+  pp frame self-check vs neutral    5.638  [2.324, 8.519]
+
+=== B: + |strength gap| ===
+  OR self vs cross                  2.206  [1.244, 4.072]
+  pp self vs cross                 11.564  [3.465, 17.774]
+  OR sibling vs cross               2.253  [1.384, 3.827]
+  pp sibling vs cross              11.302  [4.557, 17.102]
+  pp frame self-check vs neutral    5.637  [2.325, 8.517]
+  OR per unit |gap|                 1.278  [0.660, 2.430]
+
+=== C: + |tier gap| ===
+  OR self vs cross                  1.552  [1.207, 2.139]
+  pp self vs cross                  6.965  [2.994, 11.434]
+  OR sibling vs cross               2.158  [1.691, 2.912]
+  pp sibling vs cross              10.768  [7.152, 14.364]
+  pp frame self-check vs neutral    5.639  [2.324, 8.520]
+  OR per unit |gap|                 0.786  [0.620, 1.004]
+
+=== A × frame ===
+  neutral  OR self vs cross        1.749  [1.337, 2.464]
+  neutral  pp self vs cross        9.141  [4.599, 14.176]
+  neutral  OR sibling vs cross     1.555  [1.131, 2.177]
+  neutral  pp sibling vs cross     7.018  [2.007, 12.213]
+  self     OR self vs cross        1.827  [1.327, 2.720]
+  self     pp self vs cross        8.681  [3.987, 13.526]
+  self     OR sibling vs cross     2.588  [1.916, 3.819]
+  self     pp sibling vs cross    11.905  [7.661, 16.313]
+  LR test of relation x frame: chi2 4.23 on 2 df, p = 0.121
+
+corr(same-family, |gap|) across cells: B -0.88, C +0.00
+Pearson chi2/df (model A): 1.44
+
+strength proxy (no-pitch agreement with Reddit, %): {'glm-5.3': 86.0, 'glm-5.3-flash': 88.0, 'gpt-oss-120b': 81.0, 'gpt-oss-20b': 76.0, 'kimi-k3': 90.0, 'qwen3.8-max': 90.0, 'qwen3.8-flash': 83.0, 'gemma-4-31b': 89.0, 'gemma-4-26b-a4b': 88.0, 'kimi-k3.1-pro': 91.0}

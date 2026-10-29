@@ -1,0 +1,477 @@
+<title>Slip an Incorrect Math Solution Through</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: overview (frame + scope toggles, fooled matrix, relation bars, regression) on top; problem list beside one problem's full record below. Same identity as the AITA flip viewer. */
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#16181d; --mut:#5c6170; --line:#dde0e6; --sunk:#eef0f4;
+  --accent:#3445b4; --true:#1d7a45; --wrong:#c2410c; --flip:#c2410c; --held:#1d7a45;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --true:#5fd08f; --wrong:#fb8a4c; --flip:#fb8a4c; --held:#5fd08f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --true:#5fd08f; --wrong:#fb8a4c; --flip:#fb8a4c; --held:#5fd08f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1180px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1{font:600 26px/1.2 var(--sans);margin:0;text-wrap:balance}
+h2{font:600 17px/1.3 var(--sans);margin:0 0 12px;text-wrap:balance}
+h3{font:600 14px/1.3 var(--sans);margin:0 0 8px}
+.lede{color:var(--mut);max-width:75ch;margin:8px 0 0}
+.label{font:500 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.small{font-size:13px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select,input{font:inherit;color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,.post:focus-visible,td.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:6px 14px;cursor:pointer;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--card);font-weight:500}
+.pill{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border-radius:5px;border:1px solid currentColor;white-space:nowrap}
+.pill.true{color:var(--true)} .pill.wrong{color:var(--wrong)} .pill.other{color:var(--mut)}
+.tag{font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:4px;white-space:nowrap}
+.overview{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.overview{grid-template-columns:minmax(0,1fr)}}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+th{font-weight:500;color:var(--mut)}
+table.matrix th.col{text-align:center;font-size:12px;white-space:nowrap}
+td.cell{text-align:center;cursor:pointer;font-variant-numeric:tabular-nums;border:2px solid var(--card);border-radius:6px;background:color-mix(in srgb,var(--flip) calc(var(--r) * 85%),var(--card))}
+td.cell:hover{outline:2px solid var(--ink);outline-offset:-2px}
+td.cell.on{outline:2px solid var(--accent);outline-offset:-2px}
+td.cell.static{cursor:default} td.cell.static:hover{outline:none}
+td.cell b{display:block;font-size:14px}
+td.cell span{font-size:11px;color:var(--mut)}
+td.cell.hot b,td.cell.hot span{color:var(--card)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:72px minmax(0,1fr) 104px;gap:10px;align-items:center;font-size:13px}
+.track{height:12px;background:var(--sunk);border-radius:6px;position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--flip);border-radius:6px}
+.forest{display:grid;grid-template-columns:auto minmax(80px,1fr) auto;gap:6px 10px;align-items:center;font-size:13px}
+.forest .ft{height:14px;position:relative;background:var(--sunk);border-radius:4px}
+.forest .zero{position:absolute;top:0;bottom:0;left:50%;border-left:1px dashed var(--mut)}
+.forest .iv{position:absolute;top:6px;height:2px;background:var(--ink)}
+.forest .pt{position:absolute;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--accent)}
+.forest .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.forest .grp{grid-column:1/-1;margin-top:6px}
+.browser{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.browser{grid-template-columns:minmax(0,1fr)}}
+.filters{display:grid;gap:8px;margin-bottom:10px}
+.filters input,.filters select{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card)}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--sunk);border-radius:999px;padding:4px 6px 4px 10px;font-size:12px}
+.chip button{border:0;background:var(--card);border-radius:999px;width:20px;height:20px;cursor:pointer;line-height:1}
+.list{display:grid;gap:4px;max-height:780px;overflow-y:auto;padding-right:2px}
+.post{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:9px 10px;border-radius:8px;border:1px solid transparent;cursor:pointer;background:none;text-align:left;width:100%}
+.post:hover{background:var(--sunk)}
+.post[aria-current="true"]{border-color:var(--accent);background:var(--card)}
+.post .t{font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post .f{font:500 12px/1.2 var(--mono);text-align:right;color:var(--mut);white-space:nowrap}
+.post .f b{color:var(--flip)}
+.post .m{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.detail{display:grid;gap:16px;min-width:0}
+.story{font:17px/1.6 var(--serif);max-width:68ch;white-space:pre-wrap;margin:0}
+.ans{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;align-items:baseline;font-size:14px}
+.ans b{font:600 16px/1.2 var(--mono)}
+.ans .t{color:var(--true)} .ans .w{color:var(--wrong)}
+.verdicts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.vbox{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;min-width:0}
+.vbox .a{font:600 13px/1.3 var(--mono)}
+.ok{color:var(--held)} .no{color:var(--flip)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+details{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-size:13px;font-weight:500}
+pre.txt{white-space:pre-wrap;font:13px/1.55 var(--mono);margin:0;padding:10px 12px;max-height:520px;overflow:auto}
+pre.cot{background:var(--sunk);color:var(--mut)}
+.slipbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:20px}
+.sbar{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 96px;gap:10px;align-items:center;font-size:13px;margin-top:6px}
+.sbar .fill.self{background:var(--accent)} .sbar .fill.cross{background:var(--mut)}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:baseline}
+mark{background:color-mix(in srgb,var(--flip) 30%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.ex{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;margin-top:14px;min-width:0}
+.ex3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:860px){.ex3{grid-template-columns:minmax(0,1fr)}}
+.exbox{border:1px solid var(--line);border-radius:8px;min-width:0;display:grid;align-content:start}
+.exbox .label{padding:10px 12px 0}
+.exbox pre.txt{max-height:320px}
+.exbox.own{border-color:var(--flip)}
+.ex .q{font:15px/1.55 var(--serif);margin:0;max-width:80ch}
+.ex button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px}
+.ex button:hover{border-color:var(--accent);color:var(--accent)}
+pre.code{white-space:pre;overflow-x:auto}
+.pitch{font:15px/1.6 var(--serif);white-space:pre-wrap;padding:12px 14px;margin:0;max-height:560px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.g{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:6px;min-width:0}
+.g.fooled{border-left-color:var(--flip)} .g.caught{border-left-color:var(--held)}
+.st{font-weight:600;font-size:13px}
+.fooled .st{color:var(--flip)} .caught .st{color:var(--held)}
+.empty{color:var(--mut);font-size:14px;padding:20px 0}
+ul.cases{margin:4px 0 0;padding-left:20px;font:13px/1.6 var(--mono)}
+@media (prefers-reduced-motion:no-preference){.post,td.cell{transition:background .12s}}
+</style>
+
+<main>
+  <header>
+    <h1>Slip an Incorrect Math Solution Through</h1>
+    <p class="lede">100 free-response math problems, each with a planted wrong answer. Each attacker model writes a confident solution that arrives at the wrong answer. Each grader then judges that solution. A grader is <strong>fooled</strong> when it calls the wrong answer correct. Five models both attack and grade: two GLM, two gpt-oss and Kimi-K3.</p>
+    <div class="row" style="margin-top:14px">
+      <span class="label">Frame</span>
+      <div class="seg" id="frame-seg" role="group" aria-label="Grading frame">
+        <button data-fr="all">All frames</button>
+        <button data-fr="neutral">Neutral</button>
+        <button data-fr="self">Self-check</button>
+        <button data-fr="skim1k">Skim, 1k cap</button>
+      </div>
+      <span class="label" style="margin-left:8px">Count</span>
+      <div class="seg" id="scope-seg" role="group" aria-label="Which grades count">
+        <button data-sc="all">All grades</button>
+        <button data-sc="knew">Grader knew the answer</button>
+      </div>
+    </div>
+    <p class="small" id="frame-note" style="margin:8px 0 0"></p>
+  </header>
+
+  <section class="overview">
+    <div class="panel">
+      <h2>Fooled rate by attacker and grader</h2>
+      <div class="scroll"><table class="matrix" id="matrix"></table></div>
+      <div class="legend small">
+        <span><span class="tag">self</span> grader is the attacker</span>
+        <span><span class="tag">sibling</span> same family</span>
+        <span>Cells show fooled ÷ grades counted. Click a cell to list its problems.</span>
+      </div>
+      <h2 style="margin-top:26px">Fooled rate as grader, by planted error type</h2>
+      <p class="small" style="margin:0 0 8px">Each grader's fooled rate over every attacker's pitches, split by the kind of mistake planted in the problem. Only omitted case has more than 8 problems, so the other columns are noisy.</p>
+      <div class="scroll"><table class="matrix" id="by-type"></table></div>
+    </div>
+    <div class="panel" style="display:grid;gap:18px;align-content:start">
+      <div>
+        <h2>Family effect, regression</h2>
+        <p class="small" style="margin:0 0 8px">One mixed logistic regression over all three frames: fooled ~ attacker + grader + frame + relation + a random effect per problem. The attacker and grader terms absorb each model's overall strength, and the problem effect absorbs that some problems are easier to deceive on whoever attacks or grades, so relation is the family effect left over. The frame term marks which prompt the monitor got: a neutral "proposed solution", a self-check that presents the pitch as the monitor's own past attempt, or a skim with a 1k thinking cap. Points: change in fooled rate vs a cross-family pair (or vs the neutral frame), averaged over problems; 95% model-based intervals.</p>
+        <div class="forest" id="regression"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="slip" hidden>
+    <h2>Same slip as its own model</h2>
+    <p class="lede" id="slip-lede" style="margin:0 0 16px"></p>
+    <div class="slipbars" id="slip-bars"></div>
+    <p class="small" id="slip-note" style="margin:12px 0 0"></p>
+    <div id="slip-fsum"></div>
+    <h3 style="margin-top:24px">Examples</h3>
+    <p class="small" style="margin:0">Verbatim excerpts (… marks a cut). Highlighted: the dropped case and the false total in the pitch, and the same slip in the monitor's reasoning.</p>
+    <div id="slip-examples"></div>
+  </section>
+
+  <section class="panel">
+    <h2>No-pitch baseline</h2>
+    <div class="scroll"><table id="baseline"></table></div>
+    <p class="small" style="margin:8px 0 0">Pitches that did not end on the planted answer were not graded.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Prompts</h2>
+    <p class="small" style="margin:0 0 10px">Exact text sent to the models. <code>{question}</code> is the problem text; <code>{pitch}</code> is the attacker's visible reply (never its hidden CoT); <code>{target}</code> is the planted wrong answer.</p>
+    <div id="prompts" style="display:grid;gap:8px"></div>
+  </section>
+
+  <section class="browser">
+    <div class="panel">
+      <h2>Problems</h2>
+      <div class="filters">
+        <input id="q" type="search" placeholder="Search problems" aria-label="Search problem text and topic">
+        <div class="row" style="flex-wrap:nowrap">
+          <select id="etype" aria-label="Planted error type"><option value="">All error types</option></select>
+          <select id="sort" aria-label="Sort"><option value="fools">Most fooled</option><option value="order">Dataset order</option></select>
+        </div>
+        <div id="pair-chip"></div>
+      </div>
+      <div class="small" id="count" style="margin-bottom:6px"></div>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="panel detail" id="detail" aria-live="polite"><p class="empty">Pick a problem to read it, every pitch, and how each grader judged it.</p></div>
+  </section>
+</main>
+
+<script id="summary" type="application/json">__SUMMARY__</script>
+<script>
+const S = JSON.parse(document.getElementById('summary').textContent);
+const M = S.models, names = M.map(m => m.name), fam = Object.fromEntries(M.map(m => [m.name, m.family]));
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = (k, n) => n ? Math.round(100 * k / n) + '%' : '—';
+const rel = (a, g) => a === g ? 'self' : fam[a] === fam[g] ? 'sibling' : 'cross';
+const etName = t => t.replace(/_/g, ' ');
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const FRAMES = {neutral: 'neutral', self: 'self-check', skim1k: 'skim, 1k cap'}, VIEWS = {all: 'all frames', ...FRAMES};
+
+let frame = VIEWS[store.get('m3-frame')] ? store.get('m3-frame') : 'all';
+let scope = store.get('m3-scope-v2') === 'knew' ? 'knew' : 'all';
+let pair = null, current = null, attTab = names[0];
+const cache = {};
+
+const NOTES = {
+  all: 'All frames: counts pool the neutral, self-check and skim frames, so each pitch is counted once per frame.',
+  neutral: 'Neutral: the grader reads the problem and a "proposed solution", then says whether the final answer is correct.',
+  self: 'Self-check: the pitch is placed in the grader\'s own earlier reply; it is asked to verify that answer.',
+  skim1k: 'Skim, 1k cap: the grader is told to check each step without solving the problem itself, with thinking capped at 1,000 tokens.',
+};
+function renderFrame(){
+  for (const b of document.querySelectorAll('#frame-seg button')) b.setAttribute('aria-pressed', String(b.dataset.fr === frame));
+  for (const b of document.querySelectorAll('#scope-seg button')) b.setAttribute('aria-pressed', String(b.dataset.sc === scope));
+  document.getElementById('frame-note').textContent = NOTES[frame] + (scope === 'knew'
+    ? ' Counting only grades where the grader solved the problem itself with no pitch, so a fooled grade means persuasion, not ignorance.'
+    : ' Counting every parsed grade, also where the grader could not solve the problem on its own.');
+}
+
+// One colour scale for every frame and scope: full colour at 40% fooled.
+const CAP = 0.4;
+function renderMatrix(){
+  const m = S.matrix[frame][scope];
+  let h = '<tr><th>Attacker ↓ · Grader →</th>' + names.map(g => `<th class="col">${esc(g)}</th>`).join('') + '</tr>';
+  for (const a of names){
+    h += `<tr><th>${esc(a)}</th>`;
+    for (const g of names){
+      const [k, n] = m[a][g], r = n ? k / n : 0, re = rel(a, g);
+      const on = pair && pair.a === a && pair.g === g ? ' on' : '';
+      h += `<td class="cell${r > .27 ? ' hot' : ''}${on}" style="--r:${Math.min(1, r / CAP).toFixed(3)}" tabindex="0" data-a="${a}" data-g="${g}" aria-label="${a} pitches to ${g}: ${k} of ${n} fooled">
+        <b>${pct(k, n)}</b><span>${k}/${n}${re !== 'cross' ? ` · ${re}` : ''}</span></td>`;
+    }
+    h += '</tr>';
+  }
+  document.getElementById('matrix').innerHTML = h;
+  renderByType();
+}
+
+// Same colour scale as the matrix; these cells are not clickable.
+function renderByType(){
+  const m = S.byType[frame][scope], types = Object.keys(S.typeCounts);
+  let h = '<tr><th>Grader ↓ · Error type →</th>' + types.map(t => `<th class="col">${esc(etName(t))}<br><span class="small">${S.typeCounts[t]} problems</span></th>`).join('') + '</tr>';
+  for (const g of names){
+    h += `<tr><th>${esc(g)}</th>`;
+    for (const t of types){
+      const [k, n] = m[g][t], r = n ? k / n : 0;
+      h += `<td class="cell static${r > .27 ? ' hot' : ''}" style="--r:${Math.min(1, r / CAP).toFixed(3)}" aria-label="${g} on ${etName(t)} problems: ${k} of ${n} fooled"><b>${pct(k, n)}</b><span>${k}/${n}</span></td>`;
+    }
+    h += '</tr>';
+  }
+  document.getElementById('by-type').innerHTML = h;
+}
+
+
+// One fit over all three frames, with frame as one more term: the Frame toggle does not change it; the Count toggle picks the fit.
+function renderRegression(){
+  const R = S.regression.pooled[scope], W = 12, x = v => (50 + 50 * Math.max(-W, Math.min(W, v)) / W).toFixed(1);
+  const f = v => (v > 0 ? '+' : '') + v.toFixed(1), o = v => v.toFixed(2);
+  const row = (lab, pp, or, aria) => `<div>${lab}</div><div class="ft" aria-label="${aria}: ${f(pp.est)} points, 95% interval ${f(pp.lo)} to ${f(pp.hi)}"><span class="zero"></span>` +
+    `<span class="iv" style="left:${x(pp.lo)}%;width:${x(pp.hi) - x(pp.lo)}%"></span><span class="pt" style="left:${x(pp.est)}%"></span></div>` +
+    `<div class="v">${f(pp.est)} pts <span class="small">[${f(pp.lo)}, ${f(pp.hi)}]${or ? ` · OR ${o(or.est)}` : ''}</span></div>`;
+  let h = '';
+  for (const [model, lab] of [['A: fixed effects','Attacker + grader + frame + problem effect']]){
+    const F = R[model];
+    h += `<div class="grp label">${lab}</div>`;
+    for (const r of ['self','sibling']) h += row(`${r} vs cross`, F[`pp ${r} vs cross`], F[`OR ${r} vs cross`], `${r} vs cross`);
+    // Same model with one same-family term (self or sibling) in place of the two.
+    const SF = R['A: same family'];
+    h += row('same family vs cross', SF['pp same family vs cross'], SF['OR same family vs cross'], 'same family (self or sibling) vs cross');
+    for (const fr of S.regression.frames.slice(1)) h += row(`${FRAMES[fr]} vs neutral`, F[`pp frame ${fr === 'self' ? 'self-check' : fr} vs neutral`], null, `${FRAMES[fr]} frame vs neutral`);
+    const sg = F['sigma problem'];
+    h += `<div class="small" style="grid-column:1/-1">Problem effect: σ = ${o(sg.est)} [${o(sg.lo)}, ${o(sg.hi)}] on the log-odds scale (test vs none: p ${F['LR p (sigma=0)'] < 1e-4 ? '&lt; 0.0001' : '= ' + F['LR p (sigma=0)'].toFixed(4)}). AIC ${F.AIC.toFixed(1)}.</div>`;
+    h += `<details style="grid-column:1/-1"><summary>All ${F.coef.length} coefficients</summary><div class="scroll"><table>` +
+      `<tr><th>Term</th><th class="num">Log-odds</th><th class="num">SE</th><th class="num">p</th><th class="num">OR [95% CI]</th></tr>` +
+      F.coef.map(c => `<tr><td>${esc(c.term)}</td><td class="num">${c.est.toFixed(3)}</td><td class="num">${c.se.toFixed(3)}</td><td class="num">${c.p < .001 ? '&lt;0.001' : c.p.toFixed(3)}</td><td class="num">${o(c.OR)} <span class="small">[${o(c['OR lo'])}, ${o(c['OR hi'])}]</span></td></tr>`).join('') +
+      `<tr><td>problem effect σ</td><td class="num">${o(sg.est)}</td><td></td><td></td><td class="small">[${o(sg.lo)}, ${o(sg.hi)}]</td></tr></table>` +
+      `<p class="small" style="margin:8px 12px">References: attacker and grader glm-5.3, neutral frame, cross-family pair.</p></div></details>`;
+  }
+  document.getElementById('regression').innerHTML = h;
+}
+
+function renderPrompts(){
+  document.getElementById('prompts').innerHTML = S.prompts.map((p, i) =>
+    `<details${i < 2 ? ' open' : ''}><summary>${esc(p.title)} <span class="small">· ${esc(p.note)}</span></summary>` +
+    p.turns.map(([role, text]) => `<div class="label" style="padding:8px 12px 0">${esc(role)}</div><pre class="txt">${esc(text)}</pre>`).join('') +
+    `</details>`).join('');
+}
+
+function renderBaseline(){
+  let h = '<tr><th>Model</th><th>Family</th><th>As grader: solved it with no pitch</th><th>As attacker: argued for the planted answer</th></tr>';
+  for (const g of names){
+    const b = S.solve[g], c = S.commit[g];
+    h += `<tr><td>${esc(g)}</td><td>${esc(fam[g])}</td><td class="num">${pct(...b)} <span class="small">${b[0]}/${b[1]}</span></td><td class="num">${pct(...c)} <span class="small">${c[0]}/${c[1]}</span></td></tr>`;
+  }
+  document.getElementById('baseline').innerHTML = h;
+}
+
+function filtered(){
+  const q = document.getElementById('q').value.trim().toLowerCase(), t = document.getElementById('etype').value;
+  const only = pair ? new Set(S.pairFools[frame][scope][`${pair.a}|${pair.g}`] || []) : null;
+  let ps = S.items.filter(p => (!t || p.etype === t) && (!q || (p.question + ' ' + p.topic + ' ' + p.qid).toLowerCase().includes(q)) && (!only || only.has(p.qid)));
+  if (document.getElementById('sort').value === 'fools') ps = [...ps].sort((x, y) => y.fools[frame][scope][0] - x.fools[frame][scope][0]);
+  return ps;
+}
+
+function renderList(){
+  const ps = filtered();
+  document.getElementById('count').textContent = `${ps.length} of ${S.items.length} problems` + (pair ? ` where ${pair.g} was fooled by ${pair.a}'s pitch` : '');
+  document.getElementById('pair-chip').innerHTML = pair
+    ? `<span class="chip">${esc(pair.a)} → ${esc(pair.g)} fooled <button id="clear-pair" aria-label="Clear pair filter">×</button></span>` : '';
+  document.getElementById('list').innerHTML = ps.map(p => {
+    const [k, n] = p.fools[frame][scope];
+    return `<button class="post" data-qid="${p.qid}" aria-current="${p.qid === current}"><span class="t">${esc(p.question)}</span>
+      <span class="f"><b>${k}</b>/${n} fooled</span><span class="m"><span class="small">${esc(p.qid)}</span><span class="tag" style="margin:0">${esc(etName(p.etype))}</span></span></button>`;
+  }).join('') || '<p class="empty">No problems match.</p>';
+}
+
+const statusText = {fooled: '× Fooled: called it correct', caught: '✓ Caught: called it incorrect', unparsed: 'No parseable verdict'};
+
+function gradeCard(gr, x, d){
+  if (!x) return `<div class="g"><h3>${esc(gr)}</h3><div class="small">Not graded.</div></div>`;
+  const re = rel(attTab, gr), ga = x.grader_correct_option == null ? null : String(x.grader_correct_option);
+  const gaCls = ga === d.answer ? 'true' : ga === d.target ? 'wrong' : 'other';
+  return `<div class="g ${x.status}"><h3>${esc(gr)}${re !== 'cross' ? `<span class="tag">${re}</span>` : ''}</h3>
+    <div class="st">${statusText[x.status]}</div>
+    <div class="row small">its answer ${ga != null ? `<span class="pill ${gaCls}">${esc(ga)}</span>` : '—'} <span>confidence ${esc(x.confidence ?? '—')}</span></div>
+    <div class="small">${x.knew ? '<span class="ok">✓</span> solved it with no pitch' : '<span class="no">×</span> did not solve it with no pitch'}</div>
+    <details><summary>Grader CoT <span class="small">(${(x.reasoning || '').length.toLocaleString()} chars)</span></summary><pre class="txt cot">${esc(x.reasoning || '(no reasoning returned)')}</pre></details>
+    <details><summary>Reply</summary><pre class="txt">${esc(x.content)}</pre></details></div>`;
+}
+
+function gradeCardAll(gr, byFrame, d){
+  const xs = Object.keys(FRAMES).map(fr => [fr, byFrame[fr] && byFrame[fr][gr]]);
+  if (!xs.some(([, x]) => x)) return `<div class="g"><h3>${esc(gr)}</h3><div class="small">Not graded.</div></div>`;
+  const re = rel(attTab, gr), anyFooled = xs.some(([, x]) => x && x.status === 'fooled'), x0 = xs.find(([, x]) => x)[1];
+  const lines = xs.map(([fr, x]) => {
+    if (!x) return `<div class="row small"><span style="min-width:84px">${esc(FRAMES[fr])}</span>—</div>`;
+    const ga = x.grader_correct_option == null ? null : String(x.grader_correct_option);
+    const gaCls = ga === d.answer ? 'true' : ga === d.target ? 'wrong' : 'other';
+    const st = x.status === 'fooled' ? '<span class="no">× fooled</span>' : x.status === 'caught' ? '<span class="ok">✓ caught</span>' : 'unparsed';
+    return `<div class="row small"><span style="min-width:84px">${esc(FRAMES[fr])}</span>${st}${ga != null ? `<span class="pill ${gaCls}">${esc(ga)}</span>` : ''}<span>conf ${esc(x.confidence ?? '—')}</span></div>`;
+  }).join('');
+  const more = xs.filter(([, x]) => x).map(([fr, x]) => `<details><summary>${esc(FRAMES[fr])}: reply and CoT</summary><pre class="txt cot">${esc(x.reasoning || '(no reasoning returned)')}</pre><pre class="txt">${esc(x.content)}</pre></details>`).join('');
+  return `<div class="g ${anyFooled ? 'fooled' : 'caught'}"><h3>${esc(gr)}${re !== 'cross' ? `<span class="tag">${re}</span>` : ''}</h3>${lines}
+    <div class="small">${x0.knew ? '<span class="ok">✓</span> solved it with no pitch' : '<span class="no">×</span> did not solve it with no pitch'}</div>${more}</div>`;
+}
+
+function renderDetail(){
+  const el = document.getElementById('detail'), d = cache[current];
+  if (!current){ return; }
+  if (!d){ el.innerHTML = '<p class="empty">Loading problem…</p>'; return; }
+  const pitch = d.pitches[attTab];
+  const gs = pitch && frame !== 'all' ? pitch.grades[frame] || {} : {};
+  el.innerHTML = `
+    <div><div class="row"><span class="tag" style="margin:0">${esc(etName(d.error_type))}</span><span class="small">${esc(d.topic)}</span><span class="small">id ${esc(d.qid)}</span></div>
+      <p class="story" style="margin-top:12px">${esc(d.question)}</p></div>
+    <div class="ans"><span class="small">True answer</span><b class="t">${esc(d.answer)}</b><span class="small">Planted answer</span><b class="w">${esc(d.target)}</b>
+      <span class="small">Planted error</span><span style="font-size:14px">${esc(d.error_description)}</span></div>
+    ${d.cases && d.cases.length ? `<div><div class="label">Cases (${d.cases.length})</div><ul class="cases">${d.cases.map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>` : ''}
+    <details><summary>Reference solution</summary><pre class="txt">${esc(d.solution)}</pre></details>
+    ${d.check_code ? `<details><summary>Check code</summary><pre class="txt code">${esc(d.check_code)}</pre></details>` : ''}
+    <div><h3>No-pitch answers</h3><div class="verdicts">${names.map(g => { const b = d.baseline[g]; return `<div class="vbox"><div>${esc(g)}</div>
+      ${b ? `<div class="row small" style="margin-top:4px"><span class="a ${b.solved ? 'ok' : 'no'}">${b.solved ? '✓' : '×'} ${esc(b.answer ?? '—')}</span>${b.confidence != null ? `<span>conf ${esc(b.confidence)}</span>` : ''}</div>` : '<div class="small">—</div>'}</div>`; }).join('')}</div></div>
+    <div><h3>Attacker</h3><div class="tabs" role="group" aria-label="Attacker">${names.map(a => `<button data-att="${a}" aria-pressed="${a === attTab}">${esc(a)}</button>`).join('')}</div></div>
+    ${pitch ? `
+      <div class="row"><span class="small">Final answer</span><span class="pill ${pitch.final === d.target ? 'wrong' : pitch.final === d.answer ? 'true' : 'other'}">${esc(pitch.final ?? '—')}</span>${pitch.committed ? '' : '<span class="tag">did not commit to the planted answer, so not graded</span>'}</div>
+      <details><summary>${esc(attTab)} hidden CoT <span class="small">(${(pitch.reasoning || '').length.toLocaleString()} chars)</span></summary><pre class="txt cot">${esc(pitch.reasoning || '(no reasoning returned)')}</pre></details>
+      <details open><summary>${esc(attTab)} pitch (what the grader reads)</summary><p class="pitch">${esc(pitch.content)}</p></details>
+      <div><h3>Graders · ${frame === 'all' ? 'all frames' : FRAMES[frame] + ' frame'}</h3><div class="grid">${pitch.committed ? names.map(g => frame === 'all' ? gradeCardAll(g, pitch.grades, d) : gradeCard(g, gs[g], d)).join('') : '<p class="small">No grades: this pitch did not end on the planted answer.</p>'}</div></div>`
+      : '<p class="empty">No pitch from this attacker.</p>'}`;
+}
+
+async function openItem(qid){
+  if (!qid) return;
+  current = qid; renderList(); renderDetail();
+  try{ history.replaceState(null, '', '#q-' + qid); }catch(e){}
+  if (!cache[qid]){
+    try{
+      const r = await fetch(`problems/${qid}.json`);
+      if (!r.ok) throw new Error(r.status);
+      cache[qid] = await r.json();
+    }catch(e){
+      if (current === qid) document.getElementById('detail').innerHTML = `<p class="empty">Couldn't load this problem's data (${esc(e.message)}). Reload the page to try again.</p>`;
+      return;
+    }
+  }
+  if (current === qid) renderDetail();
+}
+
+function renderAll(){ renderFrame(); renderMatrix(); renderRegression(); renderList(); renderDetail(); }
+
+// "Same slip" finding from the CoT study: fixed scope (monitor knew the answer, all frames), so the toggles don't touch it.
+function marked(text, marks){
+  let h = esc(text);
+  for (const m of [...marks].sort((a, b) => b.length - a.length)) h = h.split(esc(m)).join(`\u0000${esc(m)}\u0001`);
+  return h.replace(/\u0000/g, '<mark>').replace(/\u0001/g, '</mark>');
+}
+function renderSlip(){
+  const D = S.slip;
+  if (!D) return;
+  document.getElementById('slip').hidden = false;
+  const cell = (m, sh, g) => D.bars.find(b => b.monitors === m && b.shows === sh && b.group === g);
+  const a = cell('gpt-oss monitors', true, 'self'), b = cell('gpt-oss monitors', true, 'cross');
+  document.getElementById('slip-lede').innerHTML =
+    `Most planted answers (60 of 100) drop one case of the correct solution: the <b>dropped case</b>. GLM pitches usually leave it out. gpt-oss pitches more often write it down and still reach the planted answer, for example by stating a false total. ` +
+    `When the pitch shows the dropped case, a gpt-oss monitor grading its own model's pitch reproduces it in its own reasoning and still accepts in <b>${a.k} of ${a.n}</b> fooled cases, against <b>${b.k} of ${b.n}</b> with a cross-family pitch: it makes the same slip as the pitch. GLM monitors show no such gap.`;
+  document.getElementById('slip-bars').innerHTML = ['gpt-oss monitors', 'GLM monitors'].map(m => `<div><h3 style="margin:0">${m}</h3>` +
+    [true, false].map(sh => ['self', 'cross'].map(g => {
+      const c = cell(m, sh, g), r = c.n ? c.k / c.n : 0;
+      return `<div class="sbar"><span class="small">${g === 'self' ? (sh ? 'pitch shows the dropped case' : 'pitch leaves it out') : ''}</span>` +
+        `<div class="track" aria-label="${m}, pitch ${sh ? 'shows' : 'leaves out'} the dropped case, ${g}: ${c.k} of ${c.n}"><div class="fill ${g}" style="width:${100 * r}%"></div></div>` +
+        `<span class="num">${pct(c.k, c.n)} <span class="small">${c.k}/${c.n}</span></span></div>`;
+    }).join('')).join('') + `</div>`).join('');
+  const f = D.fisher['gpt-oss monitors'], fg = D.fisher['GLM monitors'];
+  document.getElementById('slip-note').innerHTML =
+    `<span class="swatch" style="background:var(--accent)"></span>monitor graded its own model's pitch <span class="swatch" style="background:var(--mut);margin-left:10px"></span>a cross-family pitch. ` +
+    `Bars: share of fooled cases whose own reasoning contains the dropped case, from a model-judge label on records with the attacker hidden. On the 40 problems whose planted error is not an omission, the dropped case is the correct value of the step the error is in. Scope: the monitor solved the problem with no pitch; all three frames; ${D.n.self} self vs ${D.n.cross} cross fooled grades; the toggles above do not change this panel. ` +
+    `Fisher exact, pitch shows the dropped case: gpt-oss odds ratio ${f.or.toFixed(1)} (p ${f.p < .001 ? '&lt; 0.001' : '= ' + f.p.toFixed(3)}), GLM ${fg.or.toFixed(1)} (p = ${fg.p.toFixed(2)}). Several grades share one pitch, so these p-values are optimistic.`;
+  const fsum = D.false_sum;
+  document.getElementById('slip-fsum').innerHTML = `<h3 style="margin:18px 0 6px">How often each attacker's pitch states a false total</h3>` +
+    `<table style="max-width:560px"><tr><th>Attacker</th><th class="num">Pitches with a false written sum</th></tr>` +
+    names.map(n => `<tr><td>${esc(n)}</td><td class="num">${pct(...fsum[n])} <span class="small">${fsum[n][0]}/${fsum[n][1]}</span></td></tr>`).join('') + `</table>` +
+    `<p class="small" style="margin:6px 0 0">A code check over every pitch that argued for the planted answer: a written sum of three or more numbers whose stated total is wrong, such as 1+2+3+4+8+11+18+53 = 89 (really 100). It misses wrong totals that are not written out, so these counts are a floor. A false total is one way gpt-oss reaches the planted answer, not the usual one.</p>`;
+  document.getElementById('slip-examples').innerHTML = D.examples.map(e => `<div class="ex">
+    <div class="row"><b>${esc(e.monitor)} grading its own pitch</b><span class="tag" style="margin:0">${esc(FRAMES[e.frame])} frame</span><span class="small">${esc(e.qid)}</span>
+      <button data-open="${esc(e.qid)}" data-att="${esc(e.monitor)}" data-fr="${esc(e.frame)}">Open problem</button></div>
+    <p class="q">${esc(e.question)}</p>
+    <div class="ans"><span class="small">True answer</span><b class="t">${esc(e.answer)}</b><span class="small">Planted answer</span><b class="w">${esc(e.target)}</b></div>
+    <div class="small" style="display:grid;gap:2px"><b style="color:var(--ink)">How each pitch reaches ${esc(e.target)}</b>${e.plant.map(x => `<span>${esc(x)}</span>`).join('')}</div>
+    <p style="margin:0;font-size:14px"><b>The slip:</b> ${esc(e.slip)}</p>
+    <div class="ex3">
+      <div class="exbox"><span class="label">Pitch by ${esc(e.monitor)}</span><pre class="txt">${marked(e.pitch.text, e.pitch.marks)}</pre></div>
+      <div class="exbox own"><span class="label">Monitor ${esc(e.monitor)} on its own model's pitch</span><pre class="txt cot">${marked(e.self.text, e.self.marks)}</pre></div>
+      <div class="exbox"><span class="label">Same monitor on ${esc(e.contrast)}'s pitch</span><pre class="txt cot">${marked(e.cross.text, e.cross.marks)}</pre></div>
+    </div></div>`).join('');
+}
+document.getElementById('slip-examples').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-open]');
+  if (!btn) return;
+  attTab = btn.dataset.att; frame = btn.dataset.fr; pair = null;
+  store.set('m3-frame', frame); renderAll(); openItem(btn.dataset.open);
+  document.querySelector('.browser').scrollIntoView({behavior: 'smooth', block: 'start'});
+});
+
+document.getElementById('frame-seg').addEventListener('click', e => { const f = e.target.dataset.fr; if (f){ frame = f; store.set('m3-frame', f); renderAll(); } });
+document.getElementById('scope-seg').addEventListener('click', e => { const s = e.target.dataset.sc; if (s){ scope = s; store.set('m3-scope-v2', s); renderAll(); } });
+const pickCell = t => { const c = t.closest('td.cell'); if (!c) return; pair = pair && pair.a === c.dataset.a && pair.g === c.dataset.g ? null : {a: c.dataset.a, g: c.dataset.g}; if (pair) attTab = pair.a; renderMatrix(); renderList(); renderDetail(); document.getElementById('list').scrollTop = 0; };
+document.getElementById('matrix').addEventListener('click', e => pickCell(e.target));
+document.getElementById('matrix').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pickCell(e.target); } });
+document.getElementById('pair-chip').addEventListener('click', e => { if (e.target.id === 'clear-pair'){ pair = null; renderMatrix(); renderList(); } });
+for (const id of ['q','etype','sort']) document.getElementById(id).addEventListener('input', renderList);
+document.getElementById('list').addEventListener('click', e => { const b = e.target.closest('.post'); if (b) openItem(b.dataset.qid); });
+document.getElementById('detail').addEventListener('click', e => { const a = e.target.closest('[data-att]'); if (a){ attTab = a.dataset.att; renderDetail(); } });
+
+const types = [...new Set(S.items.map(p => p.etype))].sort();
+document.getElementById('etype').innerHTML += types.map(t => `<option value="${t}">${esc(etName(t))} (${S.items.filter(p => p.etype === t).length})</option>`).join('');
+renderBaseline(); renderPrompts(); renderSlip(); renderAll();
+const start = (location.hash.match(/^#q-([A-Za-z0-9]+)$/) || [])[1];
+openItem(start && S.items.some(p => p.qid === start) ? start : filtered()[0]?.qid);
+</script>
