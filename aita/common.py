@@ -17,8 +17,17 @@ gm = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gm)
 chat, run_jobs, read_jsonl, parse_json, append = gm.chat, gm.run_jobs, gm.read_jsonl, gm.parse_json, gm.append
 
-_ALL = {m["name"]: m for m in gm.GRADERS + gm.OPEN_MODELS}
-MODELS = [_ALL[n] for n in ("glm-5.3", "glm-5.3-flash", "gpt-oss-120b", "gpt-oss-20b", "kimi-k3")]
+_EXTRA = [{"name": "qwen3.8-flash", "id": "qwen/qwen3.8-flash", "family": "Qwen"},
+          {"name": "kimi-k3.1-pro", "id": "moonshotai/kimi-k3.1-pro", "family": "Kimi"}]
+_ALL = {m["name"]: m for m in gm.GRADERS + gm.OPEN_MODELS + _EXTRA}
+# Strength tier, fixed before any of the new models were run: 1 flagship, 2 flash, 3 open-large, 4 open-small.
+# Each tier holds models from 2+ families, so family match can vary at a fixed strength gap.
+TIER = {"glm-5.3": 1, "kimi-k3": 1, "kimi-k3.1-pro": 1, "qwen3.8-max": 1,
+        "glm-5.3-flash": 2, "qwen3.8-flash": 2,
+        "gpt-oss-120b": 3, "gemma-4-31b": 3,
+        "gpt-oss-20b": 4, "gemma-4-26b-a4b": 4}
+MODELS = [_ALL[n] for n in ("glm-5.3", "glm-5.3-flash", "gpt-oss-120b", "gpt-oss-20b", "kimi-k3",
+                            "qwen3.8-max", "qwen3.8-flash", "gemma-4-31b", "gemma-4-26b-a4b", "kimi-k3.1-pro")]
 VERDICTS = ("YTA", "NTA")
 
 

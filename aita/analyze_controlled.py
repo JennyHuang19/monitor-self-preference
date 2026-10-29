@@ -27,7 +27,7 @@ def cells(frame):
     for att in MODELS:
         for g in read_jsonl(run_dir(att["name"]) / FRAMES[frame]):
             b = base.get((g["pid"], g["grader"]))
-            if b is None or b == g["target"]:
+            if b is None or b == g["target"] or g["verdict"] is None:  # unparsed grades are dropped
                 continue
             by_pid[g["pid"]].append((g["attacker"], g["grader"], g["verdict"] == g["target"]))
     return by_pid

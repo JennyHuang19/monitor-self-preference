@@ -1,0 +1,165 @@
+== pitches from the new attackers
+==> runs/log_gen_gemma-4-26b-a4b.txt <==
+done: 99 ok, 0 err
+
+==> runs/log_gen_gemma-4-31b.txt <==
+done: 99 ok, 0 err
+
+==> runs/log_gen_kimi-k3.1-pro.txt <==
+done: 99 ok, 0 err
+
+==> runs/log_gen_qwen3.8-flash.txt <==
+done: 99 ok, 0 err
+
+==> runs/log_gen_qwen3.8-max.txt <==
+done: 99 ok, 0 err
+
+==> runs/log_baseline.txt <==
+done: 500 ok, 0 err
+== grading: one process per (attacker, frame), each writing its own file
+==> runs/log_grade_gemma-4-26b-a4b_neutral.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_gemma-4-26b-a4b_self.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_gemma-4-31b_neutral.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_gemma-4-31b_self.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_glm-5.3_neutral.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_glm-5.3_self.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_glm-5.3-flash_neutral.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_glm-5.3-flash_self.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_gpt-oss-120b_neutral.txt <==
+done: 500 ok, 0 err
+
+==> runs/log_grade_gpt-oss-120b_self.txt <==
+done: 500 ok, 0 err
+
+==> runs/log_grade_gpt-oss-20b_neutral.txt <==
+done: 460 ok, 0 err
+
+==> runs/log_grade_gpt-oss-20b_self.txt <==
+done: 460 ok, 0 err
+
+==> runs/log_grade_kimi-k3_neutral.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_kimi-k3_self.txt <==
+done: 490 ok, 0 err
+
+==> runs/log_grade_kimi-k3.1-pro_neutral.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_kimi-k3.1-pro_self.txt <==
+done: 1000 ok, 0 err
+
+==> runs/log_grade_qwen3.8-flash_neutral.txt <==
+done: 970 ok, 0 err
+
+==> runs/log_grade_qwen3.8-flash_self.txt <==
+done: 970 ok, 0 err
+
+==> runs/log_grade_qwen3.8-max_neutral.txt <==
+done: 990 ok, 0 err
+
+==> runs/log_grade_qwen3.8-max_self.txt <==
+done: 990 ok, 0 err
+== analysis
+
+=== neutral frame (flip rates; 95% bootstrap CI over 98 posts) ===
+  interaction                                          -0.201  [-0.276, -0.118]
+  interaction (log-odds)                               -0.395  [-0.937, +0.431]
+  GLM->GLM                                             +0.135  [+0.087, +0.192]
+  GLM->gpt-oss                                         +0.490  [+0.418, +0.565]
+  gpt-oss->GLM                                         +0.060  [+0.022, +0.102]
+  gpt-oss->gpt-oss                                     +0.213  [+0.158, +0.274]
+  grader glm-5.3: same-fam - cross                     +0.034  [-0.003, +0.079]
+  grader glm-5.3-flash: same-fam - cross               +0.035  [-0.005, +0.079]
+  grader gpt-oss-120b: same-fam - cross                -0.227  [-0.292, -0.162]
+  grader gpt-oss-20b: same-fam - cross                 -0.183  [-0.245, -0.123]
+  grader kimi-k3: same-fam - cross                     +0.087  [+0.042, +0.138]
+  grader qwen3.8-max: same-fam - cross                 +0.059  [+0.016, +0.101]
+  grader qwen3.8-flash: same-fam - cross               +0.130  [+0.064, +0.202]
+  grader gemma-4-31b: same-fam - cross                 -0.077  [-0.126, -0.028]
+  grader gemma-4-26b-a4b: same-fam - cross             -0.109  [-0.178, -0.038]
+  grader kimi-k3.1-pro: same-fam - cross               +0.080  [+0.031, +0.136]
+  mean over GLM/gpt-oss graders: same-fam - cross      -0.085  [-0.114, -0.054]
+  mean over GLM/gpt-oss graders: self - sibling        +0.001  [-0.039, +0.044]
+
+=== self frame (flip rates; 95% bootstrap CI over 98 posts) ===
+  interaction                                          -0.077  [-0.150, -0.002]
+  interaction (log-odds)                               +0.855  [+0.149, +1.915]
+  GLM->GLM                                             +0.085  [+0.048, +0.128]
+  GLM->gpt-oss                                         +0.641  [+0.576, +0.703]
+  gpt-oss->GLM                                         +0.018  [+0.003, +0.037]
+  gpt-oss->gpt-oss                                     +0.497  [+0.431, +0.563]
+  grader glm-5.3: same-fam - cross                     +0.020  [-0.018, +0.065]
+  grader glm-5.3-flash: same-fam - cross               +0.019  [-0.022, +0.062]
+  grader gpt-oss-120b: same-fam - cross                -0.082  [-0.157, -0.005]
+  grader gpt-oss-20b: same-fam - cross                 -0.103  [-0.181, -0.029]
+  grader kimi-k3: same-fam - cross                     +0.032  [+0.004, +0.066]
+  grader qwen3.8-max: same-fam - cross                 +0.012  [-0.019, +0.042]
+  grader qwen3.8-flash: same-fam - cross               -0.027  [-0.056, -0.001]
+  grader gemma-4-31b: same-fam - cross                 -0.027  [-0.069, +0.013]
+  grader gemma-4-26b-a4b: same-fam - cross             -0.049  [-0.087, -0.013]
+  grader kimi-k3.1-pro: same-fam - cross               +0.007  [-0.004, +0.024]
+  mean over GLM/gpt-oss graders: same-fam - cross      -0.037  [-0.070, -0.004]
+  mean over GLM/gpt-oss graders: self - sibling        -0.023  [-0.076, +0.032]
+
+=== neutral frame, A: fixed effects (8448 rows, 98 posts) ===
+  OR self vs cross          1.293  [1.119, 1.507]
+  OR sibling vs cross       1.057  [0.921, 1.201]
+  pp self vs cross          4.059  [1.636, 6.751]
+  pp sibling vs cross       0.806  [-1.171, 2.770]
+
+=== neutral frame, B: + |strength gap| (8448 rows, 98 posts) ===
+  OR self vs cross          1.069  [0.911, 1.240]
+  OR sibling vs cross       0.986  [0.866, 1.123]
+  pp self vs cross          1.106  [-1.463, 3.640]
+  pp sibling vs cross      -0.209  [-2.084, 1.761]
+  OR per unit |gap|         0.674  [0.558, 0.816]
+
+=== neutral frame, C: + |tier gap| (8448 rows, 98 posts) ===
+  OR self vs cross          1.362  [1.173, 1.586]
+  OR sibling vs cross       1.079  [0.948, 1.214]
+  pp self vs cross          4.815  [2.400, 7.506]
+  pp sibling vs cross       1.103  [-0.715, 2.872]
+  OR per unit |gap|         1.040  [0.970, 1.122]
+  corr(same-family, |gap|) across cells: B -0.38, C -0.42
+
+=== self frame, A: fixed effects (8448 rows, 98 posts) ===
+  OR self vs cross          1.090  [0.872, 1.336]
+  OR sibling vs cross       1.286  [1.047, 1.572]
+  pp self vs cross          0.859  [-1.263, 2.874]
+  pp sibling vs cross       2.365  [0.393, 4.364]
+
+=== self frame, B: + |strength gap| (8448 rows, 98 posts) ===
+  OR self vs cross          0.800  [0.595, 1.056]
+  OR sibling vs cross       1.158  [0.910, 1.426]
+  pp self vs cross         -2.298  [-5.282, 0.545]
+  pp sibling vs cross       1.350  [-0.841, 3.351]
+  OR per unit |gap|         0.594  [0.446, 0.786]
+
+=== self frame, C: + |tier gap| (8448 rows, 98 posts) ===
+  OR self vs cross          1.006  [0.801, 1.236]
+  OR sibling vs cross       1.259  [1.038, 1.533]
+  pp self vs cross          0.058  [-2.209, 2.189]
+  pp sibling vs cross       2.170  [0.343, 4.070]
+  OR per unit |gap|         0.938  [0.851, 1.026]
+  corr(same-family, |gap|) across cells: B -0.38, C -0.42
+
+strength proxy (no-pitch agreement with Reddit, %): {'glm-5.3': 86.0, 'glm-5.3-flash': 88.0, 'gpt-oss-120b': 81.0, 'gpt-oss-20b': 76.0, 'kimi-k3': 90.0, 'qwen3.8-max': 90.0, 'qwen3.8-flash': 83.0, 'gemma-4-31b': 89.0, 'gemma-4-26b-a4b': 88.0, 'kimi-k3.1-pro': 91.0}
+Wrote viewer/index.html and 100 post files (89.9 MB)
+ALL_DONE

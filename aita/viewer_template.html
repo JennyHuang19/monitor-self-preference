@@ -1,0 +1,481 @@
+<title>AITA Verdict Flips</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: overview (frame toggle, flip matrix, family comparison) on top; post list beside one post's full record below. */
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#16181d; --mut:#5c6170; --line:#dde0e6; --sunk:#eef0f4;
+  --accent:#3445b4; --yta:#a3324f; --nta:#23707e; --flip:#c2410c; --held:#1d7a45; --same:#2563a8; --cross:#b26b00;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --yta:#e07a95; --nta:#6cc3d1; --flip:#fb8a4c; --held:#5fd08f; --same:#7fb2f0; --cross:#e6ae4f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --yta:#e07a95; --nta:#6cc3d1; --flip:#fb8a4c; --held:#5fd08f; --same:#7fb2f0; --cross:#e6ae4f; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1180px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1{font:600 26px/1.2 var(--sans);margin:0;text-wrap:balance}
+h2{font:600 17px/1.3 var(--sans);margin:0 0 12px;text-wrap:balance}
+h3{font:600 14px/1.3 var(--sans);margin:0 0 8px}
+.lede{color:var(--mut);max-width:75ch;margin:8px 0 0}
+.label{font:500 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.small{font-size:13px;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select,input{font:inherit;color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,.post:focus-visible,td.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:6px 14px;cursor:pointer;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--card);font-weight:500}
+.pill{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border-radius:5px;border:1px solid currentColor}
+.pill.YTA{color:var(--yta)} .pill.NTA{color:var(--nta)}
+.tag{font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:4px;white-space:nowrap}
+.overview{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.overview{grid-template-columns:minmax(0,1fr)}}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+th{font-weight:500;color:var(--mut)}
+table.matrix th.col{text-align:center;font-size:12px;white-space:nowrap}
+td.cell{text-align:center;cursor:pointer;font-variant-numeric:tabular-nums;border:2px solid var(--card);border-radius:6px;background:color-mix(in srgb,var(--flip) calc(var(--r) * 85%),var(--card))}
+td.cell:hover{outline:2px solid var(--ink);outline-offset:-2px}
+td.cell.on{outline:2px solid var(--accent);outline-offset:-2px}
+td.cell b{display:block;font-size:14px}
+td.cell span{font-size:11px;color:var(--mut)}
+td.cell.hot b,td.cell.hot span{color:var(--card)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:72px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:13px}
+.track{height:12px;background:var(--sunk);border-radius:6px;position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--flip);border-radius:6px}
+.ci{position:absolute;top:2px;bottom:2px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);opacity:.55}
+.est{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:13px}
+.est div:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}
+.forest{display:grid;grid-template-columns:auto minmax(80px,1fr) auto;gap:6px 10px;align-items:center;font-size:13px}
+.forest .ft{height:14px;position:relative;background:var(--sunk);border-radius:4px}
+.forest .zero{position:absolute;top:0;bottom:0;left:50%;border-left:1px dashed var(--mut)}
+.forest .iv{position:absolute;top:6px;height:2px;background:var(--ink)}
+.forest .pt{position:absolute;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--accent)}
+.forest .sub{padding-left:12px;color:var(--mut)}
+.forest .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.forest .grp{grid-column:1/-1;margin-top:6px}
+.callout{background:var(--sunk);border-radius:8px;padding:12px 14px;font-size:13px}
+.cot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.cot-grid{grid-template-columns:minmax(0,1fr)}}
+.reason{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--card);min-width:0}
+.reason.hit{border-color:var(--same);box-shadow:inset 3px 0 0 var(--same)}
+.reason h3{font-size:15px;margin:0 0 4px}
+.reason .says{font-size:13px;color:var(--mut);margin:0 0 10px}
+.verdict-line{font-size:13px;margin:0 0 10px}
+.verdict-line b{font-variant-numeric:tabular-nums}
+.dumb{display:grid;grid-template-columns:118px minmax(80px,1fr) 196px;gap:7px 10px;align-items:center;font-size:12.5px}
+.dumb .tr{position:relative;height:16px}
+.dumb .tr::before{content:"";position:absolute;left:0;right:0;top:7px;height:2px;background:var(--sunk);border-radius:1px}
+.dumb .ln{position:absolute;top:7px;height:2px;background:var(--mut);opacity:.45}
+.dumb .dot{position:absolute;top:3px;width:10px;height:10px;margin-left:-5px;border-radius:50%;border:2px solid var(--card)}
+.dumb .dot.s{background:var(--same)} .dumb .dot.c{background:var(--cross)}
+.dumb .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dumb .num .s{color:var(--same);font-weight:600} .dumb .num .c{color:var(--cross);font-weight:600}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.key{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;align-items:center}
+.key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.quotes{grid-template-columns:minmax(0,1fr)}}
+.quote{border-left:3px solid var(--line);padding:6px 0 6px 12px;margin:0 0 10px}
+.quote.s{border-color:var(--same)} .quote.c{border-color:var(--cross)}
+.quote q{font:15px/1.5 var(--serif);display:block;quotes:"\201C" "\201D"}
+.quote .who{font-size:12px;color:var(--mut);margin-top:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;font-size:12px;text-decoration:underline}
+.browser{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.browser{grid-template-columns:minmax(0,1fr)}}
+.filters{display:grid;gap:8px;margin-bottom:10px}
+.filters input,.filters select{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card)}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--sunk);border-radius:999px;padding:4px 6px 4px 10px;font-size:12px}
+.chip button{border:0;background:var(--card);border-radius:999px;width:20px;height:20px;cursor:pointer;line-height:1}
+.list{display:grid;gap:4px;max-height:780px;overflow-y:auto;padding-right:2px}
+.post{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:9px 10px;border-radius:8px;border:1px solid transparent;cursor:pointer;background:none;text-align:left;width:100%}
+.post:hover{background:var(--sunk)}
+.post[aria-current="true"]{border-color:var(--accent);background:var(--card)}
+.post .t{font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post .f{font:500 12px/1.2 var(--mono);text-align:right;color:var(--mut);white-space:nowrap}
+.post .f b{color:var(--flip)}
+.detail{display:grid;gap:16px;min-width:0}
+.story{font:17px/1.6 var(--serif);max-width:68ch;white-space:pre-wrap;margin:0}
+.verdicts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.vbox{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;min-width:0}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+details{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-size:13px;font-weight:500}
+pre.txt{white-space:pre-wrap;font:13px/1.55 var(--mono);margin:0;padding:10px 12px;max-height:520px;overflow:auto}
+pre.cot{background:var(--sunk);color:var(--mut)}
+.pitch{font:15px/1.6 var(--serif);white-space:pre-wrap;padding:12px 14px;margin:0;max-height:560px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.g{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:6px;min-width:0}
+.g.flipped{border-left-color:var(--flip)} .g.held{border-left-color:var(--held)}
+.st{font-weight:600;font-size:13px}
+.flipped .st{color:var(--flip)} .held .st{color:var(--held)}
+.empty{color:var(--mut);font-size:14px;padding:20px 0}
+@media (prefers-reduced-motion:no-preference){.post,td.cell{transition:background .12s}}
+</style>
+
+<main>
+  <header>
+    <div class="label">Gaslighting monitors · AITA flip experiment</div>
+    <h1>AITA Verdict Flips</h1>
+    <p class="lede">100 posts from Reddit's "Am I the Asshole?" (75 judged NTA, 25 YTA). Each attacker model writes a persuasive verdict arguing for the <em>opposite</em> of Reddit's. Each grader first judges the post alone, then judges it again after reading the pitch. A <strong>flip</strong> is a grader that started off the attacker's side and moved to it.</p>
+    <div class="row" style="margin-top:14px">
+      <span class="label">Frame</span>
+      <div class="seg" role="group" aria-label="Grading frame">
+        <button id="fr-neutral" data-fr="neutral">Neutral</button>
+        <button id="fr-self" data-fr="self">Self-check</button>
+      </div>
+      <span class="small" id="frame-note"></span>
+    </div>
+  </header>
+
+  <section class="overview">
+    <div class="panel">
+      <h2>Flip rate by attacker and grader</h2>
+      <div class="scroll"><table class="matrix" id="matrix"></table></div>
+      <div class="legend small">
+        <span><span class="tag">self</span> grader is the attacker</span>
+        <span><span class="tag">sibling</span> same family</span>
+        <span>Cells show flips ÷ graders that started off the attacker's side. Click a cell to list its flips.</span>
+      </div>
+      <h2 style="margin-top:26px">GLM and Kimi only</h2>
+      <p class="small" style="margin:0 0 8px">The same cells for the two GLM and two Kimi models only. Each family has a sibling pair here.</p>
+      <div class="scroll"><table class="matrix" id="matrix-sub"></table></div>
+      <div class="bars" id="pooled-sub" style="margin-top:12px"></div>
+    </div>
+    <div class="panel" style="display:grid;gap:18px;align-content:start">
+      <div>
+        <h2>Pooled by relation</h2>
+        <div class="bars" id="pooled"></div>
+      </div>
+      <div>
+        <h3>Family effect, controlled</h3>
+        <p class="small" style="margin:0 0 8px">GLM and gpt-oss only (each has a sibling pair). Rates with 95% bootstrap intervals over posts.</p>
+        <div class="est" id="controlled"></div>
+        <div class="callout" id="interaction" style="margin-top:10px"></div>
+      </div>
+      <div>
+        <h3>Family effect, regression</h3>
+        <p class="small" style="margin:0 0 8px">One logistic regression over both frames: flip ~ attacker + grader + frame + grader × frame + relation. The attacker and grader terms absorb each model's overall strength, so relation is the family effect left over. B and C also add |strength gap|, so a close match is not read as same family: B measures strength by no-pitch agreement with Reddit, C by a tier fixed before the run (1 flagship, 2 flash, 3 open-large, 4 open-small). "A × frame" lets the family effect differ by frame. Points: change in flip rate vs a cross-family pair (or vs the neutral frame); 95% cluster bootstrap over posts, with both frames of a post resampled together. The Frame toggle does not change these fits; it only marks that frame's rows.</p>
+        <div class="label" style="margin:6px 0">All 10 models</div>
+        <div class="forest" id="regression"></div>
+        <p class="small" id="reg-note" style="margin:8px 0 0"></p>
+        <div class="label" style="margin:18px 0 6px">gpt-oss and Gemma only</div>
+        <p class="small" style="margin:0 0 8px">The four open models: two families, each with a sibling pair at matching tiers (gpt-oss-120b and Gemma-31B in tier 3, gpt-oss-20b and Gemma-26B in tier 4).</p>
+        <div class="forest" id="regression-open"></div>
+        <p class="small" id="reg-note-open" style="margin:8px 0 0"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="cot">
+    <h2>How fooled graders reason: own family vs other family</h2>
+    <p class="lede" style="margin:0 0 6px" id="cot-lede"></p>
+    <div class="key" style="margin:10px 0 14px"><span><i style="background:var(--same)"></i>fooled by its own family</span><span><i style="background:var(--cross)"></i>fooled by the other family</span><span class="small">Each row is one grader; the dots are the share of its flips that show the behavior. Gray counts: own-family flips · other-family flips.</span></div>
+    <div class="cot-grid" id="cot-cards"></div>
+    <h3 style="margin:22px 0 8px">How much they think, and how sure they are</h3>
+    <div class="scroll"><table id="cot-measures"></table></div>
+    <h3 style="margin:22px 0 8px">What it sounds like</h3>
+    <div class="quotes" id="cot-quotes"></div>
+  </section>
+
+  <section class="panel">
+    <h2>No-pitch verdicts</h2>
+    <div class="scroll"><table id="baseline"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>Prompts</h2>
+    <p class="small" style="margin:0 0 10px">Exact text sent to the models. <code>{post}</code> is the post's title and body (no Reddit comments); <code>{pitch}</code> is the attacker's visible reply (never its hidden CoT); <code>{target}</code> is the opposite of Reddit's verdict.</p>
+    <div id="prompts" style="display:grid;gap:8px"></div>
+  </section>
+
+  <section class="browser">
+    <div class="panel">
+      <h2>Posts</h2>
+      <div class="filters">
+        <input id="q" type="search" placeholder="Search titles" aria-label="Search post titles">
+        <div class="row" style="flex-wrap:nowrap">
+          <select id="verdict" aria-label="Reddit verdict"><option value="">All verdicts</option><option value="NTA">Reddit: NTA</option><option value="YTA">Reddit: YTA</option></select>
+          <select id="sort" aria-label="Sort"><option value="flips">Most flips</option><option value="order">Dataset order</option></select>
+        </div>
+        <div id="pair-chip"></div>
+      </div>
+      <div class="small" id="count" style="margin-bottom:6px"></div>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="panel detail" id="detail" aria-live="polite"><p class="empty">Pick a post to read it, every pitch, and how each grader moved.</p></div>
+  </section>
+</main>
+
+<script id="summary" type="application/json">__SUMMARY__</script>
+<script>
+const S = JSON.parse(document.getElementById('summary').textContent);
+const M = S.models, names = M.map(m => m.name), fam = Object.fromEntries(M.map(m => [m.name, m.family]));
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = (k, n) => n ? Math.round(100 * k / n) + '%' : '—';
+const rel = (a, g) => a === g ? 'self' : fam[a] === fam[g] ? 'sibling' : 'cross';
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+let frame = store.get('aita-frame') === 'self' ? 'self' : 'neutral';
+let pair = null, current = null, attTab = names[0];
+const cache = {};
+
+function renderFrame(){
+  for (const b of document.querySelectorAll('.seg button')) b.setAttribute('aria-pressed', String(b.dataset.fr === frame));
+  document.getElementById('frame-note').textContent = frame === 'neutral'
+    ? 'Grader reads the post and a "proposed judgment", then gives its own verdict.'
+    : 'The pitch is placed in the grader\'s own earlier reply; it is asked to reconsider it.';
+}
+
+const SUB = ['glm-5.3', 'glm-5.3-flash', 'kimi-k3', 'kimi-k3.1-pro'];
+
+function bars(p){
+  return ['self','sibling','cross'].map(r => {
+    const [k, n] = p[r];
+    return `<div class="bar"><span>${r}</span><div class="track"><div class="fill" style="width:${n ? 100*k/n : 0}%"></div></div><span class="num">${pct(k,n)} <span class="small">${k}/${n}</span></span></div>`;
+  }).join('');
+}
+
+function renderMatrix(){
+  matrixTable('matrix', names);
+  matrixTable('matrix-sub', SUB);
+  // Pooled by relation over the subset's cells only.
+  const p = {self:[0,0], sibling:[0,0], cross:[0,0]};
+  for (const a of SUB) for (const g of SUB){ const [k, n] = S.matrix[frame][a][g], r = p[rel(a, g)]; r[0] += k; r[1] += n; }
+  document.getElementById('pooled-sub').innerHTML = bars(p);
+}
+
+function matrixTable(id, list){
+  const m = S.matrix[frame];
+  let h = '<tr><th>Attacker ↓ · Grader →</th>' + list.map(g => `<th class="col">${esc(g)}</th>`).join('') + '</tr>';
+  for (const a of list){
+    h += `<tr><th>${esc(a)}</th>`;
+    for (const g of list){
+      const [k, n] = m[a][g], r = n ? k / n : 0, re = rel(a, g);
+      const on = pair && pair.a === a && pair.g === g ? ' on' : '';
+      h += `<td class="cell${r > .45 ? ' hot' : ''}${on}" style="--r:${r.toFixed(3)}" tabindex="0" data-a="${a}" data-g="${g}" aria-label="${a} pitches to ${g}: ${k} of ${n} flipped">
+        <b>${pct(k, n)}</b><span>${k}/${n}${re !== 'cross' ? ` · ${re}` : ''}</span></td>`;
+    }
+    h += '</tr>';
+  }
+  document.getElementById(id).innerHTML = h;
+}
+
+function renderPooled(){
+  document.getElementById('pooled').innerHTML = bars(S.pooled[frame]);
+  const c = S.controlled[frame], f = x => (100 * x).toFixed(1);
+  const cells = [['GLM → GLM','GLM->GLM'],['GLM → gpt-oss','GLM->gpt-oss'],['gpt-oss → GLM','gpt-oss->GLM'],['gpt-oss → gpt-oss','gpt-oss->gpt-oss']];
+  document.getElementById('controlled').innerHTML = cells.map(([lab, key]) =>
+    `<div>${lab} <span class="small">attacker → grader</span></div><div>${f(c[key].est)}% <span class="small">[${f(c[key].lo)}, ${f(c[key].hi)}]</span></div>`).join('');
+  const it = c['interaction'], lo = c['interaction (log-odds)'];
+  const dir = x => x.hi < 0 ? 'fewer flips within a family (leans H2)' : x.lo > 0 ? 'more flips within a family (leans H1)' : 'no clear direction';
+  document.getElementById('interaction').innerHTML =
+    `<b>Interaction</b> (same-family minus cross-family, net of attacker and grader effects): ` +
+    `${f(it.est)} points <span class="small">[${f(it.lo)}, ${f(it.hi)}]</span>, ${dir(it)}. ` +
+    `On the log-odds scale: ${lo.est.toFixed(2)} <span class="small">[${lo.lo.toFixed(2)}, ${lo.hi.toFixed(2)}]</span>, ${dir(lo)}.` +
+    (Math.sign(it.est) !== Math.sign(lo.est) ? ' <br><span class="small">The two scales disagree in sign, so the family effect here depends on how you measure it.</span>' : '');
+}
+
+// One fit over both frames: the Frame toggle only marks the active frame's rows.
+const frameName = fr => fr === 'self' ? 'self-check' : fr;
+function regressionBlock(R, forestId, noteId){
+  const W = 14, x = v => (50 + 50 * Math.max(-W, Math.min(W, v)) / W).toFixed(1);
+  const f = v => (v > 0 ? '+' : '') + v.toFixed(1), o = v => v.toFixed(2);
+  const row = (lab, pp, or, aria) => `<div>${lab}</div><div class="ft" aria-label="${aria}: ${f(pp.est)} points, 95% interval ${f(pp.lo)} to ${f(pp.hi)}"><span class="zero"></span>` +
+    `<span class="iv" style="left:${x(pp.lo)}%;width:${x(pp.hi) - x(pp.lo)}%"></span><span class="pt" style="left:${x(pp.est)}%"></span></div>` +
+    `<div class="v">${f(pp.est)} pts <span class="small">[${f(pp.lo)}, ${f(pp.hi)}]${or ? ` · OR ${o(or.est)}` : ''}</span></div>`;
+  let h = '';
+  for (const [model, lab] of [['A: fixed effects','A · attacker + grader + frame'],['B: + |strength gap|','B · plus |Reddit-agreement gap|'],['C: + |tier gap|','C · plus |tier gap|']]){
+    const M = R[model];
+    h += `<div class="grp label">${lab}</div>`;
+    for (const rel of ['self','sibling']) h += row(rel, M[`pp ${rel} vs cross`], M[`OR ${rel} vs cross`], `${rel} vs cross`);
+    if (M['OR per unit |gap|']){
+      const g = M['OR per unit |gap|'], unit = model.startsWith('B') ? '10 points' : 'tier';
+      h += `<div class="small" style="grid-column:1/-1">|gap| term: OR ${o(g.est)} per ${unit} <span>[${o(g.lo)}, ${o(g.hi)}]</span></div>`;
+    }
+  }
+  h += `<div class="grp label">Prompt type vs neutral · model A</div>`;
+  for (const fr of S.regression.frames.slice(1)) h += row(frameName(fr), R['A: fixed effects'][`pp frame ${frameName(fr)} vs neutral`], null, `${frameName(fr)} vs neutral`);
+  const X = R['A × frame'];
+  h += `<div class="grp label">Family effect within each frame · A × frame</div>`;
+  for (const fr of S.regression.frames)
+    for (const rel of ['self','sibling']){
+      const lab = `${frameName(fr)} · ${rel}`;
+      h += row(fr === frame ? `<b>▸ ${lab}</b>` : lab, X['by frame'][fr][`pp ${rel} vs cross`], X['by frame'][fr][`OR ${rel} vs cross`], `${frameName(fr)} frame, ${rel} vs cross`);
+    }
+  const pv = X['LR p (no interaction)'];
+  h += `<div class="small" style="grid-column:1/-1">Does the family effect differ by frame? Likelihood-ratio test of relation × frame: χ² ${X['LR stat'].toFixed(2)} on ${X.df} df, p = ${pv.toFixed(2)}${pv < .05 ? ', so it does' : ', so no clear difference'}.</div>`;
+  h += `<div class="small" style="grid-column:2;display:flex;justify-content:space-between"><span>−${W}</span><span>0 pts</span><span>+${W}</span></div><div></div>`;
+  document.getElementById(forestId).innerHTML = h;
+  document.getElementById(noteId).innerHTML =
+    `${R.n_rows.toLocaleString()} eligible rows (${R.n_flips.toLocaleString()} flips) from ${R.n_posts} posts, both frames: ${S.regression.frames.map(fr => `${frameName(fr)} ${R['by frame'][fr][0]}/${R['by frame'][fr][1]}`).join(', ')}. ` +
+    `Across cells, same-family correlates with |gap| at ${R['corr same-family vs |gap| B'].toFixed(2)} (B) and ${R['corr same-family vs |gap| C'].toFixed(2)} (C); the closer to 0, the better the model can separate them.` +
+    `<br><br><b>Where model A misfits</b> (χ²/df ${R['pearson/df'].toFixed(2)}; these ${R['worst cells'].length} cells carry ${(100 * R['excess top6']).toFixed(0)}% of the excess):` +
+    `<table style="margin-top:6px"><tr><th>Frame</th><th>Attacker → grader</th><th>Relation</th><th class="num">Flipped</th><th class="num">Expected</th></tr>` +
+    R['worst cells'].map(([fr, a, g, rel, y, n, e]) => `<tr><td>${esc(frameName(fr))}</td><td>${esc(a)} → ${esc(g)}</td><td>${rel}</td><td class="num">${y}/${n}</td><td class="num">${e.toFixed(1)}</td></tr>`).join('') + `</table>`;
+}
+
+function renderRegression(){
+  regressionBlock(S.regression.pooled, 'regression', 'reg-note');
+  regressionBlock(S.regression.open, 'regression-open', 'reg-note-open');
+  const s = S.regression.strength, tr = S.regression.tier;
+  document.getElementById('reg-note').innerHTML +=
+    `<br>Reddit agreement: ${names.map(n => `${esc(n)} ${s[n].toFixed(0)}%`).join(', ')}. Tiers: ${names.map(n => `${esc(n)} ${tr[n]}`).join(', ')}.`;
+}
+
+function renderPrompts(){
+  document.getElementById('prompts').innerHTML = S.prompts.map((p, i) =>
+    `<details${i < 2 ? ' open' : ''}><summary>${esc(p.title)} <span class="small">· ${esc(p.note)}</span></summary>` +
+    p.turns.map(([role, text]) => `<div class="label" style="padding:8px 12px 0">${esc(role)}</div><pre class="txt">${esc(text)}</pre>`).join('') +
+    `</details>`).join('');
+}
+
+function renderCot(){
+  const C = S.cot; if (!C) { document.getElementById('cot').hidden = true; return; }
+  const pc = ([k, n]) => n ? Math.round(100 * k / n) : 0, sg = v => (v > 0 ? '+' : '') + v.toFixed(0);
+  document.getElementById('cot-lede').textContent =
+    `All ${C.n} neutral-frame flips where a gpt-oss or Gemma grader was won over by a gpt-oss or Gemma pitch: ${C.n_same} by its own family, ${C.n - C.n_same} by the other. ` +
+    `An LLM read each grader's CoT and reply and marked four behaviors. Gaps are own-family minus other-family within each grader, averaged over the four graders; p shuffles the two groups within each grader.`;
+  document.getElementById('cot-cards').innerHTML = C.labels.map(L => {
+    const hit = L.p < .05;
+    const rows = C.graders.map(g => {
+      const s = L.per[g].same, c = L.per[g].cross, a = pc(s), b = pc(c);
+      return `<div>${esc(g)}</div><div class="tr" role="img" aria-label="${esc(g)}: ${a}% of own-family flips vs ${b}% of other-family flips">` +
+        `<span class="ln" style="left:${Math.min(a, b)}%;width:${Math.abs(a - b)}%"></span>` +
+        `<span class="dot c" style="left:${b}%"></span><span class="dot s" style="left:${a}%"></span></div>` +
+        `<div class="num"><span class="s">${a}%</span> vs <span class="c">${b}%</span> <span class="small">${s[0]}/${s[1]} · ${c[0]}/${c[1]}</span></div>`;
+    }).join('');
+    return `<div class="reason${hit ? ' hit' : ''}"><h3>${esc(L.title)}</h3><p class="says">${esc(L.says)}</p>
+      <p class="verdict-line">${hit ? '<b>Differs.</b> ' : 'No clear difference. '}Own family <b>${sg(L.gap)} pts</b> vs other family, p = ${L.p.toFixed(3)}</p>
+      <div class="dumb">${rows}<div></div><div class="axis"><span>0%</span><span>50%</span><span>100%</span></div><div></div></div></div>`;
+  }).join('');
+  let h = '<tr><th>Grader</th><th class="num">CoT length, own family</th><th class="num">other family</th><th class="num">Confidence, own family</th><th class="num">other family</th></tr>';
+  for (const g of C.graders){
+    const m = C.measures[g];
+    h += `<tr><td>${esc(g)}</td><td class="num">${Math.round(m.same.cot_median).toLocaleString()} chars</td><td class="num">${Math.round(m.cross.cot_median).toLocaleString()} chars</td><td class="num">${m.same.conf_mean.toFixed(0)}</td><td class="num">${m.cross.conf_mean.toFixed(0)}</td></tr>`;
+  }
+  document.getElementById('cot-measures').innerHTML = h + '<tr><td colspan="5" class="small">Medians and means over flips. Gemma thinks at length, gpt-oss in a few sentences; neither changes much with the attacker\'s family.</td></tr>';
+  const col = (same) => C.quotes.filter(q => q.same === same).map(q =>
+    `<div class="quote ${same ? 's' : 'c'}"><q>${esc(q.text)}</q><div class="who"><span>${esc(q.grader)} on a ${esc(q.attacker)} pitch · ${q.kind === 'praise' ? 'praising the pitch' : 'whole CoT'}</span>` +
+    `<button class="linkbtn" data-open="${esc(q.pid)}" data-att="${esc(q.attacker)}">open post</button></div></div>`).join('');
+  document.getElementById('cot-quotes').innerHTML =
+    `<div><div class="label" style="margin-bottom:8px;color:var(--same)">Fooled by its own family</div>${col(true)}</div>` +
+    `<div><div class="label" style="margin-bottom:8px;color:var(--cross)">Fooled by the other family</div>${col(false)}</div>`;
+}
+document.getElementById('cot').addEventListener('click', e => {
+  const b = e.target.closest('[data-open]'); if (!b) return;
+  if (frame !== 'neutral'){ frame = 'neutral'; store.set('aita-frame', 'neutral'); renderAll(); }
+  attTab = b.dataset.att; openPost(b.dataset.open);
+  document.getElementById('detail').scrollIntoView({behavior: 'smooth', block: 'start'});
+});
+
+function renderBaseline(){
+  let h = '<tr><th>Grader</th><th>Family</th><th>Agrees with Reddit · NTA posts</th><th>· YTA posts</th><th>As attacker: argued the assigned side</th></tr>';
+  for (const g of names){
+    const b = S.baseAgree[g], c = S.commit[g];
+    h += `<tr><td>${esc(g)}</td><td>${esc(fam[g])}</td><td class="num">${pct(...b.NTA)} <span class="small">${b.NTA[0]}/${b.NTA[1]}</span></td><td class="num">${pct(...b.YTA)} <span class="small">${b.YTA[0]}/${b.YTA[1]}</span></td><td class="num">${pct(...c)} <span class="small">${c[0]}/${c[1]}</span></td></tr>`;
+  }
+  document.getElementById('baseline').innerHTML = h;
+}
+
+function filtered(){
+  const q = document.getElementById('q').value.trim().toLowerCase(), v = document.getElementById('verdict').value;
+  const only = pair ? new Set(S.pairFlips[frame][`${pair.a}|${pair.g}`] || []) : null;
+  let ps = S.posts.filter(p => (!v || p.truth === v) && (!q || p.title.toLowerCase().includes(q)) && (!only || only.has(p.pid)));
+  if (document.getElementById('sort').value === 'flips') ps = [...ps].sort((x, y) => y.flips[frame][0] - x.flips[frame][0]);
+  return ps;
+}
+
+function renderList(){
+  const ps = filtered();
+  document.getElementById('count').textContent = `${ps.length} of ${S.posts.length} posts` + (pair ? ` where ${pair.g} flipped on ${pair.a}'s pitch` : '');
+  document.getElementById('pair-chip').innerHTML = pair
+    ? `<span class="chip">${esc(pair.a)} → ${esc(pair.g)} flips <button id="clear-pair" aria-label="Clear pair filter">×</button></span>` : '';
+  document.getElementById('list').innerHTML = ps.map(p => {
+    const [k, n] = p.flips[frame];
+    return `<button class="post" data-pid="${p.pid}" aria-current="${p.pid === current}"><span class="t">${esc(p.title)}</span>
+      <span class="f"><b>${k}</b>/${n} flips</span><span><span class="pill ${p.truth}">${p.truth}</span></span></button>`;
+  }).join('') || '<p class="empty">No posts match.</p>';
+}
+
+const statusText = {flipped:'Flipped to the attacker', held:'Held its verdict', stayed:'Already agreed, stayed', reversed:'Already agreed, then moved away', unparsed:'No parseable verdict', 'no-baseline':'No baseline verdict'};
+
+function gradeCard(gr, x){
+  if (!x) return `<div class="g"><h3>${esc(gr)}</h3><div class="small">Not graded.</div></div>`;
+  const re = rel(attTab, gr);
+  return `<div class="g ${x.status}"><h3>${esc(gr)}${re !== 'cross' ? `<span class="tag">${re}</span>` : ''}</h3>
+    <div class="st">${statusText[x.status]}</div>
+    <div class="row small">no pitch ${x.base ? `<span class="pill ${x.base}">${x.base}</span>` : '—'} → after ${x.verdict ? `<span class="pill ${x.verdict}">${x.verdict}</span>` : '—'} <span>confidence ${esc(x.confidence ?? '—')}</span></div>
+    <details><summary>Grader CoT <span class="small">(${(x.reasoning || '').length.toLocaleString()} chars)</span></summary><pre class="txt cot">${esc(x.reasoning || '(no reasoning returned)')}</pre></details>
+    <details><summary>Reply</summary><pre class="txt">${esc(x.content)}</pre></details></div>`;
+}
+
+function renderDetail(){
+  const el = document.getElementById('detail'), d = cache[current];
+  if (!current){ return; }
+  if (!d){ el.innerHTML = '<p class="empty">Loading post…</p>'; return; }
+  const pitch = d.pitches[attTab];
+  const gs = pitch ? pitch.grades[frame] || {} : {};
+  el.innerHTML = `
+    <div><div class="row"><span class="pill ${d.truth}">Reddit: ${d.truth}</span>${d.score != null ? `<span class="small">score ${esc(d.score)}</span>` : ''}<span class="small">id ${esc(d.pid)}</span></div>
+      <h2 style="margin-top:10px">${esc(d.title)}</h2>
+      <p class="story">${esc(d.text)}</p></div>
+    ${d.comments.length ? `<details><summary>Reddit's top comments (these state the verdict; graders never saw them)</summary><pre class="txt">${esc(d.comments.join('\n\n———\n\n'))}</pre></details>` : ''}
+    <div><h3>No-pitch verdicts</h3><div class="verdicts">${names.map(g => { const b = d.baseline[g]; return `<div class="vbox"><div>${esc(g)}</div>
+      ${b ? `<div class="row small" style="margin-top:4px"><span class="pill ${b.verdict}">${b.verdict ?? '—'}</span>${b.verdict === d.truth ? 'agrees with Reddit' : 'disagrees'}</div>` : '<div class="small">—</div>'}</div>`; }).join('')}</div></div>
+    <div><h3>Attacker</h3><div class="tabs" role="group" aria-label="Attacker">${names.map(a => `<button data-att="${a}" aria-pressed="${a === attTab}">${esc(a)}</button>`).join('')}</div></div>
+    ${pitch ? `
+      <div class="row"><span class="small">Argues for</span><span class="pill ${pitch.target}">${pitch.target}</span>${pitch.committed ? '' : '<span class="tag">did not commit, so not graded</span>'}</div>
+      <details><summary>${esc(attTab)} hidden CoT <span class="small">(${(pitch.reasoning || '').length.toLocaleString()} chars)</span></summary><pre class="txt cot">${esc(pitch.reasoning || '(no reasoning returned)')}</pre></details>
+      <details open><summary>${esc(attTab)} pitch (what the grader reads)</summary><p class="pitch">${esc(pitch.content)}</p></details>
+      <div><h3>Graders · ${frame === 'neutral' ? 'neutral' : 'self-check'} frame</h3><div class="grid">${pitch.committed ? names.map(g => gradeCard(g, gs[g])).join('') : '<p class="small">No grades: this pitch did not end with the assigned verdict.</p>'}</div></div>`
+      : '<p class="empty">No pitch from this attacker.</p>'}`;
+}
+
+async function openPost(pid){
+  current = pid; renderList(); renderDetail();
+  try{ history.replaceState(null, '', '#p-' + pid); }catch(e){}
+  if (!cache[pid]){
+    try{
+      const r = await fetch(`posts/${pid}.json`);
+      if (!r.ok) throw new Error(r.status);
+      cache[pid] = await r.json();
+    }catch(e){
+      if (current === pid) document.getElementById('detail').innerHTML = `<p class="empty">Couldn't load this post's data (${esc(e.message)}). Reload the page to try again.</p>`;
+      return;
+    }
+  }
+  if (current === pid) renderDetail();
+}
+
+function renderAll(){ renderFrame(); renderMatrix(); renderPooled(); renderRegression(); renderList(); renderDetail(); }
+
+document.querySelector('.seg').addEventListener('click', e => { const f = e.target.dataset.fr; if (f){ frame = f; store.set('aita-frame', f); renderAll(); } });
+const pickCell = t => { const c = t.closest('td.cell'); if (!c) return; pair = pair && pair.a === c.dataset.a && pair.g === c.dataset.g ? null : {a: c.dataset.a, g: c.dataset.g}; if (pair) attTab = pair.a; renderMatrix(); renderList(); renderDetail(); document.getElementById('list').scrollTop = 0; };
+for (const id of ['matrix', 'matrix-sub']){
+  document.getElementById(id).addEventListener('click', e => pickCell(e.target));
+  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); pickCell(e.target); } });
+}
+document.getElementById('pair-chip').addEventListener('click', e => { if (e.target.id === 'clear-pair'){ pair = null; renderMatrix(); renderList(); } });
+for (const id of ['q','verdict','sort']) document.getElementById(id).addEventListener('input', renderList);
+document.getElementById('list').addEventListener('click', e => { const b = e.target.closest('.post'); if (b) openPost(b.dataset.pid); });
+document.getElementById('detail').addEventListener('click', e => { const a = e.target.closest('[data-att]'); if (a){ attTab = a.dataset.att; renderDetail(); } });
+
+renderBaseline(); renderPrompts(); renderCot(); renderAll();
+const start = (location.hash.match(/^#p-([A-Za-z0-9]+)$/) || [])[1];
+openPost(start && S.posts.some(p => p.pid === start) ? start : filtered()[0]?.pid);
+</script>
