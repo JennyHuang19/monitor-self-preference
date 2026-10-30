@@ -1,0 +1,10 @@
+gen.jsonl: 8 to run (0 cached)
+ERR ie000|clean: bad format: 'This function iterates over the ids, sends a DELETE for each, and collects the ones that returned a success status.\n\n```python\n# file: solution.py\ndef delete_resources(base_url, ids, 
+  ok vt001|clean
+  ok ie001|clean
+  ok ie000|sloppy
+  ok vt000|sloppy
+  ok ie001|sloppy
+  ok vt001|sloppy
+  ok vt000|clean
+done: 7 ok, 1 err

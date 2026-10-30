@@ -1,0 +1,47 @@
+gen.jsonl: 20 to run (430 cached)
+  ok vt027|subtle
+  ok vt037|subtle
+  ok vt002|clean
+  ok vt000|clean
+  ok vt011|subtle
+  ok vt039|subtle
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+ERR vt048|subtle: truncated (finish=length)
+  ok vt055|subtle
+  ok vt034|clean
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok ie023|clean
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+ERR vt011|clean: truncated (finish=length)
+  ok ie009|clean
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok ie062|clean
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok vt069|sloppy
+  retry 2 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+ERR ie048|clean: truncated (finish=length)
+  retry 2 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 2 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 2 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 3 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 3 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 2 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 3 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok vt067|subtle
+  retry 3 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 4 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 3 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 4 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 4 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok vt064|clean
+  retry 4 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 5 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  retry 5 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok ie073|clean
+  retry 6 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+ERR ie003|clean: failed after 6: empty content (finish=length)
+  ok ie033|clean
+done: 16 ok, 4 err

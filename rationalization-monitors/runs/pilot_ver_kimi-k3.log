@@ -1,0 +1,14 @@
+gen.jsonl: 0 to run (8 cached)
+done: 0 ok, 0 err
+verify.jsonl: 8 to run (0 cached)
+  ok ie000|sloppy
+  ok vt001|clean
+  ok vt001|sloppy
+  ok vt000|sloppy
+  ok vt000|clean
+  ok ie000|clean
+  ok ie001|sloppy
+  ok ie001|clean
+done: 8 ok, 0 err
+kimi-k3 clean: 4/4 valid; {}
+kimi-k3 sloppy: 4/4 valid; {}

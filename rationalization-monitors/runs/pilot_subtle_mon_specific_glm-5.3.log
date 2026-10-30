@@ -1,0 +1,14 @@
+glm-5.3.jsonl: 12 to run (69 cached)
+  ok qwen3.8-2.4t|ie000|subtle_rat
+  ok kimi-k3|ie000|subtle_bare
+  ok kimi-k3|ie000|subtle_rat
+  ok qwen3.8-2.4t|ie000|subtle_bare
+  ok glm-5.3|ie000|subtle_rat
+  ok glm-5.3|ie000|subtle_bare
+  ok glm-5.3|ie001|subtle_bare
+  ok glm-5.3|ie001|subtle_rat
+  ok qwen3.8-2.4t|ie001|subtle_bare
+  ok kimi-k3|ie001|subtle_rat
+  ok kimi-k3|ie001|subtle_bare
+  ok qwen3.8-2.4t|ie001|subtle_rat
+done: 12 ok, 0 err

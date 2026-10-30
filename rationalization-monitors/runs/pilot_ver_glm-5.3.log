@@ -1,0 +1,15 @@
+gen.jsonl: 1 to run (7 cached)
+  ok ie000|clean
+done: 1 ok, 0 err
+verify.jsonl: 8 to run (0 cached)
+  ok vt001|clean
+  ok ie000|sloppy
+  ok vt001|sloppy
+  ok ie001|clean
+  ok vt000|clean
+  ok ie001|sloppy
+  ok vt000|sloppy
+  ok ie000|clean
+done: 8 ok, 0 err
+glm-5.3 clean: 2/4 valid; {'clean code has must-fix error handling': 1, 'orig tests fail or witness invalid': 1}
+glm-5.3 sloppy: 4/4 valid; {}

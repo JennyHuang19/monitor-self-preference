@@ -1,0 +1,8 @@
+gen.jsonl: 6 to run (444 cached)
+  ok ie028|subtle
+  ok ie019|subtle
+  ok vt024|sloppy
+  ok ie048|subtle
+  ok vt049|subtle
+  ok vt023|sloppy
+done: 6 ok, 0 err

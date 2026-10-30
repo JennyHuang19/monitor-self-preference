@@ -1,0 +1,15 @@
+gen.jsonl: 4 to run (8 cached)
+  ok ie000|subtle
+  ok ie001|subtle
+  ok vt001|subtle
+  ok vt000|subtle
+done: 4 ok, 0 err
+verify.jsonl: 4 to run (8 cached)
+  ok ie000|subtle
+  ok ie001|subtle
+  ok vt001|subtle
+  ok vt000|subtle
+done: 4 ok, 0 err
+qwen3.8-2.4t clean: 3/4 valid; {'missing files': 1}
+qwen3.8-2.4t sloppy: 4/4 valid; {}
+qwen3.8-2.4t subtle: 4/4 valid; {}

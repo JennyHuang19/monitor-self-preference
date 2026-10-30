@@ -1,0 +1,26 @@
+{
+  "neutral": {
+    "grader gpt-6-sol: same-fam - cross": {
+      "est": 0.020833333333333332,
+      "lo": 0.0,
+      "hi": 0.06382978723404255
+    },
+    "grader gemini-4-argon: same-fam - cross": {
+      "est": 0.0,
+      "lo": -0.0625,
+      "hi": 0.0625
+    }
+  },
+  "self": {
+    "grader gpt-6-sol: same-fam - cross": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "grader gemini-4-argon: same-fam - cross": {
+      "est": 0.0,
+      "lo": -0.06122448979591837,
+      "hi": 0.06122448979591837
+    }
+  }
+}
