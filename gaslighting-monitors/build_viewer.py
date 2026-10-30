@@ -1,7 +1,8 @@
 """Bundle questions, attacker answers, grades and baselines for every domain x attacker into a self-contained viewer.
 
-    python build_viewer.py         -> viewer.html (every pool except mix5)
+    python build_viewer.py         -> viewer.html (every pool except mix5/closed2)
     python build_viewer.py mix5    -> viewer_mix5.html (math3/trivia3: too big to share a page with the rest)
+    python build_viewer.py closed2 -> viewer_closed2.html (same protocol, closed models)
 """
 import json
 import re
@@ -11,7 +12,7 @@ from common import DOMAINS, HERE, POOLS, pool_models, read_jsonl, run_dirs
 
 # math3/trivia3 have ~100 items x 5 graders x 3 frames (~14k grades): keep only the fields the page shows, and trim
 # grader text hard (the verdict sits at the end of the reply) so the page stays under 16MB. Pitches keep more text.
-TRIM = {"math3", "trivia3"}
+TRIM = {"math3", "trivia3", "math4"}
 KEEP = {"key", "qid", "sample", "answer_key", "grader", "frame", "verdict", "confidence", "grader_correct_option", "fooled",
         "bug", "answer", "solved", "solved_by", "committed", "final", "content", "reasoning", "parse_error"}
 
@@ -39,8 +40,13 @@ def load(path, domain):
 
 
 data = {"domains": {}}
-MIX5 = sys.argv[1:] == ["mix5"]
-for pool in [p for p in POOLS if (p == "mix5") == MIX5]:
+# Pools big enough to get their own page.
+OWN_PAGE = {"mix5": "GLM-5.3, GLM-5.3-flash, Kimi-K3, gpt-oss-120b, gpt-oss-20b",
+            "closed2": "GPT-6-sol, Gemini-4-Argon",
+            "argon_glm": "Gemini-4-Argon, GLM-5.3, GLM-5.3-flash"}
+ONLY = sys.argv[1] if len(sys.argv) > 1 else None
+assert ONLY is None or ONLY in OWN_PAGE, f"pool must be one of {list(OWN_PAGE)}"
+for pool in [p for p in POOLS if (p == ONLY if ONLY else p not in OWN_PAGE)]:
     for domain in DOMAINS:
         qpath = HERE / f"questions_{domain}.json"
         if not qpath.exists():
@@ -146,13 +152,13 @@ render();
 </script></main>"""
 
 html = TEMPLATE.replace("__DATA__", json.dumps(data).replace("</", "<\\/"))
-if MIX5:
+if ONLY:
     html = re.sub(r'<p class="note">.*?</p>', '<p class="note">math3: 100 free-response math problems (60 omitted-case, 40 other '
-                  'planted errors). trivia3: 100 open-ended trivia questions. Five models (GLM-5.3, GLM-5.3-flash, Kimi-K3, '
-                  'gpt-oss-120b, gpt-oss-20b) each attack and grade every item, in the neutral, self-check and skim (1k '
+                  f'planted errors). trivia3: 100 open-ended trivia questions. {len(POOLS[ONLY])} models ({OWN_PAGE[ONLY]}) '
+                  'each attack and grade every item, in the neutral, self-check and skim (1k '
                   'thinking cap) frames. Text is trimmed to fit: grader replies show only their last 250 characters, and '
                   'grader CoT is omitted.</p>', html, count=1, flags=re.S)
-out = HERE / ("viewer_mix5.html" if MIX5 else "viewer.html")
+out = HERE / (f"viewer_{ONLY}.html" if ONLY else "viewer.html")
 out.write_text(html)
 counts = ", ".join(f"{k}: {len(v['grades'])} grades" for k, v in data["domains"].items())
 print(f"Wrote {out.name} ({counts})")

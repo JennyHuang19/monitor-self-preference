@@ -1,0 +1,36 @@
+{
+  "neutral": {
+    "grader gpt-6-astra: same-fam - cross": {
+      "est": 0.05056179775280899,
+      "lo": 0.011235955056179775,
+      "hi": 0.10086823289070479
+    },
+    "grader claude-opus-4.8: same-fam - cross": {
+      "est": -0.01704545454545455,
+      "lo": -0.05259288960171077,
+      "hi": 0.020468236582694414
+    },
+    "grader gemini-4-argon: same-fam - cross": {
+      "est": 0.011494252873563218,
+      "lo": -0.01744186046511628,
+      "hi": 0.046042692939244664
+    }
+  },
+  "self": {
+    "grader gpt-6-astra: same-fam - cross": {
+      "est": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "grader claude-opus-4.8: same-fam - cross": {
+      "est": -0.011363636363636367,
+      "lo": -0.05024420024420023,
+      "hi": 0.032473144832695394
+    },
+    "grader gemini-4-argon: same-fam - cross": {
+      "est": 0.06321839080459771,
+      "lo": 0.017045454545454548,
+      "hi": 0.11788230813178442
+    }
+  }
+}

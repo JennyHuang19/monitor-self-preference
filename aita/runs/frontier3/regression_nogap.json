@@ -1,0 +1,147 @@
+{
+  "pool": "frontier3",
+  "models": [
+    "gpt-6-astra",
+    "claude-opus-4.8",
+    "gemini-4-argon"
+  ],
+  "strength": {
+    "gpt-6-astra": 91.0,
+    "claude-opus-4.8": 90.0,
+    "gemini-4-argon": 89.0
+  },
+  "tier": {
+    "gpt-6-astra": 1,
+    "claude-opus-4.8": 1,
+    "gemini-4-argon": 1
+  },
+  "B": 2000,
+  "B_ok": 2000,
+  "n_posts": 95,
+  "n_rows": 1584,
+  "n_flips": 52,
+  "by frame": {
+    "neutral": [
+      28,
+      792
+    ],
+    "self": [
+      24,
+      792
+    ]
+  },
+  "formula": "flip ~ attacker + grader + frame + grader \u00d7 frame + relation + relation \u00d7 frame   (|tier gap| dropped: every model is tier 1)   (no sibling pairs: relation is self vs cross)",
+  "corr same-family vs |Reddit-agreement gap|": -0.8528028654224418,
+  "LR relation x frame": {
+    "stat": 0.059099603189281424,
+    "df": 1,
+    "p": 0.8079247555338006
+  },
+  "coef": {
+    "intercept": -3.868485885999453,
+    "attacker claude-opus-4.8": -1.1443019980963307,
+    "grader claude-opus-4.8": 0.9144180623115967,
+    "attacker gemini-4-argon": 0.150639704515294,
+    "grader gemini-4-argon": 0.5192614954477971,
+    "frame self": -7.946606973829148,
+    "grader claude-opus-4.8 x frame self": 7.819039044859588,
+    "grader gemini-4-argon x frame self": 8.131881209350984,
+    "self": 0.6114835590467836,
+    "self x self": 0.1546408699851142
+  },
+  "pearson/df": 1.1752998026233914,
+  "worst cells": [
+    [
+      "neutral",
+      "gpt-6-astra",
+      "claude-opus-4.8",
+      "cross",
+      1,
+      88,
+      4.359925382044836,
+      2.7242594692747315
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "claude-opus-4.8",
+      "cross",
+      8,
+      88,
+      5.0282502758798255,
+      1.8627732791343954
+    ],
+    [
+      "neutral",
+      "gpt-6-astra",
+      "gemini-4-argon",
+      "cross",
+      5,
+      87,
+      2.9510897351882215,
+      1.4724841428896047
+    ],
+    [
+      "neutral",
+      "gpt-6-astra",
+      "gpt-6-astra",
+      "self",
+      5,
+      89,
+      3.299771313403582,
+      0.9097851881263659
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "gemini-4-argon",
+      "self",
+      4,
+      87,
+      6.087668198153917,
+      0.7697975293274351
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "gpt-6-astra",
+      "cross",
+      1,
+      89,
+      2.110224182122356,
+      0.5982932451467416
+    ]
+  ],
+  "estimates": {
+    "neutral|OR self vs cross": {
+      "est": 1.8431638137816226,
+      "lo": 0.942088566334732,
+      "hi": 5.375910509464277
+    },
+    "neutral|pp self vs cross": {
+      "est": 2.2502583261707905,
+      "lo": -0.18741433146817804,
+      "hi": 6.347790879603278
+    },
+    "self|OR self vs cross": {
+      "est": 2.151412125359271,
+      "lo": 0.9823799727888635,
+      "hi": 8.258559959013784
+    },
+    "self|pp self vs cross": {
+      "est": 2.439861246115088,
+      "lo": -0.03957824159576676,
+      "hi": 6.97311214726213
+    },
+    "pp self vs cross": {
+      "est": 2.3450597861429388,
+      "lo": 0.38887315210382795,
+      "hi": 5.958631916395207
+    },
+    "pp frame self-check vs neutral": {
+      "est": -0.5048986776759883,
+      "lo": -1.945358753307218,
+      "hi": 0.8839815107377531
+    }
+  }
+}

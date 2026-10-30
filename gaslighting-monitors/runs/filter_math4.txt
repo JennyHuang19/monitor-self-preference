@@ -1,0 +1,4 @@
+293/293 candidates have 2 baseline samples from every model
+  math3 n= 45  gemini-4-argon 45  glm-5.3 32  glm-5.3-flash 30  all 23
+  new   n=248  gemini-4-argon 247  glm-5.3 139  glm-5.3-flash 114  all 83
+106 pass; kept 100 -> questions_math4.json

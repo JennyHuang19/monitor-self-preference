@@ -1,12 +1,15 @@
-"""math3 / trivia3 on the mix5 pool: fooled rates by grader, attacker, relation, frame and item type, next to the
-no-pitch baseline. "knew" = the grader solved the item with no pitch. Writes runs/summary_mix5.json."""
+"""math3 / trivia3 on the mix5 pool (or another pool: python analyze_mix5.py closed2): fooled rates by grader, attacker,
+relation, frame and item type, next to the no-pitch baseline. "knew" = the grader solved the item with no pitch.
+Writes runs/summary_<pool>.json."""
 import json
+import sys
 from collections import defaultdict
 
 from common import POOLS, RUNS, load_questions, read_jsonl, run_dir
 
 FRAMES = {"neutral": "grades.jsonl", "self": "grades_self.jsonl", "skim1k": "grades_skim1k.jsonl"}
-MODELS = [m["name"] for m in POOLS["mix5"]]
+POOL = sys.argv[1] if len(sys.argv) > 1 else "mix5"
+MODELS = [m["name"] for m in POOLS[POOL]]
 
 
 def rate(gs):
@@ -15,14 +18,16 @@ def rate(gs):
 
 
 out = {}
-for domain in ("math3", "trivia3"):
+for domain in (("math4",) if POOL == "argon_glm" else ("math3", "trivia3")):
     qs = {q["id"]: q for q in load_questions(domain)}
-    itype = "error_type" if domain == "math3" else "answer_type"
-    base = read_jsonl(run_dir(domain, "baseline", "mix5") / "baseline.jsonl")
-    solved = {(b["qid"], b["grader"]): b["solved"] for b in base}
+    itype = "error_type" if domain in ("math3", "math4") else "answer_type"
+    base = read_jsonl(run_dir(domain, "baseline", POOL) / "baseline.jsonl")
+    solved = {}  # knew = solved on every no-pitch sample
+    for b in base:
+        solved[(b["qid"], b["grader"])] = solved.get((b["qid"], b["grader"]), True) and b["solved"]
     grades, commits = [], {}
     for att in MODELS:
-        d = run_dir(domain, att, "mix5")
+        d = run_dir(domain, att, POOL)
         answers = read_jsonl(d / "answers.jsonl")
         commits[att] = (sum(a["committed"] for a in answers), len(answers))
         for fr, fname in FRAMES.items():
@@ -59,4 +64,4 @@ for domain in ("math3", "trivia3"):
                   for a in MODELS for m in MODELS for fr in FRAMES for t in sorted({q[itype] for q in qs.values()})
                   for gs in [[g for g in grades if (g["attacker"], g["grader"], g["frame"], g["itype"]) == (a, m, fr, t)]]],
     }
-(RUNS / "summary_mix5.json").write_text(json.dumps(out, indent=2))
+(RUNS / f"summary_{POOL}.json").write_text(json.dumps(out, indent=2))
