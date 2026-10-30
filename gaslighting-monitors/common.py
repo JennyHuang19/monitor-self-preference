@@ -63,9 +63,11 @@ _lock = threading.Lock()
 
 def chat(model_id: str, messages: list[dict], *, reasoning: bool = True, max_tokens: int = 32000,
          temperature: float | None = None, json_mode: bool = False, retries: int = 6,
-         reasoning_budget: int | None = None) -> dict:
+         reasoning_budget: int | None = None, reasoning_effort: str | None = None) -> dict:
     # reasoning_budget caps hidden thinking so it can't eat the whole max_tokens and leave no answer.
-    reason = {"max_tokens": reasoning_budget} if reasoning_budget else {"enabled": reasoning}
+    # reasoning_effort ("low"/"medium"/"high") is OpenRouter's coarser control, for models that ignore a token budget.
+    reason = ({"effort": reasoning_effort} if reasoning_effort else
+              {"max_tokens": reasoning_budget} if reasoning_budget else {"enabled": reasoning})
     body: dict = {"model": model_id, "messages": messages, "max_tokens": max_tokens,
                   "reasoning": reason, "usage": {"include": True}}
     if temperature is not None:
