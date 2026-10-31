@@ -236,39 +236,14 @@ The judge-agreement pilot covered 100 fooled grades across 62 problems
 The fine six-way taxonomy is less stable across families (Fleiss κ 0.47). Most disagreement sits at the boundary
 between "rubber stamp" and "missed in check", so claims about reasons should rest on the coarse categories.
 
-**6. "With many specifications, the result reflects researcher choices."** The primary analysis is fixed: the
-relation term in the fixed-effects logit over both frames, controlling for the pre-registered tier gap.
-
-The other analyses are sensitivity checks, and they agree in direction:
-- **AITA, by frame.** Self vs cross is +3.6 pp [1.2, 6.2] in the neutral frame and +2.5 pp [0.4, 4.5] in the
-  self-check frame.
-- **math3** (mix5, 5,515 rows where the grader knew the answer). Self OR is 1.31 [0.98, 1.77], with no
-  relation × frame interaction (LR p = 0.87) (`gaslighting-monitors/runs/regression_math3.json`).
-- **math4** (argon_glm). Self-pitch fooled rates are higher than cross-family ones in all three frames: 10% vs 8%
-  neutral, 8% vs 5% self-check, 11% vs 9% skim1k (`gaslighting-monitors/runs/analyze_argon_glm.txt`).
-
-On their own, math3 and math4 are not significant. They are independent replications of the sign on a different
-task with different items.
-
-One specification choice was made after seeing the data. The grader × frame term was added to the AITA fit because
-the model without it misfit badly (Pearson χ²/df 4.8 vs 1.6). The docstring of `aita/fit_regression.py` records this.
-
-**7. "Dropped parse failures could bias results."** Parse failures are too rare to matter:
+**6. "Dropped parse failures could bias results."** Parse failures are too rare to matter:
 - math3 and math4: 0.0–0.4% of grades in each relation, with no pattern by relation.
 - AITA: 89 of about 16.8k grades.
 
-**8. "Self-preference may just be style recognition."** Recognizing one's own writing style is a plausible way
+**7. "Self-preference may just be style recognition."** Recognizing one's own writing style is a plausible way
 self-preference *works*, so it isn't a confound to remove. A monitor that goes easier on text that sounds like its
 own is the failure this repo studies. Telling style apart from authorship would take the paraphrase-swap control
 (`rationalization-monitors/swap.py`), which was piloted but not run in full.
-
-**Remaining limitations.**
-- The regression code is pure Python and has not been checked against a reference library.
-- frontier3 is underpowered: 52 flips, and the self-vs-cross interval is effectively unbounded.
-- Closed frontier families have no sibling pairs here.
-- `double-plot/` and `model-tunnel-visioned/` are small pilots.
-- The merge of `main` (868dddb) dropped `POOLS` and `CONTROL` from `aita/common.py`. The frontier3 and control
-  scripts need that restored before they can be rerun; their committed outputs are unaffected.
 
 ## Running
 
