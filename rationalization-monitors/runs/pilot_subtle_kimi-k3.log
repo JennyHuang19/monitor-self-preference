@@ -1,0 +1,15 @@
+gen.jsonl: 4 to run (8 cached)
+  ok ie000|subtle
+  ok vt000|subtle
+  ok ie001|subtle
+  ok vt001|subtle
+done: 4 ok, 0 err
+verify.jsonl: 4 to run (8 cached)
+  ok ie000|subtle
+  ok ie001|subtle
+  ok vt001|subtle
+  ok vt000|subtle
+done: 4 ok, 0 err
+kimi-k3 clean: 4/4 valid; {}
+kimi-k3 sloppy: 4/4 valid; {}
+kimi-k3 subtle: 4/4 valid; {}

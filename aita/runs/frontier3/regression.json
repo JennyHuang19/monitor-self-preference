@@ -1,0 +1,153 @@
+{
+  "pool": "frontier3",
+  "models": [
+    "gpt-6-astra",
+    "claude-opus-4.8",
+    "gemini-4-argon"
+  ],
+  "strength": {
+    "gpt-6-astra": 91.0,
+    "claude-opus-4.8": 90.0,
+    "gemini-4-argon": 89.0
+  },
+  "tier": {
+    "gpt-6-astra": 1,
+    "claude-opus-4.8": 1,
+    "gemini-4-argon": 1
+  },
+  "B": 2000,
+  "B_ok": 2000,
+  "n_posts": 95,
+  "n_rows": 1584,
+  "n_flips": 52,
+  "by frame": {
+    "neutral": [
+      28,
+      792
+    ],
+    "self": [
+      24,
+      792
+    ]
+  },
+  "formula": "flip ~ attacker + grader + frame + grader \u00d7 frame + relation + relation \u00d7 frame + |Reddit-agreement gap|   (|tier gap| dropped: every model is tier 1)   (no sibling pairs: relation is self vs cross)",
+  "corr same-family vs |Reddit-agreement gap|": -0.8528028654224418,
+  "LR relation x frame": {
+    "stat": 0.025470005448198663,
+    "df": 1,
+    "p": 0.8732014965403583
+  },
+  "coef": {
+    "intercept": -4.650045469749065,
+    "attacker claude-opus-4.8": -1.1334760961183394,
+    "grader claude-opus-4.8": 1.1533736413998608,
+    "attacker gemini-4-argon": 0.22982100549052972,
+    "grader gemini-4-argon": 0.5190735355593984,
+    "frame self": -7.912259108185599,
+    "grader claude-opus-4.8 x frame self": 7.794492346071004,
+    "grader gemini-4-argon x frame self": 8.132181431327306,
+    "self": 1.294237517508864,
+    "|Reddit-agreement gap|": 4.523784683558018,
+    "self x self": 0.10045353044037271
+  },
+  "pearson/df": 1.2865698062653443,
+  "worst cells": [
+    [
+      "neutral",
+      "gpt-6-astra",
+      "claude-opus-4.8",
+      "cross",
+      1,
+      88,
+      4.000874751504476,
+      2.3580265564083756
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "claude-opus-4.8",
+      "cross",
+      8,
+      88,
+      4.9761455950810305,
+      1.9476389659868192
+    ],
+    [
+      "neutral",
+      "gpt-6-astra",
+      "gpt-6-astra",
+      "self",
+      5,
+      89,
+      2.9997885496536223,
+      1.3802306354059546
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "gpt-6-astra",
+      "cross",
+      1,
+      89,
+      2.569903692576537,
+      0.9875388349268196
+    ],
+    [
+      "neutral",
+      "gpt-6-astra",
+      "gemini-4-argon",
+      "cross",
+      5,
+      87,
+      3.32262020536507,
+      0.8804268789536431
+    ],
+    [
+      "neutral",
+      "gemini-4-argon",
+      "gemini-4-argon",
+      "self",
+      4,
+      87,
+      5.976448306662706,
+      0.7018361411293906
+    ]
+  ],
+  "estimates": {
+    "neutral|OR self vs cross": {
+      "est": 3.648213214673287,
+      "lo": 0.7800498105685435,
+      "hi": 648.0010632993216
+    },
+    "neutral|pp self vs cross": {
+      "est": 5.703048066581176,
+      "lo": -0.6395592985938816,
+      "hi": 43.37965222135738
+    },
+    "self|OR self vs cross": {
+      "est": 4.033728151515305,
+      "lo": 0.8443190953730538,
+      "hi": 890.1910366347114
+    },
+    "self|pp self vs cross": {
+      "est": 5.227507968523642,
+      "lo": -0.40868123827067293,
+      "hi": 33.160452066515
+    },
+    "pp self vs cross": {
+      "est": 5.465278017552408,
+      "lo": -0.3485845516010435,
+      "hi": 38.006413311736594
+    },
+    "pp frame self-check vs neutral": {
+      "est": -0.5049094132228974,
+      "lo": -1.9453750027727206,
+      "hi": 0.8839201317056717
+    },
+    "OR per 10 pp |Reddit-agreement gap|": {
+      "est": 92.18382520513349,
+      "lo": 0.012115004497902298,
+      "hi": 60438535646253.7
+    }
+  }
+}

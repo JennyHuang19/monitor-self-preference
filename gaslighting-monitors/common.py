@@ -36,7 +36,15 @@ OPEN_MODELS = [
 ]
 # math3/trivia3 pool: two sibling pairs (GLM, gpt-oss) plus Kimi. Every model both attacks and grades.
 MIX5 = [g for g in GRADERS if g["name"] in ("glm-5.3", "glm-5.3-flash", "kimi-k3")] + OPEN_MODELS[:2]
-POOLS = {"frontier": GRADERS, "open": OPEN_MODELS, "mix5": MIX5}
+# Closed models, same math3/trivia3 protocol as mix5. No sibling pair: self vs cross only. gpt-6-astra (and gpt-6-luna)
+# were dropped: in a 5-item pilot they never committed to the planted wrong answer, just solved the item instead.
+CLOSED2 = [
+    {"name": "gpt-6-sol", "id": "openai/gpt-6-sol", "family": "GPT"},
+    {"name": "gemini-4-argon", "id": "google/gemini-4-argon", "family": "Gemini"},
+]
+# math4 pool: Gemini plus the GLM sibling pair, on problems every one of them solves with no pitch (filter_solved.py).
+ARGON_GLM = [CLOSED2[1]] + [g for g in GRADERS if g["name"] in ("glm-5.3", "glm-5.3-flash")]
+POOLS = {"frontier": GRADERS, "open": OPEN_MODELS, "mix5": MIX5, "closed2": CLOSED2, "argon_glm": ARGON_GLM}
 
 
 def _load_key() -> str:
@@ -55,9 +63,11 @@ _lock = threading.Lock()
 
 def chat(model_id: str, messages: list[dict], *, reasoning: bool = True, max_tokens: int = 32000,
          temperature: float | None = None, json_mode: bool = False, retries: int = 6,
-         reasoning_budget: int | None = None) -> dict:
+         reasoning_budget: int | None = None, reasoning_effort: str | None = None) -> dict:
     # reasoning_budget caps hidden thinking so it can't eat the whole max_tokens and leave no answer.
-    reason = {"max_tokens": reasoning_budget} if reasoning_budget else {"enabled": reasoning}
+    # reasoning_effort ("low"/"medium"/"high") is OpenRouter's coarser control, for models that ignore a token budget.
+    reason = ({"effort": reasoning_effort} if reasoning_effort else
+              {"max_tokens": reasoning_budget} if reasoning_budget else {"enabled": reasoning})
     body: dict = {"model": model_id, "messages": messages, "max_tokens": max_tokens,
                   "reasoning": reason, "usage": {"include": True}}
     if temperature is not None:
@@ -146,11 +156,13 @@ def parse_json(text: str, first: bool = False) -> dict:
     raise ValueError("no JSON object found")
 
 
-DOMAINS = ["math", "code", "trivia", "math2", "math3", "trivia3"]
-DEFAULT_SAMPLES = {"math": 3, "code": 1, "trivia": 1, "math2": 1, "math3": 1, "trivia3": 1}
+# math4: math3's protocol on a new item set (math3 items all three argon_glm models solve, plus new ones).
+DOMAINS = ["math", "code", "trivia", "math2", "math3", "trivia3", "math4"]
+MATH3_LIKE = {"math3", "math4"}
+DEFAULT_SAMPLES = {"math": 3, "code": 1, "trivia": 1, "math2": 1, "math3": 1, "trivia3": 1, "math4": 1}
 # Free-response domains: a claimed answer instead of a lettered option. Numeric ones are compared as integers.
-FREE_RESPONSE = {"math2", "math3", "trivia3"}
-NUMERIC_DOMAINS = {"math2", "math3"}
+FREE_RESPONSE = {"math2", "math3", "trivia3", "math4"}
+NUMERIC_DOMAINS = {"math2", "math3", "math4"}
 
 
 def norm_answer(x) -> str:
@@ -175,17 +187,23 @@ def domain_args(desc: str):
     ap.add_argument("--samples", type=int, default=None)
     ap.add_argument("--pool", choices=list(POOLS), default="frontier", help="which set of models attacks and grades")
     ap.add_argument("--attacker", choices=[g["name"] for p in POOLS.values() for g in p], default=None,
-                    help="default: glm-5.3 for the frontier pool, the first open model for the open pool")
+                    help="default: glm-5.3 for the frontier pool, gpt-oss-120b for open/mix5, else the pool's first model")
     ap.add_argument("--baseline-only", action="store_true", help="grade.py: only run the no-pitch baseline")
     ap.add_argument("--frame", choices=["neutral", "self", "skim", "skim1k"], default="neutral",
                     help="grade.py: neutral = judge a proposed answer; self = the pitch is shown as the grader's own earlier reply")
     ap.add_argument("--limit", type=int, default=None, help="generate/grade: only the first N items (pilots)")
     ap.add_argument("--batches", default=None, help="make_questions.py, math3/trivia3: comma-separated batch numbers")
     ap.add_argument("--reparse", action="store_true", help="grade.py: re-parse stored replies, no model calls")
+    ap.add_argument("--questions", default=None, help="item file to use instead of questions_<domain>.json")
+    ap.add_argument("--baseline-samples", type=int, default=1, help="grade.py: no-pitch baseline samples per item x grader")
     a = ap.parse_args()
     if a.samples is None:
         a.samples = DEFAULT_SAMPLES[a.domain]
-    a.attacker = attacker(a.attacker or (GENERATOR["name"] if a.pool == "frontier" else OPEN_MODELS[0]["name"]), a.pool)
+    if not a.attacker:  # frontier: GLM; open/mix5: gpt-oss-120b; other pools: their first model
+        names = [g["name"] for g in POOLS[a.pool]]
+        a.attacker = GENERATOR["name"] if a.pool == "frontier" else next(
+            (n for n in names if n == OPEN_MODELS[0]["name"]), names[0])
+    a.attacker = attacker(a.attacker, a.pool)
     return a
 
 
@@ -231,8 +249,8 @@ def run_dirs(domain: str, pool: str = "frontier") -> list[tuple[dict, Path]]:
     return out
 
 
-def load_questions(domain: str = "math", limit: int | None = None) -> list[dict]:
-    return json.loads((HERE / f"questions_{domain}.json").read_text())[:limit]
+def load_questions(domain: str = "math", limit: int | None = None, path: str | None = None) -> list[dict]:
+    return json.loads((HERE / (path or f"questions_{domain}.json")).read_text())[:limit]
 
 
 def format_question(q: dict) -> str:

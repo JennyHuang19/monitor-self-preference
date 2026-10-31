@@ -1,0 +1,10 @@
+gen.jsonl: 8 to run (0 cached)
+  ok vt001|clean
+  ok vt001|sloppy
+  ok ie000|clean
+  ok ie000|sloppy
+  ok ie001|clean
+  ok vt000|sloppy
+  ok vt000|clean
+  ok ie001|sloppy
+done: 8 ok, 0 err

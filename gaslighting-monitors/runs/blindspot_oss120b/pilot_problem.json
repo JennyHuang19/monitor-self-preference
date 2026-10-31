@@ -1,0 +1,75 @@
+{
+ "id": "r1-c1",
+ "writer": "gpt-oss-120b",
+ "token_match": "whole_number",
+ "topic": "Geometry \u2013 lattice points on circles",
+ "question": "Let a circle be centered at a lattice point in the plane and have radius \\(\\sqrt{n}\\) where \\(n\\) is a positive integer. A lattice point is a point whose two coordinates are both integers. The circle is said to *pass through* a lattice point if the point lies exactly on the circle (its distance from the centre equals the radius). Find the sum of all positive integers \\(n<500\\) for which there exists such a circle that passes through exactly 12 lattice points.",
+ "answer": 2246,
+ "cases": [
+  {
+   "text": "n = 25 = 5\u00b2",
+   "value": 25,
+   "token": "25",
+   "writer_token": "5^2"
+  },
+  {
+   "text": "n = 50 = 5\u00b2\u00b72",
+   "value": 50,
+   "token": "50",
+   "writer_token": "5^2\u00b72"
+  },
+  {
+   "text": "n = 100 = 5\u00b2\u00b72\u00b2",
+   "value": 100,
+   "token": "100",
+   "writer_token": "5^2\u00b72^2"
+  },
+  {
+   "text": "n = 200 = 5\u00b2\u00b72\u00b3",
+   "value": 200,
+   "token": "200",
+   "writer_token": "5^2\u00b72^3"
+  },
+  {
+   "text": "n = 400 = 5\u00b2\u00b72\u2074",
+   "value": 400,
+   "token": "400",
+   "writer_token": "5^2\u00b72^4"
+  },
+  {
+   "text": "n = 225 = 5\u00b2\u00b73\u00b2",
+   "value": 225,
+   "token": "225",
+   "writer_token": "5^2\u00b73^2"
+  },
+  {
+   "text": "n = 450 = 5\u00b2\u00b72\u00b73\u00b2",
+   "value": 450,
+   "token": "450",
+   "writer_token": "5^2\u00b72\u00b73^2"
+  },
+  {
+   "text": "n = 169 = 13\u00b2",
+   "value": 169,
+   "token": "169",
+   "writer_token": "13^2"
+  },
+  {
+   "text": "n = 338 = 13\u00b2\u00b72",
+   "value": 338,
+   "token": "338",
+   "writer_token": "13^2\u00b72"
+  },
+  {
+   "text": "n = 289 = 17\u00b2",
+   "value": 289,
+   "token": "289",
+   "writer_token": "17^2"
+  }
+ ],
+ "omitted_case": 5,
+ "why_omitted": "Many solvers only consider factors of 2 when forming the multiplier m, forgetting that a square of a prime \u22613 (mod\u202f4) such as 3\u00b2 may also be multiplied without changing the number of lattice points on the circle.",
+ "target_wrong": 2021,
+ "solution": "Let the centre of the circle be the origin; translating the whole picture does not change the number of lattice points on the circle.  The lattice points on the circle \\(x^{2}+y^{2}=n\\) correspond exactly to integer solutions of the Diophantine equation \\(x^{2}+y^{2}=n\\).  The well\u2011known formula for the number of representations of \\(n\\) as a sum of two squares (counting order and signs) is\n\\[r_{2}(n)=\\begin{cases}0,&\\text{if some prime }p\\equiv3\\pmod4\\text{ occurs to an odd power in }n,\\\\[4pt]\n4\\displaystyle\\prod_{p\\equiv1\\,(4)}(e_{p}+1),&\\text{otherwise},\\end{cases}\\]\nwhere \\(e_{p}\\) is the exponent of the prime \\(p\\equiv1\\pmod4\\) in the factorisation of \\(n\\).  The circle therefore passes through exactly \\(r_{2}(n)\\) lattice points.\nWe want \\(r_{2}(n)=12\\).  Hence\n\\[4\\prod_{p\\equiv1\\,(4)}(e_{p}+1)=12\\quad\\Longrightarrow\\quad\\prod_{p\\equiv1\\,(4)}(e_{p}+1)=3.\n\\]\nThe only way a product of positive integers can be 3 is to have a single factor equal to 3 and no other factors.  Thus there is exactly one prime \\(p\\equiv1\\pmod4\\) occurring in \\(n\\) and its exponent must satisfy \\(e_{p}+1=3\\), i.e. \\(e_{p}=2\\).  Consequently\n\\[n=p^{2}\\cdot m,\\]\nwhere \\(p\\) is a prime congruent to 1 mod\u202f4, and \\(m\\) is any integer whose prime factors are either 2 or primes \\(q\\equiv3\\pmod4\\), each occurring to an even exponent (so that they do not affect \\(r_{2}\\)).\nWe are asked for \\(n<500\\).  The squares of the relevant primes are\n\\[5^{2}=25,\\;13^{2}=169,\\;17^{2}=289,\\;29^{2}=841>500,\\]\nso only \\(p=5,13,17\\) need be considered.\n\n*For \\(p=5\\) (\\(p^{2}=25\\)).*  The possible multipliers \\(m\\) (made from 2\u2011powers and even powers of primes \\(\\equiv3\\pmod4\\)) that keep the product below 500 are\n\\[1,\\;2,\\;2^{2}=4,\\;2^{3}=8,\\;2^{4}=16,\\;3^{2}=9,\\;2\\cdot3^{2}=18.\\]\nMultiplying by 25 gives the seven admissible values\n\\[25,\\;50,\\;100,\\;200,\\;400,\\;225,\\;450.\\]\n\n*For \\(p=13\\) (\\(p^{2}=169\\)).*  Multipliers \\(m\\) allowed are \\(1\\) and \\(2\\), producing\n\\[169,\\;338.\\]\n\n*For \\(p=17\\) (\\(p^{2}=289\\)).*  Only \\(m=1\\) works, giving \\(289\\).\n\nCollecting all distinct \\(n<500\\) we obtain the ten numbers\n\\[25,\\;50,\\;100,\\;200,\\;400,\\;225,\\;450,\\;169,\\;338,\\;289.\\]\nEach of them indeed yields \\(r_{2}(n)=12\\) lattice points on the corresponding circle, and no other integer \\(n<500\\) does.\nThe required sum is therefore\n\\[25+50+100+200+400+225+450+169+338+289=2246.\\]\nHence the answer is **2246**.",
+ "check_code": "import json, math\n\ndef r2(n):\n    # return number of integer solutions (x,y) to x^2+y^2=n, counting order and signs\n    # factor n\n    temp = n\n    prod = 1\n    for p in range(2, int(math.isqrt(temp)) + 1):\n        if temp % p == 0:\n            exp = 0\n            while temp % p == 0:\n                temp //= p\n                exp += 1\n            if p % 4 == 3:\n                if exp % 2 == 1:\n                    return 0\n                # even exponent does not affect the product\n            elif p % 4 == 1:\n                prod *= (exp + 1)\n            # p == 2 does not affect the product\n    # remaining prime factor\n    if temp > 1:\n        if temp % 4 == 3:\n            return 0\n        elif temp % 4 == 1:\n            prod *= 2  # exponent is 1, so (1+1)\n    return 4 * prod\n\nlimit = 500\nvals = []\nfor n in range(1, limit):\n    if r2(n) == 12:\n        vals.append(n)\nans = sum(vals)\nprint(ans)\nprint(json.dumps(sorted(vals)))"
+}

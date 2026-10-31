@@ -1,0 +1,5 @@
+15/15 candidates have 2 baseline samples from every model
+  math3 n=  5  gemini-4-argon 5  glm-5.3 4  glm-5.3-flash 3  all 2
+  new   n= 10  gemini-4-argon 10  glm-5.3 5  glm-5.3-flash 4  all 3
+5 pass; kept 5 -> questions_math4.json
+ALL DONE

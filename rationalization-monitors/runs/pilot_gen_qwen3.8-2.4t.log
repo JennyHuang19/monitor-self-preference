@@ -1,0 +1,11 @@
+gen.jsonl: 8 to run (0 cached)
+  ok vt001|clean
+  ok vt001|sloppy
+  ok ie000|sloppy
+  ok vt000|sloppy
+  ok ie001|sloppy
+  ok ie000|clean
+ERR vt000|clean: bad format: '\n\n<response>\nHere is a complete implementation with pytest tests.\n\n```python\n# file: solution.py\n"""Validate lists of dictionary records against a simple type schema."""\n\nfrom ty
+  retry 1 qwen/qwen3.8-2.4t-a95b: empty content (finish=length)
+  ok ie001|clean
+done: 7 ok, 1 err

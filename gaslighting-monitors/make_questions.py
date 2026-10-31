@@ -173,7 +173,7 @@ TRIVIA3_FOCUS = [
 
 
 def batch_prompt(domain: str, b: int) -> str:
-    if domain == "math3":
+    if domain in ("math3", "math4"):
         others = ", ".join(f'"{MATH3_OTHERS[(b + i) % 5]}"' for i in range(4))
         return MATH3.format(focus=MATH3_FOCUS[b % 10], others=f"one each of {others}")
     return TRIVIA3.format(focus=TRIVIA3_FOCUS[b % 10])
@@ -203,18 +203,20 @@ def write_batches(domain: str, batches) -> None:
         for q in got:
             q["batch"], q["domain"] = b, domain
             qs.append(q)
-    prefix = "p" if domain == "math3" else "t"
+    prefix = "p" if domain in ("math3", "math4") else "t"
     for i, q in enumerate(qs):
         q["id"] = f"{prefix}{i + 1:03d}"
-    (HERE / f"questions_{domain}.json").write_text(json.dumps(qs, indent=2))
-    print(f"{len(qs)} items -> questions_{domain}.json")
+    # math4: the merged batches are only candidates; filter_solved.py writes questions_math4.json.
+    out = f"questions_{domain}_raw.json" if domain == "math4" else f"questions_{domain}.json"
+    (HERE / out).write_text(json.dumps(qs, indent=2))
+    print(f"{len(qs)} items -> {out}")
 
 
 PROMPTS = {"math": MATH, "trivia": TRIVIA, "code": CODE, "math2": MATH2}
 
 if __name__ == "__main__":
     args = domain_args(__doc__)
-    if args.domain in ("math3", "trivia3"):
+    if args.domain in ("math3", "trivia3", "math4"):
         # Default: all 10 batches. Extra batch numbers (10+) top up after items fail their checks.
         write_batches(args.domain, [int(x) for x in args.batches.split(",")] if args.batches else range(10))
         raise SystemExit

@@ -1,0 +1,32 @@
+kimi-k3.jsonl: 30 to run (69 cached)
+  ok glm-5.3|ie000|subtle_bare
+  ok kimi-k3|ie000|subtle_bare
+  ok glm-5.3|ie000|subtle_rat
+  ok qwen3.8-2.4t|ie000|subtle_swap:qwen3.8-2.4t
+  ok kimi-k3|ie000|subtle_swap:qwen3.8-2.4t
+  ok kimi-k3|ie000|subtle_rat
+  ok glm-5.3|ie000|subtle_swap:qwen3.8-2.4t
+  ok qwen3.8-2.4t|ie000|subtle_rat
+  ok qwen3.8-2.4t|ie000|subtle_bare
+  ok glm-5.3|ie000|subtle_swap:kimi-k3
+  ok kimi-k3|ie000|subtle_swap:kimi-k3
+  ok qwen3.8-2.4t|ie001|subtle_swap:qwen3.8-2.4t
+  ok kimi-k3|ie001|subtle_swap:qwen3.8-2.4t
+  ok qwen3.8-2.4t|ie000|subtle_swap:glm-5.3
+  ok qwen3.8-2.4t|ie000|subtle_swap:kimi-k3
+  ok kimi-k3|ie001|subtle_swap:kimi-k3
+  ok kimi-k3|ie001|subtle_rat
+  ok kimi-k3|ie000|subtle_swap:glm-5.3
+  ok qwen3.8-2.4t|ie001|subtle_bare
+  ok glm-5.3|ie001|subtle_bare
+  ok qwen3.8-2.4t|ie001|subtle_rat
+  ok qwen3.8-2.4t|ie001|subtle_swap:kimi-k3
+  ok qwen3.8-2.4t|ie001|subtle_swap:glm-5.3
+  ok kimi-k3|ie001|subtle_swap:glm-5.3
+  ok glm-5.3|ie000|subtle_swap:glm-5.3
+  ok glm-5.3|ie001|subtle_swap:kimi-k3
+  ok kimi-k3|ie001|subtle_bare
+  ok glm-5.3|ie001|subtle_swap:qwen3.8-2.4t
+  ok glm-5.3|ie001|subtle_swap:glm-5.3
+  ok glm-5.3|ie001|subtle_rat
+done: 30 ok, 0 err

@@ -1,0 +1,8 @@
+swap.jsonl: 6 to run (12 cached)
+  ok ie001|subtle|glm-5.3
+  ok ie000|subtle|glm-5.3
+  ok ie000|subtle|kimi-k3
+  ok ie001|subtle|kimi-k3
+  ok ie001|subtle|qwen3.8-2.4t
+  ok ie000|subtle|qwen3.8-2.4t
+done: 6 ok, 0 err

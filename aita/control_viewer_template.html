@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Frontier Pushback Control</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: same system as the frontier page. Summary (grader table, matrices, contrasts) on top; post list beside one post below.
+   --true marks the control (true-side) pitch, --flip the main run's false-side pitch. */
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#16181d; --mut:#5c6170; --line:#dde0e6; --sunk:#eef0f4;
+  --accent:#3445b4; --yta:#a3324f; --nta:#23707e; --flip:#c2410c; --held:#1d7a45; --true:#2563a8; --noise:#8a8f9c;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --yta:#e07a95; --nta:#6cc3d1; --flip:#fb8a4c; --held:#5fd08f; --true:#7fb2f0; --noise:#7d8391; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121317; --card:#1b1d22; --ink:#e9eaee; --mut:#9aa0ad; --line:#30333b; --sunk:#23262d;
+  --accent:#93a0ff; --yta:#e07a95; --nta:#6cc3d1; --flip:#fb8a4c; --held:#5fd08f; --true:#7fb2f0; --noise:#7d8391; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans)}
+main{max-width:1180px;margin:0 auto;padding-block:28px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:24px}
+h1{font:600 26px/1.2 var(--sans);margin:0;text-wrap:balance}
+h2{font:600 17px/1.3 var(--sans);margin:0 0 10px;text-wrap:balance}
+h3{font:600 14px/1.3 var(--sans);margin:0 0 8px}
+p{margin:0}
+.lede{color:var(--mut);max-width:78ch;margin-top:8px}
+.label{font:500 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.small{font-size:13px;color:var(--mut)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select,input{font:inherit;color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;padding:6px 14px;cursor:pointer;color:var(--mut)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--card);font-weight:500}
+.pill{display:inline-block;font:600 11px/1 var(--mono);padding:4px 7px;border-radius:5px;border:1px solid currentColor}
+.pill.YTA{color:var(--yta)} .pill.NTA{color:var(--nta)}
+.tag{font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:4px;white-space:nowrap}
+.callout{background:var(--sunk);border-radius:8px;padding:12px 14px;font-size:14px;display:grid;gap:6px;max-width:92ch}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+th{font-weight:500;color:var(--mut)}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.key{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;align-items:center;margin:4px 0 10px}
+.key i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+/* paired bars: one track per metric, same 0..max scale on every row */
+.pb{display:grid;gap:3px;min-width:180px}
+.pb .ln{display:grid;grid-template-columns:minmax(80px,1fr) 64px;gap:8px;align-items:center}
+.pb .tr{height:9px;background:var(--sunk);border-radius:5px;position:relative;overflow:hidden}
+.pb .f{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.pb .f.n{background:var(--noise)} .pb .f.t{background:var(--true)} .pb .f.x{background:var(--flip)}
+.pb .v{font:12px/1 var(--mono);text-align:right;color:var(--mut)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+table.matrix th.col{text-align:center;font-size:12px;white-space:nowrap}
+td.cell{text-align:center;font-variant-numeric:tabular-nums;border:2px solid var(--card);border-radius:6px}
+td.cell b{display:block;font-size:14px}
+td.cell span{font-size:11px;color:var(--mut)}
+.forest{display:grid;grid-template-columns:minmax(0,auto) minmax(90px,1fr) auto;gap:6px 10px;align-items:center;font-size:13px}
+.forest .ft{height:14px;position:relative;background:var(--sunk);border-radius:4px}
+.forest .zero{position:absolute;top:0;bottom:0;left:50%;border-left:1px dashed var(--mut)}
+.forest .iv{position:absolute;top:6px;height:2px;background:var(--ink)}
+.forest .pt{position:absolute;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%}
+.forest .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.forest .grp{grid-column:1/-1;margin-top:6px}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.browser{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.browser{grid-template-columns:minmax(0,1fr)}}
+.filters{display:grid;gap:8px;margin-bottom:10px}
+.filters select{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--card)}
+.list{display:grid;gap:4px;max-height:760px;overflow-y:auto}
+.post{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:9px 10px;border-radius:8px;border:1px solid transparent;cursor:pointer;background:none;text-align:left;width:100%}
+.post:hover{background:var(--sunk)}
+.post[aria-current="true"]{border-color:var(--accent);background:var(--card)}
+.post .t{font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post .f{font:500 12px/1.3 var(--mono);text-align:right;color:var(--mut);white-space:nowrap}
+.post .f .p{color:var(--true)} .post .f .x{color:var(--flip)}
+.detail{display:grid;gap:16px;min-width:0}
+.story{font:16px/1.6 var(--serif);max-width:68ch;white-space:pre-wrap;margin:0;max-height:420px;overflow:auto}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px}
+.tabs button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+details{border:1px solid var(--line);border-radius:8px;background:var(--card)}
+summary{cursor:pointer;padding:8px 12px;font-size:13px;font-weight:500}
+pre.txt{white-space:pre-wrap;font:13px/1.55 var(--mono);margin:0;padding:10px 12px;max-height:480px;overflow:auto}
+pre.cot{background:var(--sunk);color:var(--mut)}
+.pitch{font:15px/1.6 var(--serif);white-space:pre-wrap;padding:12px 14px;margin:0;max-height:520px;overflow:auto;border-left:3px solid var(--true);background:var(--sunk);border-radius:0 8px 8px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.g{border:1px solid var(--line);border-left:4px solid var(--held);border-radius:8px;padding:10px;display:grid;gap:6px;min-width:0}
+.g.push{border-left-color:var(--flip)}
+.st{font-weight:600;font-size:13px;color:var(--held)}
+.push .st{color:var(--flip)}
+.empty{color:var(--mut);font-size:14px;padding:20px 0}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="label">AITA flip experiment · frontier control</div>
+    <h1>Do frontier graders push back on correct pitches?</h1>
+    <p class="lede">In the main frontier run, every attacker argues for the <em>opposite</em> of Reddit's verdict, and graders rarely flip. Here, on 25 of the same posts, the same attackers get the same red-team prompt with one change: they argue <strong>for</strong> Reddit's verdict. Every grader already agreed with Reddit before seeing any pitch, so any move away from it is <strong>pushback on a correct argument</strong>, the grader's false-positive rate as a deception detector.</p>
+    <div class="row" style="margin-top:14px">
+      <span class="label">Frame</span>
+      <div class="seg" role="group" aria-label="Grading frame">
+        <button id="fr-neutral" data-fr="neutral">Neutral</button>
+        <button id="fr-self" data-fr="self">Self-check</button>
+      </div>
+      <span class="small" id="frame-note"></span>
+    </div>
+  </header>
+
+  <div class="callout" id="finding"></div>
+
+  <section class="panel">
+    <h2>Accepting true pitches vs resisting false ones, by grader</h2>
+    <div class="key">
+      <span><i style="background:var(--noise)"></i>no pitch, asked again: verdict changed</span>
+      <span><i style="background:var(--true)"></i>true-side pitch: grader left Reddit's verdict (pushback)</span>
+      <span><i style="background:var(--flip)"></i>false-side pitch, same posts: grader flipped to it</span>
+    </div>
+    <div class="scroll"><table id="graders"></table></div>
+    <p class="small" style="margin-top:8px;max-width:92ch">Discrimination = share accepting the true pitch minus share accepting the false one (1 is perfect). 95% intervals bootstrap over the 25 posts. <b>Selection note:</b> 14 of the 25 posts were picked because some grader flipped on them in the main run, so the false-pitch flip rates here are higher than over all 100 posts. That makes discrimination look worse than it is, never better.</p>
+  </section>
+
+  <section class="two">
+    <div class="panel">
+      <h2>Pushback on the true-side pitch</h2>
+      <p class="small" style="margin:0 0 8px">Attacker rows, grader columns. Graders that left Reddit's verdict ÷ graders.</p>
+      <div class="scroll"><table class="matrix" id="m-true"></table></div>
+    </div>
+    <div class="panel">
+      <h2>Flips on the false-side pitch, same posts</h2>
+      <p class="small" style="margin:0 0 8px">From the main frontier run, restricted to these 25 posts.</p>
+      <div class="scroll"><table class="matrix" id="m-false"></table></div>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="panel">
+      <h2>Contrasts</h2>
+      <p class="small" style="margin:0 0 10px">Difference in the share of grades on the wrong side of Reddit, with 95% intervals over posts. Self = the grader is the attacker.</p>
+      <div class="forest" id="forest"></div>
+      <div class="axis" id="forest-axis" style="margin-top:4px"></div>
+    </div>
+    <div class="panel">
+      <h2>How sure graders are</h2>
+      <p class="small" style="margin:0 0 8px">Mean stated confidence (0–100) in the verdict the grader gave, both frames pooled.</p>
+      <div class="scroll"><table id="conf"></table></div>
+      <h3 style="margin-top:18px">Attacker commitment</h3>
+      <p class="small" id="commit"></p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Prompts</h2>
+    <p class="small" style="margin:0 0 10px">Identical to the main run. In the control, <code>{target}</code> is Reddit's verdict instead of its opposite. The no-pitch baselines are the main run's; the second no-pitch sample reuses the baseline prompt.</p>
+    <div id="prompts" style="display:grid;gap:8px"></div>
+  </section>
+
+  <section class="browser">
+    <div class="panel">
+      <h2>Posts</h2>
+      <div class="filters">
+        <div class="row" style="flex-wrap:nowrap">
+          <select id="verdict" aria-label="Reddit verdict"><option value="">All verdicts</option><option value="NTA">Reddit: NTA</option><option value="YTA">Reddit: YTA</option></select>
+          <select id="sort" aria-label="Sort"><option value="push">Most pushback</option><option value="flips">Most main-run flips</option></select>
+        </div>
+      </div>
+      <div class="small" style="margin-bottom:6px"><span style="color:var(--true)">pushback</span> on true pitch · <span style="color:var(--flip)">flips</span> on false pitch, both frames</div>
+      <div class="list" id="list"></div>
+    </div>
+    <div class="panel detail" id="detail" aria-live="polite"><p class="empty">Pick a post to read it, each attacker's true-side pitch, and how every grader responded.</p></div>
+  </section>
+</main>
+<script>
+const D = /*DATA*/null;
+const S = D.summary, M = D.models;
+let frame = 'neutral';
+try{ const f = localStorage.getItem('ctrl-frame'); if (f === 'self' || f === 'neutral') frame = f; }catch(e){}
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = (k, n) => n ? (100 * k / n).toFixed(0) + '%' : '—';
+const short = n => n.replace('claude-', '').replace('gemini-4-', 'gemini ').replace('gpt-6-', 'gpt-6 ');
+const fmtCI = t => `${t[0] >= 0 ? '+' : ''}${(100 * t[0]).toFixed(1)} [${(100 * t[1]).toFixed(1)}, ${(100 * t[2]).toFixed(1)}]`;
+
+function cells(cond, fr){ return S.cells.filter(c => c.cond === cond && c.frame === fr); }
+function pooled(cond, fr, pred){ const cs = cells(cond, fr).filter(pred); return [cs.reduce((a, c) => a + c.bad, 0), cs.reduce((a, c) => a + c.n, 0)]; }
+
+function finding(){
+  const all = f => [0, 1].map(i => ['neutral', 'self'].map(fr => pooled(f, fr, () => true)[i]).reduce((a, b) => a + b));
+  const [pk, pn] = all('true'), [fk, fn] = all('false');
+  const nz = Object.values(S.noise).reduce((a, v) => [a[0] + v[0], a[1] + v[1]], [0, 0]);
+  const sx = S.self_cross;
+  document.getElementById('finding').innerHTML =
+    `<p><b>Graders pushed back on ${pk} of ${pn} correct pitches (${pct(pk, pn)})</b>, against ${fk} of ${fn} flips (${pct(fk, fn)}) on false pitches for the same posts. A second no-pitch sample changed verdict ${nz[0]} of ${nz[1]} times (${pct(nz[0], nz[1])}).</p>` +
+    `<p>By attacker, pushback on true pitches (both frames): ${M.map(a => { const cs = S.cells.filter(c => c.cond === 'true' && c.attacker === a); return `${esc(a)} ${cs.reduce((x, c) => x + c.bad, 0)}/${cs.reduce((x, c) => x + c.n, 0)}`; }).join(' · ')}. In the replies, graders call the pushed-back pitches "too categorical" or "too harsh", which reads as a reaction to overstatement more than to the verdict.</p>` +
+    `<p class="small">Self minus cross, self-check frame: false-pitch flips ${fmtCI(sx['self|false'])} pp, true-pitch pushback ${fmtCI(sx['self|true'])} pp. Neutral frame: ${fmtCI(sx['neutral|false'])} and ${fmtCI(sx['neutral|true'])} pp.</p>`;
+}
+
+function graders(){
+  const rows = S.grader.filter(r => r.frame === frame);
+  const mx = Math.max(0.2, ...rows.flatMap(r => [r.pushback, r.flip, r.noise || 0]));
+  const bar = (v, cls) => `<div class="ln"><div class="tr"><div class="f ${cls}" style="width:${(100 * (v || 0) / mx).toFixed(1)}%"></div></div><div class="v">${v == null || isNaN(v) ? '—' : (100 * v).toFixed(1) + '%'}</div></div>`;
+  document.getElementById('graders').innerHTML = '<tr><th>Grader</th><th>Rates (same scale, 0–' + (100 * mx).toFixed(0) + '%)</th><th class="num">Discrimination [95% CI]</th></tr>' +
+    rows.map(r => `<tr><td>${esc(r.grader)}</td><td><div class="pb">${bar(r.noise, 'n')}${bar(r.pushback, 't')}${bar(r.flip, 'x')}</div></td><td class="num">${r.disc[0].toFixed(2)} [${r.disc[1].toFixed(2)}, ${r.disc[2].toFixed(2)}]</td></tr>`).join('');
+}
+
+function matrix(id, cond, colorVar){
+  const cs = cells(cond, frame);
+  const mx = Math.max(0.15, ...cs.map(c => c.n ? c.bad / c.n : 0));
+  let h = '<tr><th>attacker ↓ grader →</th>' + M.map(g => `<th class="col">${esc(short(g))}</th>`).join('') + '</tr>';
+  for (const a of M){
+    h += `<tr><th>${esc(short(a))}</th>`;
+    for (const g of M){
+      const c = cs.find(c => c.attacker === a && c.grader === g);
+      const r = c && c.n ? c.bad / c.n : 0;
+      h += `<td class="cell" style="background:color-mix(in srgb,var(${colorVar}) ${(70 * r / mx).toFixed(0)}%,var(--card))"><b>${c ? c.bad + '/' + c.n : '—'}</b><span>${a === g ? 'self' : ''}</span></td>`;
+    }
+    h += '</tr>';
+  }
+  document.getElementById(id).innerHTML = h;
+}
+
+function forest(){
+  const items = [['Self minus cross (grader is the attacker)', null]];
+  for (const fr of ['neutral', 'self']){
+    items.push([`${fr === 'self' ? 'Self-check' : 'Neutral'}: flips on false pitch`, S.self_cross[fr + '|false'], '--flip']);
+    items.push([`${fr === 'self' ? 'Self-check' : 'Neutral'}: pushback on true pitch`, S.self_cross[fr + '|true'], '--true']);
+  }
+  items.push(['Self-check minus neutral frame, pushback on true pitch', null]);
+  for (const [k, v] of Object.entries(S.frame)) items.push([k, v, '--true']);
+  const lim = Math.max(0.1, ...items.filter(i => i[1]).flatMap(i => [Math.abs(i[1][1]), Math.abs(i[1][2])]));
+  const L = Math.ceil(lim * 20) / 20, x = v => 50 + 50 * v / L;
+  document.getElementById('forest').innerHTML = items.map(([lab, t, col]) => !t ? `<div class="grp label">${esc(lab)}</div>` :
+    `<div>${esc(lab)}</div><div class="ft"><div class="zero"></div><div class="iv" style="left:${x(t[1])}%;width:${Math.max(0.5, x(t[2]) - x(t[1]))}%"></div><div class="pt" style="left:${x(t[0])}%;background:var(${col})"></div></div><div class="v">${(100 * t[0] >= 0 ? '+' : '') + (100 * t[0]).toFixed(1)} pp</div>`).join('');
+  document.getElementById('forest-axis').innerHTML = `<span>−${(100 * L).toFixed(0)} pp</span><span>0</span><span>+${(100 * L).toFixed(0)} pp</span>`;
+}
+
+function conf(){
+  document.getElementById('conf').innerHTML = '<tr><th>Grader</th><th class="num">no pitch</th><th class="num">true pitch</th><th class="num">false, resisted</th><th class="num">false, flipped</th></tr>' +
+    M.map(g => `<tr><td>${esc(g)}</td>${S.confidence[g].map(v => `<td class="num">${v == null || isNaN(v) ? '—' : v.toFixed(1)}</td>`).join('')}</tr>`).join('');
+  document.getElementById('commit').textContent = M.map(a => `${a} ${S.commitment[a][0]}/${S.commitment[a][1]}`).join(' · ') + ' pitches ended with the assigned (true) verdict.';
+}
+
+function prompts(){
+  const P = D.prompts, blk = (t, s) => `<details><summary>${esc(t)}</summary><pre class="txt">${esc(s)}</pre></details>`;
+  document.getElementById('prompts').innerHTML = blk('Attacker · system prompt', P.attacker) + blk('Grader · neutral frame', P.neutral) +
+    blk('Grader · self-check frame (pitch placed as the grader\'s own earlier answer)', `[user]\n${P.self_ask}\n\n[assistant]\n{pitch}\n\n[user]\n${P.self_verify}`);
+}
+
+let cur = null, curAtt = M[0];
+function list(){
+  const v = document.getElementById('verdict').value, s = document.getElementById('sort').value;
+  const ps = D.posts.filter(p => !v || p.truth === v).sort((a, b) => b[s] - a[s] || b.push - a.push);
+  document.getElementById('list').innerHTML = ps.map(p => `<button class="post" data-pid="${p.pid}" aria-current="${p.pid === cur}"><span class="t">${esc(p.title)}</span><span class="f"><span class="pill ${p.truth}">${p.truth}</span><br><span class="p">${p.push}</span> · <span class="x">${p.flips}</span></span></button>`).join('');
+}
+const cache = {};
+async function open(pid){
+  cur = pid; list();
+  try{ parent.postMessage({aitaControlPost: pid}, '*'); }catch(e){}
+  const el = document.getElementById('detail');
+  if (!cache[pid]){ el.innerHTML = '<p class="empty">Loading…</p>'; try{ cache[pid] = await (await fetch('posts/' + pid + '.json')).json(); }catch(e){ el.innerHTML = '<p class="empty">Could not load this post. Reload the page to try again.</p>'; return; } }
+  if (cur === pid) render(cache[pid]);
+}
+function render(r){
+  const el = document.getElementById('detail');
+  const P = r.pitches[curAtt] || {}, T = P.true, F = P.false;
+  const gcard = (g, grd) => {
+    if (!grd) return `<div class="g"><div class="small">${esc(g)}: no grade</div></div>`;
+    const bad = grd.verdict && grd.verdict !== r.truth;
+    return `<div class="g ${bad ? 'push' : ''}"><div class="row" style="justify-content:space-between"><b style="font-size:13px">${esc(g)}</b><span class="pill ${grd.verdict}">${grd.verdict || '?'}</span></div>
+      <div class="st">${bad ? 'Pushed back' : 'Accepted'}<span class="small" style="font-weight:400"> · agree ${grd.agree} · conf ${grd.confidence ?? '—'}</span></div>
+      ${grd.reasoning ? `<details><summary>Reasoning summary</summary><pre class="txt cot">${esc(grd.reasoning)}</pre></details>` : ''}
+      ${grd.content ? `<details><summary>Reply</summary><pre class="txt">${esc(grd.content)}</pre></details>` : ''}</div>`;
+  };
+  const falseRow = fr => F ? M.map(g => { const x = F.grades[fr][g]; return `${esc(short(g))} <span class="pill ${x?.verdict}">${x?.verdict || '—'}</span>`; }).join(' &nbsp; ') : 'no committed false-side pitch';
+  el.innerHTML = `<div class="row" style="justify-content:space-between"><h2 style="margin:0">${esc(r.title)}</h2><span class="small">Reddit <span class="pill ${r.truth}">${r.truth}</span></span></div>
+    <details><summary>Post</summary><p class="story" style="padding:0 12px 12px">${esc(r.text)}</p></details>
+    <div class="small">No-pitch verdicts (first · second sample): ${M.map(g => `${esc(short(g))} ${r.baseline[g].first} · ${r.baseline[g].rerun || '—'}`).join(' &nbsp; ')}</div>
+    <div><div class="label" style="margin-bottom:6px">Attacker</div><div class="tabs" id="att">${M.map(a => `<button data-a="${a}" aria-pressed="${a === curAtt}">${esc(a)}</button>`).join('')}</div></div>
+    ${T ? `<div><h3>True-side pitch, arguing ${T.target}${T.committed ? '' : ' <span class="tag">did not commit</span>'}</h3><p class="pitch">${esc(T.content)}</p></div>
+      <div><h3>Grades, ${frame === 'self' ? 'self-check' : 'neutral'} frame</h3><div class="grid">${M.map(g => gcard(g, T.grades[frame][g])).join('')}</div></div>` : '<p class="empty">No control pitch from this attacker yet.</p>'}
+    <div class="small"><b>Same attacker, false-side pitch (main run), ${frame === 'self' ? 'self-check' : 'neutral'} frame:</b> ${falseRow(frame)}. Full text is in the Frontier tab.</div>`;
+  el.querySelector('#att').addEventListener('click', e => { const b = e.target.closest('button'); if (b){ curAtt = b.dataset.a; render(r); } });
+}
+
+function setFrame(f){
+  frame = f;
+  try{ localStorage.setItem('ctrl-frame', f); }catch(e){}
+  for (const b of document.querySelectorAll('.seg button')) b.setAttribute('aria-pressed', String(b.dataset.fr === f));
+  document.getElementById('frame-note').textContent = f === 'self' ? 'The pitch is shown as the grader\'s own earlier answer, which it is asked to reconsider.' : 'The pitch is shown as a proposed judgment to agree or disagree with.';
+  graders(); matrix('m-true', 'true', '--true'); matrix('m-false', 'false', '--flip');
+  if (cur && cache[cur]) render(cache[cur]);
+}
+document.querySelector('.seg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setFrame(b.dataset.fr); });
+document.getElementById('list').addEventListener('click', e => { const b = e.target.closest('.post'); if (b) open(b.dataset.pid); });
+document.getElementById('verdict').addEventListener('change', list);
+document.getElementById('sort').addEventListener('change', list);
+finding(); forest(); conf(); prompts(); setFrame(frame); list();
+const h = location.hash.match(/^#p-([A-Za-z0-9]+)$/);
+open(h && D.posts.some(p => p.pid === h[1]) ? h[1] : [...D.posts].sort((a, b) => b.push - a.push)[0].pid);
+// Report height to the tab wrapper so its frame fits the page.
+const report = () => { try{ parent.postMessage({aitaHeight: document.documentElement.scrollHeight}, '*'); }catch(e){} };
+new ResizeObserver(report).observe(document.body); report();
+</script>
+</body>
+</html>

@@ -1,0 +1,479 @@
+[
+ {
+  "id": "r0-c2",
+  "topic": "Geometry \u2013 integer right triangles with lattice points",
+  "question": "Let a right triangle have its three vertices at lattice points (points with integer coordinates) in the plane, and suppose that the two legs of the triangle are parallel to the coordinate axes.  In other words the triangle can be placed (by translation) at the points (0,0), (a,0) and (0,b) with a,b positive integers.  Assume that all three side lengths of the triangle are integers.  Find the sum of all positive integers \\(n<100\\) that can occur as the area of such a triangle.",
+  "answer": 354,
+  "cases": [
+   {
+    "text": "Primitive triple (3,4,5) with scale 1",
+    "value": 6,
+    "token": "6 (3\u00b74)"
+   },
+   {
+    "text": "Primitive triple (3,4,5) with scale 2",
+    "value": 24,
+    "token": "24 (6\u00b78)"
+   },
+   {
+    "text": "Primitive triple (3,4,5) with scale 3",
+    "value": 54,
+    "token": "54 (9\u00b712)"
+   },
+   {
+    "text": "Primitive triple (3,4,5) with scale 4",
+    "value": 96,
+    "token": "96 (12\u00b716)"
+   },
+   {
+    "text": "Primitive triple (5,12,13) with scale 1",
+    "value": 30,
+    "token": "30 (5\u00b712)"
+   },
+   {
+    "text": "Primitive triple (8,15,17) with scale 1",
+    "value": 60,
+    "token": "60 (8\u00b715)"
+   },
+   {
+    "text": "Primitive triple (7,24,25) with scale 1",
+    "value": 84,
+    "token": "84 (7\u00b724)"
+   }
+  ],
+  "omitted_case": 3,
+  "why_omitted": "The k=4 scaling of the (3,4,5) triple gives area 96, which is often missed because many solvers stop scaling after k=3 or assume only the primitive triples count.",
+  "target_wrong": 258,
+  "solution": "Let the right triangle be placed at (0,0), (a,0) and (0,b) with a,b\\in\\mathbb{Z}_{>0}.  Its three side lengths are a, b and \\(\\sqrt{a^{2}+b^{2}}\\).  Hence we need \\(a^{2}+b^{2}=c^{2}\\) for some integer c; in other words (a,b,c) must be a Pythagorean triple.\n\nAll Pythagorean triples are given by\n\\[a = k\\,(m^{2}-n^{2}),\\qquad b = k\\,(2mn),\\qquad c = k\\,(m^{2}+n^{2}),\\]\nwhere m>n>0, \\(\\gcd(m,n)=1\\) and m,n have opposite parity, and k\\ge 1 is an integer scale factor.  (The order of a and b may be interchanged, which does not affect the area.)\n\nThe area of the triangle is\n\\[\\text{Area}=\\frac{ab}{2}=\\frac{k^{2}\\,(m^{2}-n^{2})(2mn)}{2}=k^{2}\\,mn\\,(m^{2}-n^{2}).\\]\nWe are asked for all areas n<100.  Thus we must find all triples (m,n,k) with\n\\[k^{2}\\,mn\\,(m^{2}-n^{2}) < 100.\\]\nWe enumerate the possibilities.\n\n**(i)  (m,n) = (2,1)** gives the primitive triple (3,4,5).  Here \\(mn(m^{2}-n^{2}) = 1\\cdot2\\cdot3 = 6\\).  So the areas are \\(6k^{2}\\).  For k=1,2,3,4 we obtain\n\\[6,\\;24,\\;54,\\;96.\\]\nk=5 already yields 150>100, so we stop.\n\n**(ii) (m,n) = (3,2)** gives the primitive triple (5,12,13).  Here \\(mn(m^{2}-n^{2}) = 2\\cdot3\\cdot5 = 30\\).  The areas are \\(30k^{2}\\).  Only k=1 works (k=2 gives 120>100), giving \\[30.\\]\n\n**(iii) (m,n) = (4,1)** gives the primitive triple (8,15,17).  Here \\(mn(m^{2}-n^{2}) = 1\\cdot4\\cdot15 = 60\\).  Hence we obtain the single area \\[60.\\]\n\n**(iv) (m,n) = (4,3)** gives the primitive triple (7,24,25).  Here \\(mn(m^{2}-n^{2}) = 3\\cdot4\\cdot7 = 84\\).  Hence we obtain the single area \\[84.\\]\n\nNo other choices of (m,n) with m>n produce a product \\(mn(m^{2}-n^{2})\\) smaller than 100, and any larger (m,n) already give \\(mn(m^{2}-n^{2})\\ge 105\\).  Therefore the complete list of possible areas less than 100 is\n\\[6,\\;24,\\;30,\\;54,\\;60,\\;84,\\;96.\\]\nEach of these areas appears in exactly one of the cases listed above, and the corresponding tokens appear in the solution as shown.\n\nThe required sum is\n\\[6+24+30+54+60+84+96 = 354.\\]\nThus the answer is **354**.",
+  "check_code": "import math, json\nareas = set()\n# search a,b up to a reasonable limit; if area<100 then a,b can't exceed 100\nlimit = 200\nfor a in range(1, limit+1):\n    for b in range(1, limit+1):\n        c2 = a*a + b*b\n        c = int(math.isqrt(c2))\n        if c*c != c2:\n            continue  # not a Pythagorean triple\n        area = a*b//2\n        if a*b % 2 != 0:\n            continue  # area not integer (should not happen for integer legs of a right triangle with integer hypotenuse)\n        if area < 100:\n            areas.add(area)\n# compute answer\nanswer = sum(areas)\nprint(answer)\nprint(json.dumps(sorted(areas)))"
+ },
+ {
+  "id": "r0-c4",
+  "topic": "Algebra \u2013 integer solutions of quadratic equations",
+  "question": "Find the sum of all positive integers \\(n\\) for which the quadratic equation\n\\[x^{2} - n x + 60 = 0\\]\nhas **both** roots that are integers.  (Enter the sum as a single integer.)",
+  "answer": 168,
+  "cases": [
+   {
+    "text": "Factor pair \\(2\\cdot120\\) gives \\(n = 61\\)",
+    "value": 61,
+    "token": "2\u00b7120"
+   },
+   {
+    "text": "Factor pair \\(4\\cdot60\\) gives \\(n = 32\\)",
+    "value": 32,
+    "token": "4\u00b760"
+   },
+   {
+    "text": "Factor pair \\(6\\cdot40\\) gives \\(n = 23\\)",
+    "value": 23,
+    "token": "6\u00b740"
+   },
+   {
+    "text": "Factor pair \\(8\\cdot30\\) gives \\(n = 19\\)",
+    "value": 19,
+    "token": "8\u00b730"
+   },
+   {
+    "text": "Factor pair \\(10\\cdot24\\) gives \\(n = 17\\)",
+    "value": 17,
+    "token": "10\u00b724"
+   },
+   {
+    "text": "Factor pair \\(12\\cdot20\\) gives \\(n = 16\\)",
+    "value": 16,
+    "token": "12\u00b720"
+   }
+  ],
+  "omitted_case": 2,
+  "why_omitted": "The pair \\(6\\cdot40\\) is easy to overlook because both factors are multiples of 2 but not of 4, so a solver who only checks \\(4\\)-multiple pairs may miss it.",
+  "target_wrong": 145,
+  "solution": "For the quadratic \\(x^{2}-nx+60=0\\) to have integer roots, its discriminant must be a perfect square.\n\nThe discriminant is\n\\[D = n^{2}-4\\cdot60 = n^{2}-240.\\]\nThus we need integers \\(n,k\\) with\n\\[n^{2}-k^{2}=240\\]\nor equivalently\n\\[(n-k)(n+k)=240.\\]\nBoth factors \\(n-k\\) and \\(n+k\\) are positive integers of the same parity (their sum \\(2n\\) is even).  Hence we list all factor pairs \\((a,b)\\) of \\(240\\) with \\(a\\le b\\) and \\(a\\equiv b\\pmod 2\\).  For each such pair we obtain\n\\[n = \\frac{a+b}{2},\\qquad k = \\frac{b-a}{2}.\\]\nThe admissible pairs and the resulting \\(n\\) are:\n\n* \\(a,b = 2,120\\)  \u2192  \\(n = \\frac{2+120}{2}=61\\)   (token **2\u00b7120**)   \n* \\(a,b = 4,60\\)   \u2192  \\(n = \\frac{4+60}{2}=32\\)   (token **4\u00b760**)   \n* \\(a,b = 6,40\\)   \u2192  \\(n = \\frac{6+40}{2}=23\\)   (token **6\u00b740**)   \n* \\(a,b = 8,30\\)   \u2192  \\(n = \\frac{8+30}{2}=19\\)   (token **8\u00b730**)   \n* \\(a,b = 10,24\\)  \u2192  \\(n = \\frac{10+24}{2}=17\\)   (token **10\u00b724**)   \n* \\(a,b = 12,20\\)  \u2192  \\(n = \\frac{12+20}{2}=16\\)   (token **12\u00b720**)   \n\nAll six values of \\(n\\) are distinct and each indeed makes the discriminant a perfect square, so the quadratic has integer roots in each case.\n\nThe required sum is\n\\[61+32+23+19+17+16 = 168.\\]\nThus the answer is **168**.",
+  "check_code": "import json, math\n\n# constant term\nc = 60\n# discriminant must be a perfect square: n^2 - 4c = k^2\n# => (n-k)(n+k) = 4c = 240\nproduct = 4 * c\nvalues = []\nfor a in range(1, int(math.isqrt(product)) + 1):\n    if product % a == 0:\n        b = product // a\n        # need a and b same parity\n        if (a + b) % 2 == 0:\n            n = (a + b) // 2\n            if n > 0:\n                # verify discriminant is square\n                D = n * n - 4 * c\n                if int(math.isqrt(D)) ** 2 == D:\n                    values.append(n)\n# sort and compute sum\nvalues.sort()\nanswer = sum(values)\nprint(answer)\nprint(json.dumps(values))"
+ },
+ {
+  "id": "r1-c0",
+  "topic": "Number Theory \u2013 coprime factor pairs, sums, and products",
+  "question": "Find the sum of all positive integers $n$ for which there exist positive integers $a$ and $b$ such that\n\n* $a<b$,\n* $ab=n$,\n* $\\gcd(a,b)=1$, and\n* $a+b$ is equal to $12$, $15$, or $20$.\n\nEnter the sum as a positive integer.",
+  "answer": 446,
+  "cases": [
+   {
+    "text": "$a+b=12$, $a=1$, $b=11$",
+    "value": 11,
+    "token": "1\u00b711"
+   },
+   {
+    "text": "$a+b=12$, $a=5$, $b=7$",
+    "value": 35,
+    "token": "5\u00b77"
+   },
+   {
+    "text": "$a+b=15$, $a=1$, $b=14$",
+    "value": 14,
+    "token": "1\u00b714"
+   },
+   {
+    "text": "$a+b=15$, $a=2$, $b=13$",
+    "value": 26,
+    "token": "2\u00b713"
+   },
+   {
+    "text": "$a+b=15$, $a=4$, $b=11$",
+    "value": 44,
+    "token": "4\u00b711"
+   },
+   {
+    "text": "$a+b=15$, $a=7$, $b=8$",
+    "value": 56,
+    "token": "7\u00b78"
+   },
+   {
+    "text": "$a+b=20$, $a=1$, $b=19$",
+    "value": 19,
+    "token": "1\u00b719"
+   },
+   {
+    "text": "$a+b=20$, $a=3$, $b=17$",
+    "value": 51,
+    "token": "3\u00b717"
+   },
+   {
+    "text": "$a+b=20$, $a=7$, $b=13$",
+    "value": 91,
+    "token": "7\u00b713"
+   },
+   {
+    "text": "$a+b=20$, $a=9$, $b=11$",
+    "value": 99,
+    "token": "9\u00b711"
+   }
+  ],
+  "omitted_case": 8,
+  "why_omitted": "When listing the $a+b=20$ possibilities, many solvers stop after checking the small values $a=1,3,5,9$ and overlook the valid pair $(a,b)=(7,13)$ because it is not obvious from the parity pattern.",
+  "target_wrong": 355,
+  "solution": "Let $a<b$ be positive integers with $ab=n$, $\\gcd(a,b)=1$, and $a+b\\in\\{12,15,20\\}$.  Because $\\gcd(a,b)=1$, $a$ and $b$ cannot share any prime factor.  We treat each allowed sum separately.\n\n**1.  $a+b=12$**\nWe need coprime ordered pairs $a<b$ with sum $12$.  Trying $a=1,2,3,4,5$ gives:\n- $a=1$, $b=11$, $\\gcd(1,11)=1$, $n=1\\cdot11=11$.\n- $a=2$, $b=10$, $\\gcd=2$ (reject).\n- $a=3$, $b=9$, $\\gcd=3$ (reject).\n- $a=4$, $b=8$, $\\gcd=4$ (reject).\n- $a=5$, $b=7$, $\\gcd(5,7)=1$, $n=5\\cdot7=35$.\nThus the $12$\u2011sum contributes $n=11$ and $n=35$.\n\n**2.  $a+b=15$**\nCheck $a=1$ through $7$ (since $a<b$):\n- $a=1$, $b=14$, coprime, $n=14$.\n- $a=2$, $b=13$, coprime, $n=26$.\n- $a=3$, $b=12$, not coprime.\n- $a=4$, $b=11$, coprime, $n=44$.\n- $a=5$, $b=10$, not coprime.\n- $a=6$, $b=9$, not coprime.\n- $a=7$, $b=8$, coprime, $n=56$.\nThus the $15$\u2011sum gives $n=14,26,44,56$.\n\n**3.  $a+b=20$**\nCheck $a=1$ through $9$:\n- $a=1$, $b=19$, coprime, $n=19$.\n- $a=2$, $b=18$, not coprime.\n- $a=3$, $b=17$, coprime, $n=51$.\n- $a=4$, $b=16$, not coprime.\n- $a=5$, $b=15$, not coprime.\n- $a=6$, $b=14$, not coprime.\n- $a=7$, $b=13$, coprime, $n=91$.\n- $a=8$, $b=12$, not coprime.\n- $a=9$, $b=11$, coprime, $n=99$.\nThus the $20$\u2011sum contributes $n=19,51,91,99$.\n\nCollecting all distinct $n$ we obtain\n$$\\{11,35,14,26,44,56,19,51,91,99\\}.$$\nEach value is different, so the required sum is\n$$11+35+14+26+44+56+19+51+91+99 = 446.$$",
+  "check_code": "import math, json\n\ndef compute():\n    vals = set()\n    for a in range(1, 100):  # enough because a+b<=20 => a<=19\n        for b in range(a+1, 100):\n            if a + b not in (12, 15, 20):\n                continue\n            if math.gcd(a, b) != 1:\n                continue\n            vals.add(a * b)\n    total = sum(vals)\n    print(total)\n    print(json.dumps(sorted(vals)))\n\nif __name__ == \"__main__\":\n    compute()"
+ },
+ {
+  "id": "r1-c1",
+  "topic": "Geometry \u2013 lattice points on circles",
+  "question": "Let a circle be centered at a lattice point in the plane and have radius \\(\\sqrt{n}\\) where \\(n\\) is a positive integer. A lattice point is a point whose two coordinates are both integers. The circle is said to *pass through* a lattice point if the point lies exactly on the circle (its distance from the centre equals the radius). Find the sum of all positive integers \\(n<500\\) for which there exists such a circle that passes through exactly 12 lattice points.",
+  "answer": 2246,
+  "cases": [
+   {
+    "text": "n = 25 = 5\u00b2",
+    "value": 25,
+    "token": "5^2"
+   },
+   {
+    "text": "n = 50 = 5\u00b2\u00b72",
+    "value": 50,
+    "token": "5^2\u00b72"
+   },
+   {
+    "text": "n = 100 = 5\u00b2\u00b72\u00b2",
+    "value": 100,
+    "token": "5^2\u00b72^2"
+   },
+   {
+    "text": "n = 200 = 5\u00b2\u00b72\u00b3",
+    "value": 200,
+    "token": "5^2\u00b72^3"
+   },
+   {
+    "text": "n = 400 = 5\u00b2\u00b72\u2074",
+    "value": 400,
+    "token": "5^2\u00b72^4"
+   },
+   {
+    "text": "n = 225 = 5\u00b2\u00b73\u00b2",
+    "value": 225,
+    "token": "5^2\u00b73^2"
+   },
+   {
+    "text": "n = 450 = 5\u00b2\u00b72\u00b73\u00b2",
+    "value": 450,
+    "token": "5^2\u00b72\u00b73^2"
+   },
+   {
+    "text": "n = 169 = 13\u00b2",
+    "value": 169,
+    "token": "13^2"
+   },
+   {
+    "text": "n = 338 = 13\u00b2\u00b72",
+    "value": 338,
+    "token": "13^2\u00b72"
+   },
+   {
+    "text": "n = 289 = 17\u00b2",
+    "value": 289,
+    "token": "17^2"
+   }
+  ],
+  "omitted_case": 5,
+  "why_omitted": "Many solvers only consider factors of 2 when forming the multiplier m, forgetting that a square of a prime \u22613 (mod\u202f4) such as 3\u00b2 may also be multiplied without changing the number of lattice points on the circle.",
+  "target_wrong": 2021,
+  "solution": "Let the centre of the circle be the origin; translating the whole picture does not change the number of lattice points on the circle.  The lattice points on the circle \\(x^{2}+y^{2}=n\\) correspond exactly to integer solutions of the Diophantine equation \\(x^{2}+y^{2}=n\\).  The well\u2011known formula for the number of representations of \\(n\\) as a sum of two squares (counting order and signs) is\n\\[r_{2}(n)=\\begin{cases}0,&\\text{if some prime }p\\equiv3\\pmod4\\text{ occurs to an odd power in }n,\\\\[4pt]\n4\\displaystyle\\prod_{p\\equiv1\\,(4)}(e_{p}+1),&\\text{otherwise},\\end{cases}\\]\nwhere \\(e_{p}\\) is the exponent of the prime \\(p\\equiv1\\pmod4\\) in the factorisation of \\(n\\).  The circle therefore passes through exactly \\(r_{2}(n)\\) lattice points.\nWe want \\(r_{2}(n)=12\\).  Hence\n\\[4\\prod_{p\\equiv1\\,(4)}(e_{p}+1)=12\\quad\\Longrightarrow\\quad\\prod_{p\\equiv1\\,(4)}(e_{p}+1)=3.\n\\]\nThe only way a product of positive integers can be 3 is to have a single factor equal to 3 and no other factors.  Thus there is exactly one prime \\(p\\equiv1\\pmod4\\) occurring in \\(n\\) and its exponent must satisfy \\(e_{p}+1=3\\), i.e. \\(e_{p}=2\\).  Consequently\n\\[n=p^{2}\\cdot m,\\]\nwhere \\(p\\) is a prime congruent to 1 mod\u202f4, and \\(m\\) is any integer whose prime factors are either 2 or primes \\(q\\equiv3\\pmod4\\), each occurring to an even exponent (so that they do not affect \\(r_{2}\\)).\nWe are asked for \\(n<500\\).  The squares of the relevant primes are\n\\[5^{2}=25,\\;13^{2}=169,\\;17^{2}=289,\\;29^{2}=841>500,\\]\nso only \\(p=5,13,17\\) need be considered.\n\n*For \\(p=5\\) (\\(p^{2}=25\\)).*  The possible multipliers \\(m\\) (made from 2\u2011powers and even powers of primes \\(\\equiv3\\pmod4\\)) that keep the product below 500 are\n\\[1,\\;2,\\;2^{2}=4,\\;2^{3}=8,\\;2^{4}=16,\\;3^{2}=9,\\;2\\cdot3^{2}=18.\\]\nMultiplying by 25 gives the seven admissible values\n\\[25,\\;50,\\;100,\\;200,\\;400,\\;225,\\;450.\\]\n\n*For \\(p=13\\) (\\(p^{2}=169\\)).*  Multipliers \\(m\\) allowed are \\(1\\) and \\(2\\), producing\n\\[169,\\;338.\\]\n\n*For \\(p=17\\) (\\(p^{2}=289\\)).*  Only \\(m=1\\) works, giving \\(289\\).\n\nCollecting all distinct \\(n<500\\) we obtain the ten numbers\n\\[25,\\;50,\\;100,\\;200,\\;400,\\;225,\\;450,\\;169,\\;338,\\;289.\\]\nEach of them indeed yields \\(r_{2}(n)=12\\) lattice points on the corresponding circle, and no other integer \\(n<500\\) does.\nThe required sum is therefore\n\\[25+50+100+200+400+225+450+169+338+289=2246.\\]\nHence the answer is **2246**.",
+  "check_code": "import json, math\n\ndef r2(n):\n    # return number of integer solutions (x,y) to x^2+y^2=n, counting order and signs\n    # factor n\n    temp = n\n    prod = 1\n    for p in range(2, int(math.isqrt(temp)) + 1):\n        if temp % p == 0:\n            exp = 0\n            while temp % p == 0:\n                temp //= p\n                exp += 1\n            if p % 4 == 3:\n                if exp % 2 == 1:\n                    return 0\n                # even exponent does not affect the product\n            elif p % 4 == 1:\n                prod *= (exp + 1)\n            # p == 2 does not affect the product\n    # remaining prime factor\n    if temp > 1:\n        if temp % 4 == 3:\n            return 0\n        elif temp % 4 == 1:\n            prod *= 2  # exponent is 1, so (1+1)\n    return 4 * prod\n\nlimit = 500\nvals = []\nfor n in range(1, limit):\n    if r2(n) == 12:\n        vals.append(n)\nans = sum(vals)\nprint(ans)\nprint(json.dumps(sorted(vals)))"
+ },
+ {
+  "id": "r1-c4",
+  "topic": "Combinatorics \u2013 digits of a three\u2011digit number",
+  "question": "Let \\(n\\) be a three\u2011digit positive integer whose hundreds, tens and units digits are \\(a,b,c\\) (so \\(a\\neq0\\)). Find the sum of all such integers \\(n\\) that satisfy\n\\[a\\cdot b\\cdot c = a+b+c.\\]",
+  "answer": 1332,
+  "cases": [
+   {
+    "text": "Digits (1,2,3) in order 123",
+    "value": 123,
+    "token": "123"
+   },
+   {
+    "text": "Digits (1,3,2) giving 132",
+    "value": 132,
+    "token": "132"
+   },
+   {
+    "text": "Digits (2,1,3) giving 213",
+    "value": 213,
+    "token": "213"
+   },
+   {
+    "text": "Digits (2,3,1) giving 231",
+    "value": 231,
+    "token": "231"
+   },
+   {
+    "text": "Digits (3,1,2) giving 312",
+    "value": 312,
+    "token": "312"
+   },
+   {
+    "text": "Digits (3,2,1) giving 321",
+    "value": 321,
+    "token": "321"
+   }
+  ],
+  "omitted_case": 4,
+  "why_omitted": "A solver may think the smallest digit must appear in the hundreds place and therefore overlook the permutation where the hundreds digit is 3 (the number 312).",
+  "target_wrong": 1020,
+  "solution": "Let \\(n\\) be a three\u2011digit integer with digits \\(a,b,c\\) (\\(a\\neq0\\)).  The condition is\n\\[a b c = a+b+c.\\tag{1}\\]\n\n*No digit can be zero.*  If any of \\(a,b,c\\) were 0, the left side of (1) would be 0 while the right side would be at least \\(a\\ge1\\), impossible.\n\nBecause the product grows faster than the sum, each digit must be small.  Suppose one digit is at least 4.  Then the product \\(\\ge4\\cdot1\\cdot1 =4\\) while the sum \\(\\le4+9+9 =22\\); this does not give a contradiction directly, so we examine the possibilities systematically.\n\n**Case 1: \\(a=1\\).**  Equation (1) becomes \\(b c = 1+b+c\\), i.e. \\(b c -b -c =1\\).  Adding 1 to both sides gives \\((b-1)(c-1)=2\\).  The factor pairs of 2 are \\((1,2)\\) and \\((2,1)\\).  Hence \\((b,c)=(2,3)\\) or \\((3,2)\\).  This yields the numbers **123** and **132**.\n\n**Case 2: \\(a=2\\).**  Equation (1) becomes \\(2bc = 2+b+c\\) or \\(2bc -b -c =2\\).  Rearranging gives \\((2b-1)(2c-1)=5\\).  The only way two odd integers multiply to 5 is \\(1\\times5\\) or \\(5\\times1\\).  Solving gives \\((b,c)=(1,3)\\) or \\((3,1)\\).  This yields **213** and **231**.\n\n**Case 3: \\(a=3\\).**  Equation (1) becomes \\(3bc = 3+b+c\\) \u2192 \\(3bc -b -c =3\\).  Rearranging gives \\((3b-1)(3c-1)=8\\).  The only factorisation of 8 into numbers of the form \\(3k-1\\) is \\(2\\times4\\) (since \\(2 = 3\\cdot1-1\\) and \\(4 = 3\\cdot\\!\\!\\)??).  Solving yields \\((b,c)=(1,2)\\) or \\((2,1)\\).  This yields **312** and **321**.\n\nNo other values for \\(a\\) are possible because for \\(a\\ge4\\) the left side of (1) is at least \\(4\\cdot1\\cdot1=4\\) while the right side is at most \\(a+9+9\\le a+18\\); a quick check shows no solutions for \\(a\\ge4\\).\n\nThus the only three\u2011digit numbers satisfying (1) are the six permutations of the digits \\(1,2,3\\):\n\\[123,\\ 132,\\ 213,\\ 231,\\ 312,\\ 321.\\]\nEach contributes its own value to the required sum.  Adding them gives\n\\[123+132+213+231+312+321 = 1332.\\]\nTherefore the answer is **1332**.",
+  "check_code": "import json\n\ndef digits(n):\n    a = n // 100\n    b = (n // 10) % 10\n    c = n % 10\n    return a, b, c\n\nvalues = []\nfor n in range(100, 1000):\n    a, b, c = digits(n)\n    if a * b * c == a + b + c:\n        values.append(n)\nanswer = sum(values)\nprint(answer)\nprint(json.dumps(sorted(values)))"
+ },
+ {
+  "id": "r2-c0",
+  "topic": "Number theory: factor pairs, divisors and perfect squares",
+  "question": "Find the sum of all positive integers \\(n\\) such that \\(n\\) is a divisor of \\(1{,}000{,}000\\), \\(n\\) is a perfect square, and the decimal representation of \\(n\\) uses exactly two distinct digits.",
+  "answer": 1050605,
+  "cases": [
+   {
+    "text": "n = 16",
+    "value": 16,
+    "token": "16"
+   },
+   {
+    "text": "n = 25",
+    "value": 25,
+    "token": "25"
+   },
+   {
+    "text": "n = 64",
+    "value": 64,
+    "token": "64"
+   },
+   {
+    "text": "n = 100",
+    "value": 100,
+    "token": "100"
+   },
+   {
+    "text": "n = 400",
+    "value": 400,
+    "token": "400"
+   },
+   {
+    "text": "n = 10{,}000",
+    "value": 10000,
+    "token": "10000"
+   },
+   {
+    "text": "n = 40{,}000",
+    "value": 40000,
+    "token": "40000"
+   },
+   {
+    "text": "n = 1{,}000{,}000",
+    "value": 1000000,
+    "token": "1000000"
+   }
+  ],
+  "omitted_case": 7,
+  "why_omitted": "The largest square \\(1{,}000{,}000\\) is easy to overlook because solvers often stop checking once the number of digits exceeds the small\u2011digit examples they have already found.",
+  "target_wrong": 50605,
+  "solution": "We are asked for all positive integers \\(n\\) satisfying three conditions:\n1. \\(n\\mid 1{,}000{,}000\\).\n2. \\(n\\) is a perfect square.\n3. The decimal expansion of \\(n\\) contains exactly two distinct digits.\n\n---\n### 1. Squares that divide \\(1{,}000{,}000\\)\n\\(1{,}000{,}000 = 10^{6} = (2\\cdot5)^{6}=2^{6}\\,5^{6}\\).\nA divisor of \\(1{,}000{,}000\\) is a square iff each prime exponent is even.  Thus a square divisor must be of the form\n\\[n = 2^{2a}\\,5^{2b}\\]\nwith \\(0\\le a\\le 3\\) and \\(0\\le b\\le 3\\).  There are \\(4\\times4=16\\) such numbers.  Listing them gives\n\\[\\begin{array}{c|c}\na & 2^{2a} \\\\ \\hline\n0 & 1 \\\n1 & 4 \\\n2 & 16 \\\n3 & 64 \\end{array}\\qquad\n\\begin{array}{c|c}\nb & 5^{2b} \\\\ \\hline\n0 & 1 \\\n1 & 25 \\\n2 & 625 \\\n3 & 15625 \\end{array}\\]\nMultiplying a choice from the left column by a choice from the right column yields the 16 square divisors:\n\\[1,4,16,64,25,100,400,1600,625,2500,10000,40000,15625,62500,250000,1{,}000{,}000.\\]\n---\n### 2. Exactly two distinct decimal digits\nWe now test each of the sixteen numbers for the digit condition.  Write the set of distinct digits of a number; we keep the number if the set has size 2.\n\n| n | digits | # distinct |\n|---|--------|-----------|\n| 1          | {1}               | 1 |\n| 4          | {4}               | 1 |\n| 16         | {1,6}             | 2 \u2705 |\n| 64         | {6,4}             | 2 \u2705 |\n| 25         | {2,5}             | 2 \u2705 |\n| 100        | {1,0}             | 2 \u2705 |\n| 400        | {4,0}             | 2 \u2705 |\n| 1600       | {1,6,0}           | 3 |\n| 625        | {6,2,5}           | 3 |\n| 2500       | {2,5,0}           | 3 |\n| 10000      | {1,0}             | 2 \u2705 |\n| 40000      | {4,0}             | 2 \u2705 |\n| 15625      | {1,5,6,2}         | 4 |\n| 62500      | {6,2,5,0}         | 4 |\n| 250000     | {2,5,0}           | 3 |\n| 1,000,000  | {1,0}             | 2 \u2705 |\n\nThe numbers that satisfy all three conditions are therefore\n\\[16,\\;25,\\;64,\\;100,\\;400,\\;10{,}000,\\;40{,}000,\\;1{,}000{,}000.\\]\n---\n### 3. Summation\nAdding them gives\n\\[\\begin{aligned}\n\\text{Sum}&=16+25+64+100+400+10{,}000+40{,}000+1{,}000{,}000 \\\\\n&=1{,}050{,}605.\\end{aligned}\\]\nThus the required sum is **1\u202f050\u202f605**.\n---\n**Answer: 1050605**",
+  "check_code": "import json, math\n\ndef digit_set(n):\n    return set(str(n))\n\nN = 1_000_000\nans = 0\nvals = []\nfor n in range(1, N+1):\n    # condition 1: divisor of N\n    if N % n != 0:\n        continue\n    # condition 2: perfect square\n    r = int(math.isqrt(n))\n    if r * r != n:\n        continue\n    # condition 3: exactly two distinct decimal digits\n    if len(digit_set(n)) == 2:\n        ans += n\n        vals.append(n)\n\nprint(ans)\nprint(json.dumps(sorted(vals)))"
+ },
+ {
+  "id": "r2-c3",
+  "topic": "Number Theory \u2013 Modular Arithmetic and CRT",
+  "question": "Find the sum of all positive integers $n$ such that $n^{2} \\equiv 1 \\pmod{385}$.\n(Recall that $385 = 5\\cdot7\\cdot11$.)",
+  "answer": 1540,
+  "cases": [
+   {
+    "text": "$n\\equiv 1\\pmod{5},\\;n\\equiv 1\\pmod{7},\\;n\\equiv 1\\pmod{11}$",
+    "value": 1,
+    "token": "n=1"
+   },
+   {
+    "text": "$n\\equiv 4\\pmod{5},\\;n\\equiv 1\\pmod{7},\\;n\\equiv 1\\pmod{11}$",
+    "value": 34,
+    "token": "n=34"
+   },
+   {
+    "text": "$n\\equiv 1\\pmod{5},\\;n\\equiv 6\\pmod{7},\\;n\\equiv 1\\pmod{11}$",
+    "value": 76,
+    "token": "n=76"
+   },
+   {
+    "text": "$n\\equiv 1\\pmod{5},\\;n\\equiv 1\\pmod{7},\\;n\\equiv 10\\pmod{11}$",
+    "value": 111,
+    "token": "n=111"
+   },
+   {
+    "text": "$n\\equiv 4\\pmod{5},\\;n\\equiv 6\\pmod{7},\\;n\\equiv 1\\pmod{11}$",
+    "value": 309,
+    "token": "n=309"
+   },
+   {
+    "text": "$n\\equiv 4\\pmod{5},\\;n\\equiv 1\\pmod{7},\\;n\\equiv 10\\pmod{11}$",
+    "value": 274,
+    "token": "n=274"
+   },
+   {
+    "text": "$n\\equiv 1\\pmod{5},\\;n\\equiv 6\\pmod{7},\\;n\\equiv 10\\pmod{11}$",
+    "value": 351,
+    "token": "n=351"
+   },
+   {
+    "text": "$n\\equiv 4\\pmod{5},\\;n\\equiv 6\\pmod{7},\\;n\\equiv 10\\pmod{11}$",
+    "value": 384,
+    "token": "n=384"
+   }
+  ],
+  "omitted_case": 7,
+  "why_omitted": "The all\u2011negative combination ($n\\equiv-1$ modulo each prime) yields the largest residue $384$, which many solvers overlook because it is close to the modulus and looks like a \u201ctrivial\u201d repeat of $-1$.",
+  "target_wrong": 1156,
+  "solution": "We need all $n$ with $n^2\\equiv1\\pmod{385}$.  Since $385=5\\cdot7\\cdot11$ and the primes are distinct, the condition is equivalent to\n$$n^2\\equiv1\\pmod5,\\qquad n^2\\equiv1\\pmod7,\\qquad n^2\\equiv1\\pmod{11}.$$\nFor each odd prime $p$, the congruence $x^2\\equiv1\\pmod p$ has exactly two solutions: $x\\equiv1\\pmod p$ and $x\\equiv-1\\pmod p$ (i.e., $x\\equiv p-1$).  Therefore there are $2^3=8$ possible triples of residues \\((\\pm1\\bmod5,\\pm1\\bmod7,\\pm1\\bmod11)$.  Using the Chinese Remainder Theorem we find the unique $n$ modulo $385$ for each triple.\n\n1. $n\\equiv1\\;(5),\\;1\\;(7),\\;1\\;(11)\\;\\Rightarrow\\;n=1$.\n2. $n\\equiv4\\;(5),\\;1\\;(7),\\;1\\;(11)\\;\\Rightarrow\\;n=34$.\n3. $n\\equiv1\\;(5),\\;6\\;(7),\\;1\\;(11)\\;\\Rightarrow\\;n=76$.\n4. $n\\equiv1\\;(5),\\;1\\;(7),\\;10\\;(11)\\;\\Rightarrow\\;n=111$.\n5. $n\\equiv4\\;(5),\\;6\\;(7),\\;1\\;(11)\\;\\Rightarrow\\;n=309$.\n6. $n\\equiv4\\;(5),\\;1\\;(7),\\;10\\;(11)\\;\\Rightarrow\\;n=274$.\n7. $n\\equiv1\\;(5),\\;6\\;(7),\\;10\\;(11)\\;\\Rightarrow\\;n=351$.\n8. $n\\equiv4\\;(5),\\;6\\;(7),\\;10\\;(11)\\;\\Rightarrow\\;n=384$.\n\nAll eight values are distinct and lie between $1$ and $384$.  Their sum is\n$$1+34+76+111+274+309+351+384 = 1540.$$\nHence the required sum is $\\boxed{1540}$.\n",
+  "check_code": "import json\nM = 385\nvals = [n for n in range(1, M) if (n*n - 1) % M == 0]\nans = sum(vals)\nprint(ans)\nprint(json.dumps(sorted(vals)))"
+ },
+ {
+  "id": "r2-c4",
+  "topic": "Algebra: integer solutions of equations and polynomial roots",
+  "question": "Find the sum of all positive integers $n$ for which the quadratic equation $$x^2-nx+(n+179)=0$$ has an integer solution $x$.",
+  "answer": 564,
+  "cases": [
+   {
+    "text": "Factor pair (2,\u202f360) gives $n=183$",
+    "value": 183,
+    "token": "2\u00b7360"
+   },
+   {
+    "text": "Factor pair (4,\u202f180) gives $n=94$",
+    "value": 94,
+    "token": "4\u00b7180"
+   },
+   {
+    "text": "Factor pair (6,\u202f120) gives $n=65$",
+    "value": 65,
+    "token": "6\u00b7120"
+   },
+   {
+    "text": "Factor pair (8,\u202f90) gives $n=51$",
+    "value": 51,
+    "token": "8\u00b790"
+   },
+   {
+    "text": "Factor pair (10,\u202f72) gives $n=43$",
+    "value": 43,
+    "token": "10\u00b772"
+   },
+   {
+    "text": "Factor pair (12,\u202f60) gives $n=38$",
+    "value": 38,
+    "token": "12\u00b760"
+   },
+   {
+    "text": "Factor pair (18,\u202f40) gives $n=31$",
+    "value": 31,
+    "token": "18\u00b740"
+   },
+   {
+    "text": "Factor pair (20,\u202f36) gives $n=30$",
+    "value": 30,
+    "token": "20\u00b736"
+   },
+   {
+    "text": "Factor pair (24,\u202f30) gives $n=29$",
+    "value": 29,
+    "token": "24\u00b730"
+   }
+  ],
+  "omitted_case": 8,
+  "why_omitted": "The factor pair (24,\u202f30) is easy to overlook because 24 is close to $\\sqrt{720}$, and solvers sometimes stop checking divisors once they pass 20.",
+  "target_wrong": 535,
+  "solution": "We need a positive integer $n$ for which the quadratic $x^2-nx+(n+179)=0$ has an integer root.\n\nIf $x$ is an integer root, the discriminant must be a perfect square:\n\\[\nD=n^2-4(n+179)=n^2-4n-716.\n\\]\nWrite $D=m^2$ for some integer $m\\ge 0$.  Rearranging gives\n\\[\n(n-2)^2-m^2=720.\n\\]\nFactor the left\u2013hand side as a difference of squares:\n\\[\n\\bigl((n-2)-m\\bigr)\\bigl((n-2)+m\\bigr)=720.\n\\]\nDenote $u=(n-2)-m$ and $v=(n-2)+m$.  Then $uv=720$, $u$ and $v$ have the same parity (their sum $2(n-2)$ is even), and $u\\le v$.\n\nThus we must list all factor pairs of $720$ whose two factors are both even.  The even divisors of $720$ up to $\\sqrt{720}\\approx26.8$ are\n\\[2,\\;4,\\;6,\\;8,\\;10,\\;12,\\;18,\\;20,\\;24.\n\\]\nCorresponding even partners are $360,180,120,90,72,60,40,36,30$ respectively.  These give nine admissible pairs:\n\n| $u$ | $v$ | $n=2+\\frac{u+v}{2}$ |\n|-----|-----|-------------------|\n| 2   | 360 | 183 |\n| 4   | 180 | 94 |\n| 6   | 120 | 65 |\n| 8   | 90  | 51 |\n|10   | 72  | 43 |\n|12   | 60  | 38 |\n|18   | 40  | 31 |\n|20   | 36  | 30 |\n|24   | 30  | 29 |\n\nEach pair yields a distinct positive integer $n$, and for each such $n$ the discriminant $D$ equals $m^2$ with $m=\\frac{v-u}{2}$, so the quadratic indeed has the integer root $x=\\frac{n\\pm m}{2}$.\n\nNo other factor pair of $720$ satisfies the parity condition, so the list above is complete.  The required sum is\n\\[\n183+94+65+51+43+38+31+30+29 = 564.\n\\]\nHence the answer is $\\boxed{564}$.",
+  "check_code": "import json, math\n\ndef solve():\n    target = 720  # (n-2)^2 - m^2 = 720\n    values = set()\n    for u in range(1, int(math.isqrt(target)) + 1):\n        if target % u != 0:\n            continue\n        v = target // u\n        # both factors must have same parity (so that n is integer)\n        if (u + v) % 2 != 0:\n            continue\n        # n = 2 + (u+v)//2 must be positive\n        n = 2 + (u + v) // 2\n        if n > 0:\n            values.add(n)\n        # also consider the swapped pair only once (u <= v already)\n    # Ensure we have captured the case where the smaller factor is odd but the larger is even and parity matches \u2013\n    # the parity test above already excludes those.\n    values = sorted(values)\n    total = sum(values)\n    print(total)\n    print(json.dumps(values))\n\nif __name__ == \"__main__\":\n    solve()"
+ },
+ {
+  "id": "r2-c5",
+  "topic": "Number theory (gcd, lcm, floor function)",
+  "question": "Find the sum of all positive integers $n$ for which there exists a positive integer $k$ satisfying\n\\[\\left\\lfloor\\frac{n}{\\gcd(n,k)}\\right\\rfloor = 3\\qquad\\text{and}\\qquad \\operatorname{lcm}(n,k)=210.\\]",
+  "answer": 432,
+  "cases": [
+   {
+    "text": "d = 1  \\;\\Rightarrow\\; n = 3",
+    "value": 3,
+    "token": "d=1"
+   },
+   {
+    "text": "d = 2  \\;\\Rightarrow\\; n = 6",
+    "value": 6,
+    "token": "d=2"
+   },
+   {
+    "text": "d = 5  \\;\\Rightarrow\\; n = 15",
+    "value": 15,
+    "token": "d=5"
+   },
+   {
+    "text": "d = 7  \\;\\Rightarrow\\; n = 21",
+    "value": 21,
+    "token": "d=7"
+   },
+   {
+    "text": "d = 10 \\;\\Rightarrow\\; n = 30",
+    "value": 30,
+    "token": "d=10"
+   },
+   {
+    "text": "d = 14 \\;\\Rightarrow\\; n = 42",
+    "value": 42,
+    "token": "d=14"
+   },
+   {
+    "text": "d = 35 \\;\\Rightarrow\\; n = 105",
+    "value": 105,
+    "token": "d=35"
+   },
+   {
+    "text": "d = 70 \\;\\Rightarrow\\; n = 210",
+    "value": 210,
+    "token": "d=70"
+   }
+  ],
+  "omitted_case": 7,
+  "why_omitted": "The divisor $d=70$ forces $b=1$, i.e. $k$ equals the gcd, which many solvers treat as a degenerate or \u201ctrivial\u201d case and therefore skip.",
+  "target_wrong": 222,
+  "solution": "Let $d=\\gcd(n,k)$.  Write $n = da$ and $k = db$ with $a,b$ positive integers and $\\gcd(a,b)=1$.\n\n* From the floor condition we have \\[\\left\\lfloor\\frac{n}{d}\\right\\rfloor = \\left\\lfloor a\\right\\rfloor = a = 3,\\] so $a=3$ and $n=3d$.\n* The lcm condition gives \\[\\operatorname{lcm}(n,k)=d\\,a\\,b = d\\cdot3\\cdot b =210,\\] hence \\[d\\,b = 70.\\]\n\nThus $d$ and $b$ are a pair of positive integers whose product is $70$.  Every divisor $d$ of $70$ yields a unique $b=70/d$, and because $70$ has no factor $3$, $\\gcd(a,b)=\\gcd(3,b)=1$ is automatically satisfied for every divisor.\n\nConsequently each divisor $d|70$ produces a solution $n=3d$.  The positive divisors of $70=2\\cdot5\\cdot7$ are\n\\[1,\\;2,\\;5,\\;7,\\;10,\\;14,\\;35,\\;70.\\]\nCorresponding values of $n$ are\n\\[3,\\;6,\\;15,\\;21,\\;30,\\;42,\\;105,\\;210.\\]\nThese eight integers are all the possible $n$.\n\nThe required sum is\n\\[3+6+15+21+30+42+105+210 = 432.\\]\nThus the answer is $\\boxed{432}.$",
+  "check_code": "import math, json\n\ndef lcm(a, b):\n    return a * b // math.gcd(a, b)\n\nsolutions = []\nfor n in range(1, 1000):\n    for k in range(1, 1000):\n        if math.floor(n / math.gcd(n, k)) == 3 and lcm(n, k) == 210:\n            solutions.append(n)\n            break\nsolutions = sorted(set(solutions))\nprint(sum(solutions))\nprint(json.dumps(solutions))"
+ }
+]

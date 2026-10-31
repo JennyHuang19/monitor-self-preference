@@ -1,0 +1,4 @@
+glm-5.3.jsonl: 2 to run (1212 cached)
+  ok qwen3.8-2.4t|ie067|subtle_rat
+  ok glm-5.3|ie033|subtle_rat
+done: 2 ok, 0 err

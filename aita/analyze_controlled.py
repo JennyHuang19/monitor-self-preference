@@ -5,6 +5,8 @@ Here, using only the two families with sibling pairs (GLM, gpt-oss):
   interaction = flip(GLM->GLM) - flip(GLM->oss) - flip(oss->GLM) + flip(oss->oss)    [attacker->grader family]
   >0: graders flip more for same-family attackers (H1); <0: less (H2).
 Also per grader: same-family attackers minus cross-family attackers; and self minus sibling.
+closed2 (python analyze_controlled.py --pool closed2) has no sibling pair, so only the per-grader same-fam (= self) - cross
+contrasts are reported.
 95% CIs bootstrap over posts. Writes runs/controlled.json."""
 import json
 import math
@@ -15,7 +17,8 @@ from common import MODELS, RUNS, read_jsonl, run_dir
 
 FRAMES = {"neutral": "grades.jsonl", "self": "grades_self.jsonl"}
 FAM = {m["name"]: m["family"] for m in MODELS}
-PAIR = ("GLM", "gpt-oss")
+# Families with a sibling pair (GLM, gpt-oss for the open pool; none for closed2).
+PAIR = tuple(f for f in dict.fromkeys(FAM.values()) if sum(v == f for v in FAM.values()) >= 2)
 B = 2000
 
 base = {(b["pid"], b["grader"]): b["verdict"] for b in read_jsonl(RUNS / "baseline.jsonl")}
@@ -44,10 +47,13 @@ def rate(rows, pred):
 
 def stats(rows):
     fam = lambda fa, fg: rate(rows, lambda a, g: FAM[a] == fa and FAM[g] == fg)
-    out = {"interaction": fam("GLM", "GLM") - fam("GLM", "gpt-oss") - fam("gpt-oss", "GLM") + fam("gpt-oss", "gpt-oss")}
-    # Same contrast on log-odds, which is less distorted by the GLM graders sitting near the floor.
-    lo = lambda fa, fg: math.log((fam(fa, fg) + 0.005) / (1 - fam(fa, fg) + 0.005))
-    out["interaction (log-odds)"] = lo("GLM", "GLM") - lo("GLM", "gpt-oss") - lo("gpt-oss", "GLM") + lo("gpt-oss", "gpt-oss")
+    out = {}
+    if len(PAIR) == 2:
+        f1, f2 = PAIR
+        out["interaction"] = fam(f1, f1) - fam(f1, f2) - fam(f2, f1) + fam(f2, f2)
+        # Same contrast on log-odds, which is less distorted by the GLM graders sitting near the floor.
+        lo = lambda fa, fg: math.log((fam(fa, fg) + 0.005) / (1 - fam(fa, fg) + 0.005))
+        out["interaction (log-odds)"] = lo(f1, f1) - lo(f1, f2) - lo(f2, f1) + lo(f2, f2)
     for fa in PAIR:
         for fg in PAIR:
             out[f"{fa}->{fg}"] = fam(fa, fg)
@@ -58,11 +64,13 @@ def stats(rows):
         out[f"grader {gr['name']}: same-fam - cross"] = same - cross
         if gr["family"] in PAIR:
             diffs.append(same - cross)
-    out["mean over GLM/gpt-oss graders: same-fam - cross"] = sum(diffs) / len(diffs)
+    if not PAIR:
+        return out
+    out[f"mean over {'/'.join(PAIR)} graders: same-fam - cross"] = sum(diffs) / len(diffs)
     sib = [rate(rows, lambda a, g: g == gr["name"] and a == gr["name"]) -
            rate(rows, lambda a, g: g == gr["name"] and a != gr["name"] and FAM[a] == gr["family"])
            for gr in MODELS if gr["family"] in PAIR]
-    out["mean over GLM/gpt-oss graders: self - sibling"] = sum(sib) / len(sib)
+    out[f"mean over {'/'.join(PAIR)} graders: self - sibling"] = sum(sib) / len(sib)
     return out
 
 

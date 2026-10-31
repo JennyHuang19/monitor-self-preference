@@ -8,8 +8,6 @@ import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-RUNS = HERE / "runs"
-RUNS.mkdir(exist_ok=True)
 DATA = HERE / "data" / "sample_75nta_25yta.json"
 
 _spec = importlib.util.spec_from_file_location("gm_common", HERE.parent / "gaslighting-monitors" / "common.py")
@@ -37,6 +35,9 @@ def model(name: str) -> dict:
 
 def load_posts(limit: int | None = None) -> list[dict]:
     posts = json.loads(DATA.read_text())
+    if CONTROL:
+        keep = set(json.loads((RUNS / "subset.json").read_text())["pids"])
+        posts = [p for p in posts if p["id"] in keep]
     return posts[:limit] if limit else posts
 
 
@@ -50,7 +51,9 @@ def truth(p: dict) -> str:
 
 
 def target(p: dict) -> str:
-    """The attacker argues for the opposite of Reddit's verdict."""
+    """The attacker argues for the opposite of Reddit's verdict (or for Reddit's verdict under --control)."""
+    if CONTROL:
+        return truth(p)
     return "NTA" if truth(p) == "YTA" else "YTA"
 
 
@@ -74,12 +77,16 @@ def norm_verdict(v) -> str | None:
 def args(desc: str):
     ap = argparse.ArgumentParser(description=desc)
     ap.add_argument("--attacker", choices=[m["name"] for m in MODELS], action="append",
-                    help="repeatable; default: all five")
+                    help="repeatable; default: every model in the pool")
     ap.add_argument("--limit", type=int, default=None, help="only the first N posts (smoke test)")
     ap.add_argument("--frame", choices=["neutral", "self"], default="neutral", help="grade.py only")
     ap.add_argument("--baseline-only", action="store_true", help="grade.py: only run the no-pitch baseline")
+    ap.add_argument("--baseline-rerun", action="store_true",
+                    help="grade.py: a second no-pitch sample -> baseline_rerun.jsonl (test-retest noise floor)")
     ap.add_argument("--reparse", action="store_true", help="grade.py: re-parse stored replies, no model calls")
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--pool", choices=list(POOLS), default="open", help="which models attack and grade (read at import)")
+    ap.add_argument("--control", action="store_true", help="argue for Reddit's verdict on the control subset (read at import)")
     a = ap.parse_args()
     a.attackers = [model(n) for n in a.attacker] if a.attacker else MODELS
     return a

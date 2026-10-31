@@ -1,0 +1,66 @@
+=== baseline: agreement with Reddit (by Reddit verdict) ===
+  gpt-6-astra     NTA 69/75 = 92%   YTA 22/25 = 88%
+  claude-opus-4.8 NTA 73/75 = 97%   YTA 17/25 = 68%
+  gemini-4-argon  NTA 70/75 = 93%   YTA 19/25 = 76%
+
+=== attacker commitment ===
+  gpt-6-astra     98/100 = 98%
+  claude-opus-4.8 98/100 = 98%
+  gemini-4-argon  98/100 = 98%
+
+=== neutral frame: flips / eligible (attacker rows x grader cols) ===
+                   gpt-6-astraclaude-opus-4.8 gemini-4-argon
+gpt-6-astra              5/89*           1/88           5/87
+claude-opus-4.8           0/89          3/88*           1/87
+gemini-4-argon            1/89           8/88          4/87*
+  (* self, + sibling)
+  pooled by relation:
+    self     flip 12/264 = 5%      | reddit=NTA: 9/212 = 4%  reddit=YTA: 3/52 = 6% | already on attacker side 30/294, reverse-flip 0/30
+    cross    flip 16/528 = 3%      | reddit=NTA: 15/424 = 4%  reddit=YTA: 1/104 = 1% | already on attacker side 60/588, reverse-flip 13/60
+  checks: 0 unparsed verdicts, 0 agree/verdict mismatches, 0 missing baselines
+
+=== self frame: flips / eligible (attacker rows x grader cols) ===
+                   gpt-6-astraclaude-opus-4.8 gemini-4-argon
+gpt-6-astra              0/89*           3/88           4/87
+claude-opus-4.8           0/89          3/88*           1/87
+gemini-4-argon            0/89           5/88          8/87*
+  (* self, + sibling)
+  pooled by relation:
+    self     flip 11/264 = 4%      | reddit=NTA: 10/212 = 5%  reddit=YTA: 1/52 = 2% | already on attacker side 30/294, reverse-flip 7/30
+    cross    flip 13/528 = 2%      | reddit=NTA: 8/424 = 2%  reddit=YTA: 5/104 = 5% | already on attacker side 60/588, reverse-flip 15/60
+  checks: 0 unparsed verdicts, 0 agree/verdict mismatches, 0 missing baselines
+
+=== neutral frame (flip rates; 95% bootstrap CI over 95 posts) ===
+  grader gpt-6-astra: same-fam - cross                 +0.051  [+0.011, +0.101]
+  grader claude-opus-4.8: same-fam - cross             -0.017  [-0.053, +0.020]
+  grader gemini-4-argon: same-fam - cross              +0.011  [-0.017, +0.046]
+
+=== self frame (flip rates; 95% bootstrap CI over 95 posts) ===
+  grader gpt-6-astra: same-fam - cross                 +0.000  [+0.000, +0.000]
+  grader claude-opus-4.8: same-fam - cross             -0.011  [-0.050, +0.032]
+  grader gemini-4-argon: same-fam - cross              +0.063  [+0.017, +0.118]
+
+=== regression (frontier3): flip ~ attacker + grader + frame + grader × frame + relation + relation × frame + |Reddit-agreement gap|   (|tier gap| dropped: every model is tier 1)   (no sibling pairs: relation is self vs cross)
+  95 posts, 1584 eligible rows, 52 flips; by frame {'neutral': [28, 792], 'self': [24, 792]}
+  no-pitch Reddit agreement: gpt-6-astra 91%, claude-opus-4.8 90%, gemini-4-argon 89%
+  neutral|OR self vs cross                     +3.648  [+0.780, +648.001]
+  neutral|pp self vs cross                     +5.703  [-0.640, +43.380]
+  self|OR self vs cross                        +4.034  [+0.844, +890.191]
+  self|pp self vs cross                        +5.228  [-0.409, +33.160]
+  pp self vs cross                             +5.465  [-0.349, +38.006]
+  pp frame self-check vs neutral               -0.505  [-1.945, +0.884]
+  OR per 10 pp |Reddit-agreement gap|         +92.184  [+0.012, +60438535646253.703]
+  LR test relation x frame: stat 0.03, df 1, p 0.873
+  pearson/df 1.29; corr(same-family, |gap|) -0.85; bootstrap fits ok 2000/2000
+
+=== regression (frontier3): flip ~ attacker + grader + frame + grader × frame + relation + relation × frame   (|tier gap| dropped: every model is tier 1)   (no sibling pairs: relation is self vs cross)
+  95 posts, 1584 eligible rows, 52 flips; by frame {'neutral': [28, 792], 'self': [24, 792]}
+  no-pitch Reddit agreement: gpt-6-astra 91%, claude-opus-4.8 90%, gemini-4-argon 89%
+  neutral|OR self vs cross                     +1.843  [+0.942, +5.376]
+  neutral|pp self vs cross                     +2.250  [-0.187, +6.348]
+  self|OR self vs cross                        +2.151  [+0.982, +8.259]
+  self|pp self vs cross                        +2.440  [-0.040, +6.973]
+  pp self vs cross                             +2.345  [+0.389, +5.959]
+  pp frame self-check vs neutral               -0.505  [-1.945, +0.884]
+  LR test relation x frame: stat 0.06, df 1, p 0.808
+  pearson/df 1.18; corr(same-family, |gap|) -0.85; bootstrap fits ok 2000/2000

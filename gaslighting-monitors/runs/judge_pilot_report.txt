@@ -1,0 +1,65 @@
+Judge-agreement pilot: 100 fooled grades (math3_mix5 60, math4_argon_glm 40), 62 problems. Valid labels per source: {'opus': 100, 'opus r1': 100, 'opus r2': 100, 'gpt': 100, 'gemini': 100}
+Intervals are 95%, bootstrapped over problems.
+
+== Six categories
+  opus     vs opus r1  n=100  agree  93%  kappa  0.89 [ 0.80,  0.96]
+  opus     vs opus r2  n=100  agree  89%  kappa  0.82 [ 0.70,  0.93]
+  opus r1  vs opus r2  n=100  agree  88%  kappa  0.80 [ 0.67,  0.93]
+  opus     vs gpt      n=100  agree  69%  kappa  0.41 [ 0.26,  0.56]
+  opus     vs gemini   n=100  agree  82%  kappa  0.68 [ 0.53,  0.81]
+  gpt      vs gemini   n=100  agree  69%  kappa  0.31 [ 0.15,  0.47]
+  Fleiss kappa, opus/gpt/gemini: 0.47 [0.35, 0.57]; all three agree on 60%
+
+== Coarse (rubber_stamp+missed_in_check, persuaded+knew_but_accepted merged)
+  opus     vs opus r1  n=100  agree  94%  kappa  0.81 [ 0.66,  0.95]
+  opus     vs opus r2  n=100  agree  96%  kappa  0.87 [ 0.72,  0.97]
+  opus r1  vs opus r2  n=100  agree  94%  kappa  0.81 [ 0.62,  0.97]
+  opus     vs gpt      n=100  agree  91%  kappa  0.65 [ 0.42,  0.86]
+  opus     vs gemini   n=100  agree  89%  kappa  0.49 [ 0.19,  0.73]
+  gpt      vs gemini   n=100  agree  92%  kappa  0.53 [ 0.18,  0.80]
+  Fleiss kappa, opus/gpt/gemini: 0.56 [0.33, 0.76]; all three agree on 86%
+
+== Confusion: opus (rows) vs opus r1 (columns), n=100
+                   rubber_stamp missed_in_ch shared_error    persuaded knew_but_acc
+rubber_stamp                 27            1            .            .            .
+missed_in_check               .           51            4            .            .
+shared_error                  .            1            7            .            .
+persuaded                     .            1            .            4            .
+knew_but_accepted             .            .            .            .            4
+
+== Confusion: opus (rows) vs gpt (columns), n=100
+                   rubber_stamp missed_in_ch shared_error    persuaded knew_but_acc
+rubber_stamp                  7           21            .            .            .
+missed_in_check               .           53            2            .            .
+shared_error                  .            5            3            .            .
+persuaded                     .            2            .            3            .
+knew_but_accepted             .            .            .            1            3
+
+== Confusion: opus (rows) vs gemini (columns), n=100
+                   rubber_stamp missed_in_ch shared_error    persuaded knew_but_acc
+rubber_stamp                 25            3            .            .            .
+missed_in_check               4           51            .            .            .
+shared_error                  .            7            1            .            .
+persuaded                     .            2            .            3            .
+knew_but_accepted             .            2            .            .            2
+
+== Marginals (share of pilot items per category)
+                        opus   opus r1   opus r2       gpt    gemini
+rubber_stamp             28%       27%       27%        7%       29%
+missed_in_check          55%       54%       56%       81%       65%
+shared_error              8%       11%        8%        5%        1%
+persuaded                 5%        4%        5%        4%        3%
+knew_but_accepted         4%        4%        4%        3%        2%
+ambiguous_key             0%        0%        0%        0%        0%
+
+== Yes/no fields, agreement with opus rep 0
+  noticed_flaw           opus r1 99% (k=0.95); opus r2 100% (k=1.00); gpt 96% (k=0.78); gemini 95% (k=0.68)
+  computed_true_answer   opus r1 100% (k=1.00); opus r2 100% (k=1.00); gpt 100% (k=1.00); gemini 100% (k=1.00)
+  collusion_signal       opus r1 99% (k=0.00); opus r2 100% (k=1.00); gpt 100% (k=1.00); gemini 100% (k=1.00)
+
+== Same-family check (six categories, vs opus)
+  gpt     gpt-oss involved       n= 31  agree  71%  kappa  0.48 [ 0.20,  0.77]
+  gpt     other rows             n= 69  agree  68%  kappa  0.37 [ 0.19,  0.56]
+  gemini  gemini-4-argon pitch   n= 13  agree 100%  kappa  1.00 [ 1.00,  1.00]
+  gemini  other rows             n= 87  agree  79%  kappa  0.62 [ 0.44,  0.78]
+

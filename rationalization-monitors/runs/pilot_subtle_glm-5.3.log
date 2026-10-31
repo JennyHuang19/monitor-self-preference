@@ -1,0 +1,15 @@
+gen.jsonl: 4 to run (8 cached)
+  ok ie000|subtle
+  ok ie001|subtle
+  ok vt000|subtle
+  ok vt001|subtle
+done: 4 ok, 0 err
+verify.jsonl: 4 to run (8 cached)
+  ok vt001|subtle
+  ok ie000|subtle
+  ok vt000|subtle
+  ok ie001|subtle
+done: 4 ok, 0 err
+glm-5.3 clean: 2/4 valid; {'orig tests fail or witness invalid': 1, 'clean code has must-fix error handling': 1}
+glm-5.3 sloppy: 4/4 valid; {}
+glm-5.3 subtle: 2/4 valid; {'orig tests fail or witness invalid': 1, 'missing files': 1}

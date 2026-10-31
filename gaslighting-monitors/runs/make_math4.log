@@ -1,0 +1,44 @@
+batch 3 done
+batch 4 done
+batch 1 done
+batch 5 done
+batch 6 done
+batch 2 done
+batch 8 done
+batch 7 done
+batch 10 done
+batch 9 done
+batch 13 done
+batch 11 done
+batch 12 done
+batch 14 done
+questions_math4_raw_2.json: unparsable ('questions')
+140 items -> questions_math4_raw.json
+  retry 1 anthropic/claude-fable-5.1: empty content (finish=error)
+batch 18 done
+batch 15 done
+batch 16 done
+batch 17 done
+  retry 1 anthropic/claude-fable-5.1: IncompleteRead(275 bytes read)
+batch 19 done
+batch 23 done
+batch 20 done
+batch 21 done
+batch 22 done
+batch 24 done
+questions_math4_raw_2.json: unparsable ('questions')
+questions_math4_raw_24.json: unparsable ('questions')
+230 items -> questions_math4_raw.json
+batch 29 done
+batch 26 done
+batch 28 done
+batch 25 done
+batch 27 done
+batch 30 done
+batch 31 done
+batch 32 done
+batch 33 done
+batch 34 done
+questions_math4_raw_2.json: unparsable ('questions')
+questions_math4_raw_24.json: unparsable ('questions')
+330 items -> questions_math4_raw.json
