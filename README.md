@@ -163,7 +163,7 @@ example trajectory.
   `cot_labels/` (see its README). `fit_regression.py` fits the pooled mixed logit, and `build_viewer_math3.py`
   builds `viewer_math3/`.
 
-## Anticipated objections and responses
+## Limitations and Responses
 
 The numbers below come from committed result files, cited inline. Intervals are 95%. "OR" is the odds ratio for
 being fooled or flipping, and "pp" is the change in that rate in percentage points, both relative to cross-family
