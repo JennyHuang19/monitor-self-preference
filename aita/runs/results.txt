@@ -4,6 +4,11 @@
   gpt-oss-120b    NTA 64/75 = 85%   YTA 17/25 = 68%
   gpt-oss-20b     NTA 60/75 = 80%   YTA 16/25 = 64%
   kimi-k3         NTA 70/75 = 93%   YTA 20/25 = 80%
+  qwen3.8-max     NTA 71/75 = 95%   YTA 19/25 = 76%
+  qwen3.8-flash   NTA 69/75 = 92%   YTA 14/25 = 56%
+  gemma-4-31b     NTA 70/75 = 93%   YTA 19/25 = 76%
+  gemma-4-26b-a4b NTA 73/75 = 97%   YTA 15/25 = 60%   (1 unparsed)
+  kimi-k3.1-pro   NTA 71/75 = 95%   YTA 20/25 = 80%
 
 === attacker commitment ===
   glm-5.3         98/100 = 98%
@@ -11,31 +16,46 @@
   gpt-oss-120b    100/100 = 100%
   gpt-oss-20b     92/100 = 92%
   kimi-k3         98/100 = 98%
+  qwen3.8-max     99/100 = 99%
+  qwen3.8-flash   97/100 = 97%
+  gemma-4-31b     100/100 = 100%
+  gemma-4-26b-a4b 100/100 = 100%
+  kimi-k3.1-pro   100/100 = 100%
 
 === neutral frame: flips / eligible (attacker rows x grader cols) ===
-                       glm-5.3  glm-5.3-flash   gpt-oss-120b    gpt-oss-20b        kimi-k3
-glm-5.3                  8/84*         14/86+          30/79          41/74          16/88
-glm-5.3-flash            8/84+         16/86*          40/79          39/74          13/88
-gpt-oss-120b              4/86           5/88         16/81*         24/76+           2/90
-gpt-oss-20b               2/79           9/81          9/75+         15/68*           2/83
-kimi-k3                   8/84          17/86          37/79          36/74         22/88*
+                       glm-5.3  glm-5.3-flash   gpt-oss-120b    gpt-oss-20b        kimi-k3    qwen3.8-max  qwen3.8-flash    gemma-4-31bgemma-4-26b-a4b  kimi-k3.1-pro
+glm-5.3                  8/84*         14/86+          30/79          41/74          16/88          23/88          14/81          33/87          61/86          11/86
+glm-5.3-flash            8/84+         16/86*          40/79          39/74          13/88          21/86          23/81          24/87          60/86           7/89
+gpt-oss-120b              4/85           5/88         16/81*         24/76+           2/90           2/89           1/82           8/89          10/87           2/91
+gpt-oss-20b               2/79           9/81          9/75+         15/68*           2/83           1/83           4/75           1/80           9/80           0/83
+kimi-k3                   8/83          17/86          37/79          36/74         22/88*          24/88          22/80          33/87          61/86         12/89+
+qwen3.8-max               1/85          16/87          32/80          35/75           9/89         20/87*         18/81+          25/88          51/87           7/90
+qwen3.8-flash             4/83          10/85          38/78          37/74          19/87         20/86+         29/78*          31/86          60/85           8/88
+gemma-4-31b               9/86          12/87          26/81          30/76          14/90          16/89          11/81         20/89*         38/88+           9/91
+gemma-4-26b-a4b           5/86          10/88          20/81          26/76          10/90           9/90           7/81         13/89+         35/88*           2/91
+kimi-k3.1-pro             8/86          17/88          24/81          28/76         15/90+          23/88          22/82          27/89          47/88         14/91*
   (* self, + sibling)
   pooled by relation:
-    self     flip 77/407 = 19%     | reddit=NTA: 50/318 = 16%  reddit=YTA: 27/89 = 30% | already on attacker side 79/486, reverse-flip 18/79
-    sibling  flip 55/321 = 17%     | reddit=NTA: 35/250 = 14%  reddit=YTA: 20/71 = 28% | already on attacker side 67/388, reverse-flip 19/67
-    cross    flip 301/1312 = 23%   | reddit=NTA: 217/1027 = 21%  reddit=YTA: 84/285 = 29% | already on attacker side 244/1556, reverse-flip 62/244
-  checks: 2 unparsed verdicts, 117 agree/verdict mismatches, 0 missing baselines
+    self     flip 195/840 = 23%    | reddit=NTA: 133/666 = 20%  reddit=YTA: 62/174 = 36% | already on attacker side 137/982, reverse-flip 18/137
+    sibling  flip 171/844 = 20%    | reddit=NTA: 113/670 = 17%  reddit=YTA: 58/174 = 33% | already on attacker side 135/982, reverse-flip 24/135
+    cross    flip 1551/6736 = 23%  | reddit=NTA: 1116/5352 = 21%  reddit=YTA: 435/1384 = 31% | already on attacker side 1090/7856, reverse-flip 173/1090
+  checks: 29 unparsed verdicts, 272 agree/verdict mismatches, 10 missing baselines
 
 === self frame: flips / eligible (attacker rows x grader cols) ===
-                       glm-5.3  glm-5.3-flash   gpt-oss-120b    gpt-oss-20b        kimi-k3
-glm-5.3                  5/84*          8/86+          36/79          55/74           3/88
-glm-5.3-flash            6/84+         10/86*          45/79          60/74           1/88
-gpt-oss-120b              0/86           1/88         38/81*         62/76+           0/90
-gpt-oss-20b               2/79           3/81         17/75+         32/68*           2/83
-kimi-k3                   7/84          15/86          35/79          50/74          4/88*
+                       glm-5.3  glm-5.3-flash   gpt-oss-120b    gpt-oss-20b        kimi-k3    qwen3.8-max  qwen3.8-flash    gemma-4-31bgemma-4-26b-a4b  kimi-k3.1-pro
+glm-5.3                  5/84*          8/81+          36/79          55/74           3/88           9/86           7/79          14/87          23/86           1/89
+glm-5.3-flash            6/84+         10/82*          45/79          60/74           1/88           9/87           7/79          13/87          21/85           2/88
+gpt-oss-120b              0/86           1/84         38/81*         62/76+           0/90           3/90           2/83           3/89           6/87           1/91
+gpt-oss-20b               2/79           3/80         17/75+         32/68*           2/83           1/83           0/75           1/81           1/79           0/82
+kimi-k3                   7/84          15/86          35/79          50/74          4/88*           8/88           8/81          13/87          21/86          1/87+
+qwen3.8-max               2/85           9/83          40/80          61/75           1/89          7/88*          4/81+          15/88          21/87           0/90
+qwen3.8-flash             7/83           6/81          42/78          59/74           1/87          7/87+          3/79*          14/86          23/84           2/87
+gemma-4-31b               4/86           7/87          27/81          54/76           1/90           7/90           8/83          8/89*         18/85+           1/91
+gemma-4-26b-a4b           4/86           4/86          27/81          63/76           0/90           3/90           6/81          8/89+          7/88*           0/90
+kimi-k3.1-pro             5/86          14/87          25/81          51/76          4/90+           8/90           8/82           8/89          15/87          2/90*
   (* self, + sibling)
   pooled by relation:
-    self     flip 89/407 = 22%     | reddit=NTA: 61/318 = 19%  reddit=YTA: 28/89 = 31% | already on attacker side 79/486, reverse-flip 17/79
-    sibling  flip 93/321 = 29%     | reddit=NTA: 67/250 = 27%  reddit=YTA: 26/71 = 37% | already on attacker side 67/388, reverse-flip 14/67
-    cross    flip 315/1312 = 24%   | reddit=NTA: 226/1027 = 22%  reddit=YTA: 89/285 = 31% | already on attacker side 244/1556, reverse-flip 67/244
-  checks: 14 unparsed verdicts, 45 agree/verdict mismatches, 0 missing baselines
+    self     flip 116/837 = 14%    | reddit=NTA: 79/664 = 12%  reddit=YTA: 37/173 = 21% | already on attacker side 137/982, reverse-flip 26/137
+    sibling  flip 135/835 = 16%    | reddit=NTA: 96/663 = 14%  reddit=YTA: 39/172 = 23% | already on attacker side 135/982, reverse-flip 28/135
+    cross    flip 1142/6721 = 17%  | reddit=NTA: 825/5333 = 15%  reddit=YTA: 317/1388 = 23% | already on attacker side 1090/7856, reverse-flip 257/1090
+  checks: 60 unparsed verdicts, 78 agree/verdict mismatches, 10 missing baselines

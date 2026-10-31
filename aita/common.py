@@ -13,38 +13,19 @@ DATA = HERE / "data" / "sample_75nta_25yta.json"
 _spec = importlib.util.spec_from_file_location("gm_common", HERE.parent / "gaslighting-monitors" / "common.py")
 gm = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gm)
-run_jobs, read_jsonl, parse_json, append = gm.run_jobs, gm.read_jsonl, gm.parse_json, gm.append
+chat, run_jobs, read_jsonl, parse_json, append = gm.chat, gm.run_jobs, gm.read_jsonl, gm.parse_json, gm.append
 
-import direct  # noqa: E402
-
-# AITA-only frontier models (not in the gaslighting registry). These two go to the vendors' own APIs, keyed by
-# their OpenRouter id; everything else (incl. gemini-4-argon, no Google key) goes through OpenRouter.
-_FRONTIER3_EXTRA = [{"name": "gpt-6-astra", "id": "openai/gpt-6-astra", "family": "GPT"},
-                    {"name": "claude-opus-4.8", "id": "anthropic/claude-opus-4.8", "family": "Claude"}]
-DIRECT = {"openai/gpt-6-astra": ("openai", "gpt-6-astra"), "anthropic/claude-opus-4.8": ("anthropic", "claude-opus-4-8")}
-
-
-def chat(model_id: str, messages: list[dict], *, max_tokens: int = 32000, **kw) -> dict:
-    if model_id in DIRECT:
-        return direct.chat(*DIRECT[model_id], messages, max_tokens=max_tokens)
-    return gm.chat(model_id, messages, max_tokens=max_tokens, **kw)
-_ALL = {m["name"]: m for m in gm.GRADERS + gm.OPEN_MODELS + gm.CLOSED2 + _FRONTIER3_EXTRA}
-# open: the original five, runs in runs/. Other pools get runs/<pool>/.
-POOLS = {"open": ("glm-5.3", "glm-5.3-flash", "gpt-oss-120b", "gpt-oss-20b", "kimi-k3"),
-         "closed2": tuple(m["name"] for m in gm.CLOSED2),
-         "frontier3": ("gpt-6-astra", "claude-opus-4.8", "gemini-4-argon")}
-# Read --pool at import so analyze*.py (which take no other args) and the constants below follow it.
-_pre = argparse.ArgumentParser(add_help=False)
-_pre.add_argument("--pool", choices=list(POOLS), default="open")
-_pre.add_argument("--control", action="store_true")
-_pre_args = _pre.parse_known_args()[0]
-POOL = _pre_args.pool
-# --control: the attacker argues FOR Reddit's verdict on a 25-post subset (runs/<pool>/control/, see select_control.py).
-CONTROL = _pre_args.control
-MODELS = [_ALL[n] for n in POOLS[POOL]]
-MAIN_RUNS = HERE / "runs" if POOL == "open" else HERE / "runs" / POOL
-RUNS = MAIN_RUNS / "control" if CONTROL else MAIN_RUNS
-RUNS.mkdir(parents=True, exist_ok=True)
+_EXTRA = [{"name": "qwen3.8-flash", "id": "qwen/qwen3.8-flash", "family": "Qwen"},
+          {"name": "kimi-k3.1-pro", "id": "moonshotai/kimi-k3.1-pro", "family": "Kimi"}]
+_ALL = {m["name"]: m for m in gm.GRADERS + gm.OPEN_MODELS + _EXTRA}
+# Strength tier, fixed before any of the new models were run: 1 flagship, 2 flash, 3 open-large, 4 open-small.
+# Each tier holds models from 2+ families, so family match can vary at a fixed strength gap.
+TIER = {"glm-5.3": 1, "kimi-k3": 1, "kimi-k3.1-pro": 1, "qwen3.8-max": 1,
+        "glm-5.3-flash": 2, "qwen3.8-flash": 2,
+        "gpt-oss-120b": 3, "gemma-4-31b": 3,
+        "gpt-oss-20b": 4, "gemma-4-26b-a4b": 4}
+MODELS = [_ALL[n] for n in ("glm-5.3", "glm-5.3-flash", "gpt-oss-120b", "gpt-oss-20b", "kimi-k3",
+                            "qwen3.8-max", "qwen3.8-flash", "gemma-4-31b", "gemma-4-26b-a4b", "kimi-k3.1-pro")]
 VERDICTS = ("YTA", "NTA")
 
 

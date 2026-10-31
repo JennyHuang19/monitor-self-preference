@@ -1,0 +1,442 @@
+{
+ "measures": [
+  "examined the error step",
+  "recomputed it itself",
+  "accepted unchecked",
+  "found it, then dropped it",
+  "ownership words",
+  "hedging words",
+  "CoT chars",
+  "reply chars",
+  "confidence"
+ ],
+ "matched": {
+  "examined the error step": {
+   "self": 0.71875,
+   "cross": 0.65625,
+   "diff": 0.0625,
+   "lo": -0.140625,
+   "hi": 0.25,
+   "self higher": 10,
+   "cross higher": 5,
+   "n": 32
+  },
+  "recomputed it itself": {
+   "self": 0.5,
+   "cross": 0.5,
+   "diff": 0.0,
+   "lo": -0.203125,
+   "hi": 0.21875,
+   "self higher": 7,
+   "cross higher": 7,
+   "n": 32
+  },
+  "accepted unchecked": {
+   "self": 0.0625,
+   "cross": 0.03125,
+   "diff": 0.03125,
+   "lo": -0.0625,
+   "hi": 0.15625,
+   "self higher": 2,
+   "cross higher": 1,
+   "n": 32
+  },
+  "found it, then dropped it": {
+   "self": 0.34375,
+   "cross": 0.109375,
+   "diff": 0.234375,
+   "lo": 0.0625,
+   "hi": 0.40625,
+   "self higher": 10,
+   "cross higher": 2,
+   "n": 32
+  },
+  "ownership words": {
+   "self": 0.0,
+   "cross": 0.03125,
+   "diff": -0.03125,
+   "lo": -0.09375,
+   "hi": 0.0,
+   "self higher": 0,
+   "cross higher": 1,
+   "n": 32
+  },
+  "hedging words": {
+   "self": 0.375,
+   "cross": 0.21875,
+   "diff": 0.15625,
+   "lo": -0.0625,
+   "hi": 0.375,
+   "self higher": 10,
+   "cross higher": 5,
+   "n": 32
+  },
+  "CoT chars": {
+   "self": 1029.625,
+   "cross": 760.71875,
+   "diff": 268.90625,
+   "lo": -68.84375,
+   "hi": 703.828125,
+   "self higher": 18,
+   "cross higher": 14,
+   "n": 32
+  },
+  "reply chars": {
+   "self": 203.0625,
+   "cross": 257.8125,
+   "diff": -54.75,
+   "lo": -143.296875,
+   "hi": 17.171875,
+   "self higher": 8,
+   "cross higher": 13,
+   "n": 32
+  },
+  "confidence": {
+   "self": 97.25,
+   "cross": 98.296875,
+   "diff": -1.046875,
+   "lo": -2.234375,
+   "hi": 0.03125,
+   "self higher": 6,
+   "cross higher": 15,
+   "n": 32
+  }
+ },
+ "balanced": {
+  "examined the error step": {
+   "diff": -0.10747846808779264,
+   "lo": -0.22376243287922007,
+   "hi": 0.00593602171537239
+  },
+  "recomputed it itself": {
+   "diff": -0.06753820114337115,
+   "lo": -0.1877987145951448,
+   "hi": 0.053093967119201765
+  },
+  "accepted unchecked": {
+   "diff": 0.026870800635995284,
+   "lo": -0.02811201723342053,
+   "hi": 0.08924193465661386
+  },
+  "found it, then dropped it": {
+   "diff": 0.05436595768185243,
+   "lo": -0.05886290198492075,
+   "hi": 0.16196456259542885
+  },
+  "ownership words": {
+   "diff": -0.07073731264375979,
+   "lo": -0.12792757071107586,
+   "hi": -0.01731430081945546
+  },
+  "hedging words": {
+   "diff": 0.04020105657280607,
+   "lo": -0.0843800426890133,
+   "hi": 0.16605355459025253
+  },
+  "CoT chars": {
+   "diff": -34.72682325880509,
+   "lo": -305.70704605442256,
+   "hi": 225.80802036605238
+  },
+  "reply chars": {
+   "diff": -62.966092219315776,
+   "lo": -142.26968882786701,
+   "hi": 15.55331234391092
+  },
+  "confidence": {
+   "diff": 0.2434331119975065,
+   "lo": -1.020189496608945,
+   "hi": 1.5439227336750048
+  }
+ },
+ "by monitor": {
+  "examined the error step": {
+   "glm-5.3-flash": {
+    "self": 0.6,
+    "cross": 0.7142857142857143,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.4444444444444444,
+    "cross": 0.9230769230769231,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.75,
+    "cross": 0.5895522388059702,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.5384615384615384,
+    "cross": 0.7333333333333333,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 1.0,
+    "cross": 0.9230769230769231,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "recomputed it itself": {
+   "glm-5.3-flash": {
+    "self": 0.45714285714285713,
+    "cross": 0.5714285714285714,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.5555555555555556,
+    "cross": 0.7692307692307693,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.6785714285714286,
+    "cross": 0.5298507462686567,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.46153846153846156,
+    "cross": 0.7,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 1.0,
+    "cross": 0.9230769230769231,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "accepted unchecked": {
+   "glm-5.3-flash": {
+    "self": 0.08571428571428572,
+    "cross": 0.09523809523809523,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.1111111111111111,
+    "cross": 0.0,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.0,
+    "cross": 0.022388059701492536,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.15384615384615385,
+    "cross": 0.03333333333333333,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 0.0,
+    "cross": 0.0,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "found it, then dropped it": {
+   "glm-5.3-flash": {
+    "self": 0.22857142857142856,
+    "cross": 0.23809523809523808,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.1111111111111111,
+    "cross": 0.38461538461538464,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.4642857142857143,
+    "cross": 0.16417910447761194,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.3076923076923077,
+    "cross": 0.15,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 0.3333333333333333,
+    "cross": 0.3076923076923077,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "ownership words": {
+   "glm-5.3-flash": {
+    "self": 0.0,
+    "cross": 0.047619047619047616,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.0,
+    "cross": 0.3076923076923077,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.03571428571428571,
+    "cross": 0.007462686567164179,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.0,
+    "cross": 0.016666666666666666,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 0.0,
+    "cross": 0.07692307692307693,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "hedging words": {
+   "glm-5.3-flash": {
+    "self": 0.34285714285714286,
+    "cross": 0.38095238095238093,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 0.5,
+    "cross": 0.5384615384615384,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 0.5357142857142857,
+    "cross": 0.30597014925373134,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 0.38461538461538464,
+    "cross": 0.4,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 0.6666666666666666,
+    "cross": 0.7692307692307693,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "CoT chars": {
+   "glm-5.3-flash": {
+    "self": 677.6857142857143,
+    "cross": 870.5952380952381,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 546.0,
+    "cross": 1130.1538461538462,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 1292.142857142857,
+    "cross": 735.776119402985,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 767.0,
+    "cross": 1086.9833333333333,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 2829.0,
+    "cross": 2002.4615384615386,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "reply chars": {
+   "glm-5.3-flash": {
+    "self": 460.22857142857146,
+    "cross": 577.4047619047619,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 541.7777777777778,
+    "cross": 616.5384615384615,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 58.285714285714285,
+    "cross": 58.23134328358209,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 68.76923076923077,
+    "cross": 69.46666666666667,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 204.0,
+    "cross": 421.7692307692308,
+    "n self": 3,
+    "n cross": 13
+   }
+  },
+  "confidence": {
+   "glm-5.3-flash": {
+    "self": 99.22857142857143,
+    "cross": 99.02380952380952,
+    "n self": 35,
+    "n cross": 42
+   },
+   "glm-5.3": {
+    "self": 98.16666666666667,
+    "cross": 95.6923076923077,
+    "n self": 18,
+    "n cross": 13
+   },
+   "gpt-oss-20b": {
+    "self": 96.67857142857143,
+    "cross": 97.07462686567165,
+    "n self": 28,
+    "n cross": 134
+   },
+   "gpt-oss-120b": {
+    "self": 94.53846153846153,
+    "cross": 95.63333333333334,
+    "n self": 13,
+    "n cross": 60
+   },
+   "kimi-k3": {
+    "self": 97.0,
+    "cross": 97.92307692307692,
+    "n self": 3,
+    "n cross": 13
+   }
+  }
+ }
+}
