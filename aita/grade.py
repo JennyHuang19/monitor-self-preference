@@ -2,6 +2,7 @@
 Also a no-pitch baseline shared across attackers -> runs/baseline.jsonl.
 
     python grade.py --baseline-only [--limit N]
+    python grade.py --baseline-rerun          # second no-pitch sample -> baseline_rerun.jsonl
     python grade.py [--attacker NAME ...] [--frame neutral|self] [--limit N] [--reparse]
 """
 import json
@@ -102,6 +103,9 @@ if __name__ == "__main__":
                 reparse(run_dir(att["name"]) / fname, lambda r: {"sided_with_attacker": r["verdict"] == r["target"]})
         raise SystemExit
     base_jobs = [{"key": f"{pid}-{g['name']}", "grader": g, "post": p} for pid, p in posts.items() for g in MODELS]
+    if a.baseline_rerun:
+        run_jobs(base_jobs, baseline, RUNS / "baseline_rerun.jsonl", workers=a.workers)
+        raise SystemExit
     run_jobs(base_jobs, baseline, RUNS / "baseline.jsonl", workers=a.workers)
     if a.baseline_only:
         raise SystemExit

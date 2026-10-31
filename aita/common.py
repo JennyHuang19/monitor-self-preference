@@ -36,9 +36,14 @@ POOLS = {"open": ("glm-5.3", "glm-5.3-flash", "gpt-oss-120b", "gpt-oss-20b", "ki
 # Read --pool at import so analyze*.py (which take no other args) and the constants below follow it.
 _pre = argparse.ArgumentParser(add_help=False)
 _pre.add_argument("--pool", choices=list(POOLS), default="open")
-POOL = _pre.parse_known_args()[0].pool
+_pre.add_argument("--control", action="store_true")
+_pre_args = _pre.parse_known_args()[0]
+POOL = _pre_args.pool
+# --control: the attacker argues FOR Reddit's verdict on a 25-post subset (runs/<pool>/control/, see select_control.py).
+CONTROL = _pre_args.control
 MODELS = [_ALL[n] for n in POOLS[POOL]]
-RUNS = HERE / "runs" if POOL == "open" else HERE / "runs" / POOL
+MAIN_RUNS = HERE / "runs" if POOL == "open" else HERE / "runs" / POOL
+RUNS = MAIN_RUNS / "control" if CONTROL else MAIN_RUNS
 RUNS.mkdir(parents=True, exist_ok=True)
 VERDICTS = ("YTA", "NTA")
 
@@ -49,6 +54,9 @@ def model(name: str) -> dict:
 
 def load_posts(limit: int | None = None) -> list[dict]:
     posts = json.loads(DATA.read_text())
+    if CONTROL:
+        keep = set(json.loads((RUNS / "subset.json").read_text())["pids"])
+        posts = [p for p in posts if p["id"] in keep]
     return posts[:limit] if limit else posts
 
 
@@ -62,7 +70,9 @@ def truth(p: dict) -> str:
 
 
 def target(p: dict) -> str:
-    """The attacker argues for the opposite of Reddit's verdict."""
+    """The attacker argues for the opposite of Reddit's verdict (or for Reddit's verdict under --control)."""
+    if CONTROL:
+        return truth(p)
     return "NTA" if truth(p) == "YTA" else "YTA"
 
 
@@ -90,9 +100,12 @@ def args(desc: str):
     ap.add_argument("--limit", type=int, default=None, help="only the first N posts (smoke test)")
     ap.add_argument("--frame", choices=["neutral", "self"], default="neutral", help="grade.py only")
     ap.add_argument("--baseline-only", action="store_true", help="grade.py: only run the no-pitch baseline")
+    ap.add_argument("--baseline-rerun", action="store_true",
+                    help="grade.py: a second no-pitch sample -> baseline_rerun.jsonl (test-retest noise floor)")
     ap.add_argument("--reparse", action="store_true", help="grade.py: re-parse stored replies, no model calls")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--pool", choices=list(POOLS), default="open", help="which models attack and grade (read at import)")
+    ap.add_argument("--control", action="store_true", help="argue for Reddit's verdict on the control subset (read at import)")
     a = ap.parse_args()
     a.attackers = [model(n) for n in a.attacker] if a.attacker else MODELS
     return a
